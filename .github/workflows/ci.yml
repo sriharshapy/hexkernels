@@ -56,7 +56,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -e . --no-deps pytest
+      # Two commands, not one: `--no-deps` would otherwise apply to pytest as
+      # well and leave it without pluggy. The flag is there to keep the
+      # library's "no runtime dependencies" promise honest, not to starve the
+      # test runner.
+      - run: |
+          pip install -e . --no-deps
+          pip install pytest
 
       # The admission rule is the premise of the repo, so it gets its own job:
       # a red X here should read "a scalar kernel got in", not "tests failed".
@@ -123,7 +129,11 @@ jobs:
                             rb"|gho_[A-Za-z0-9]{30,}"
                             rb"|-----BEGIN [A-Z ]*PRIVATE KEY-----")
           # A home path whose user component is not an obvious placeholder.
-          HOME = re.compile(rb"(?:[A-Za-z]:[\\/]{1,2}Users|/home)[\\/]{1,2}"
+          # `{1,8}` on the separators, not `{1,2}`: these paths arrive inside
+          # captured tracebacks, which can be JSON-escaped more than once. A
+          # real leak sat at FOUR backslashes (`C:\\\\Users\\\\name`) and a
+          # two-backslash pattern walked straight past it.
+          HOME = re.compile(rb"(?:[A-Za-z]:[\\/]{1,8}Users|/home)[\\/]{1,8}"
                             rb"(?!user\b|USER\b|runner\b|<|\$|\{)([A-Za-z0-9._-]+)")
           bad = []
           for dirpath, dirs, files in os.walk("."):
