@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8*int8->int8",
+  "edge_cases": [
+    "63*63 max",
+    "-64*-64 large positive",
+    "-64*63 negative",
+    "product=0",
+    "saturate +127/-128",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_truncate.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "80236c3e2686b6f21c8083d5a0518085c40775d79298ffee7105368ccbe4ebdb",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_mul_requant_dma",
+  "origin": "expert",
+  "params": {
+    "input_range": "[-64,63]",
+    "mult": 7,
+    "shift": 6,
+    "zp": 3
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_mul_requant_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 547199,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 125967,
+    "expert_speedup": 4.34,
+    "source": "v6 corpus build (simulator)"
+  }
+}

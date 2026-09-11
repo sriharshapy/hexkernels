@@ -1,0 +1,86 @@
+{
+  "bundle": "complete",
+  "category": "Attention block with rotary position embedding (transformer layer)",
+  "domain": "ai",
+  "dtype": "uint8xint8->uint16",
+  "edge_cases": [
+    "extends i8_attention_block with a per-position RoPE pre-rotation of Q and K over feature pairs (d, d+HALF) before QK^T",
+    "RoPE rotation runs on HVX/scalar as a shared prefix; the baseline pays the SAME rotation cost, so the win comes from the HMX matmuls",
+    "Qr is the uint8 HMX activation (clamped to [0,255]); Kr is the int8 weight (clamped to [-128,127]); rot_shift=4 carries the table's 1/16 fixed-point scale",
+    "position 0 -> identity rotation (cos=8=1.0, sin=0); position 1 pair 0 -> 90-degree rotation (cos=0, sin=8) swapping the pair",
+    "query row 1 forced all-zero -> uniform softmax edge after rotation",
+    "cos/sin tables in [-8,8] and rot_shift=4 keep Qr in [0,7], Kr in [-3,3] so QK^T |acc| <= 1344 -> requant field 1428 < 2048 (exact)",
+    "softmax over the KEY axis; A.V accumulator stays < 2048 (probs is a normalized row summing to ~255)",
+    "both HMX matmuls: 2x2 grid of 32x32 crouton tiles, 2-tile reduction, one mxclracc per output tile",
+    "crouton pack/unpack staged in cacheable DDR + bulk 128B HVX vector copies to/from VTCM (scalar VTCM access ~48 cyc)",
+    "nearmiss_skip_rope omits the rotation (raw Q,K into QK^T) -> INCORRECT (3906/4096 wrong)",
+    "nearmiss_wrongpair rotates adjacent pairs (2d,2d+1) instead of (d,d+HALF) -> INCORRECT (236/4096 wrong)",
+    "poisoned output buffer; runtime cos/sin/exp tables (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_skip_rope.c",
+    "nearmiss_wrongpair.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "20e0663fe559d2856bbee70a745831d73498c56a7b2d6bd6b6fcf653d19afcbc",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_rope_attention_block",
+  "origin": "expert",
+  "params": {
+    "D": 64,
+    "HALF": 32,
+    "S": 64,
+    "cos_lut": "int8[S x HALF] runtime per-position rotation cosines (Q3 amplitude ~8 = 1.0)",
+    "exp_lut": "256 uint8 entries (runtime), fixed-point exp, index 255 = exp(0)",
+    "heads": 1,
+    "rot_shift": 4,
+    "scale": "arithmetic >>4 on the 0x40-requant field (net ~1/15, in the 1/sqrt(D) regime)",
+    "sin_lut": "int8[S x HALF] runtime per-position rotation sines",
+    "softmax_tau": 24
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_rope_attention_block",
+    "upstream": null
+  },
+  "signal": "RoPE attention block (rotary embedding + matmul + softmax)",
+  "tags": [
+    "attention",
+    "rope",
+    "rotary",
+    "positional-embedding",
+    "transformer",
+    "block",
+    "matmul",
+    "softmax",
+    "hmx",
+    "hvx",
+    "vtcm",
+    "int8",
+    "requant",
+    "tiling",
+    "l3",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 566530,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 357718,
+    "expert_speedup": 1.584,
+    "source": "v6 corpus build (simulator)"
+  }
+}

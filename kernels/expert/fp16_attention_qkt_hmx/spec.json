@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": "Attention matmul",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "S=32 (single output crouton tile) but D=128 (deep head-dim reduction, accumulated over 4 K-tiles)",
+    "K is stored [S,D] row-major (row j IS key vector j) -- scores = Q.K^T needs no explicit transpose, only swapped tile indices in the crouton weight pack (unlike the AV sibling, where V is already B[K,N]-shaped)",
+    "the HVX baseline pays an EXTRA one-time transpose of K into a cacheable Kt[D,S] buffer (needed for its contiguous-row AXPY formulation) -- the HMX expert avoids this entirely by packing straight from K, giving it a bigger edge than the AV sibling's 1.22x",
+    "Q6_mxclracc_hf clears the persistent hf accumulator ONCE; 4 (activation,weight) load pairs accumulate into it before the single store",
+    "fp16 crouton layout off(r,c)=(r/2)*64+c*2+(r&1) for Q, weight, output, per D-tile",
+    "HVX/HMX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "D=128 is a deep reduction -> qf16 rounding drifts more (near-cancellation outputs close to zero); widened tolerance atol=8e-3/rtol=1.2e-2",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "missing-transpose near-miss (computes Q.K, not Q.K^T) must fail the tolerance gate"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_missing_transpose.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "710a069f7b525b14f717f11bd8d59549ced9725c902f0c327479cf9f5d7b8914",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "fp16_attention_qkt_hmx",
+  "origin": "expert",
+  "params": {
+    "D": 128,
+    "S": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_attention_qkt_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine, deep-K reduction)",
+  "tags": [
+    "attention",
+    "qkt",
+    "matmul",
+    "hmx",
+    "fp16",
+    "deep-k",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 38281,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 24089,
+    "expert_speedup": 1.59,
+    "source": "v6 corpus build (simulator)"
+  }
+}

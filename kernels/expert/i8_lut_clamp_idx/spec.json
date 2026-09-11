@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": "Lookup-table function",
+  "domain": "comms",
+  "dtype": "int8",
+  "edge_cases": [
+    "idx == lo (exact lower clamp boundary)",
+    "idx == hi (exact upper clamp boundary)",
+    "idx < lo (clamps to lo)",
+    "idx > hi (clamps to hi)",
+    "idx 0/255 (extreme uint8 values)",
+    "n%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_noclamp.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "0b87c7c56a58ee75678ea7162089fee15419ebf793da7d2b827097a36c47db15",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_lut_clamp_idx",
+  "origin": "expert",
+  "params": {
+    "hi": "runtime (swept: 224, 127, 192)",
+    "index_formula": "clamp((uint8_t)in[i], lo, hi)",
+    "lo": "runtime (swept: 32, 0, 64)",
+    "lut_entries": 256
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_lut_clamp_idx",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "lut",
+    "clamp",
+    "gather",
+    "nonlinear",
+    "AI",
+    "param"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 9010,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 5641,
+    "expert_speedup": 1.597,
+    "source": "v6 corpus build (simulator)"
+  }
+}

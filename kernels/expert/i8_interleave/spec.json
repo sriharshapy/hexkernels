@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "two concurrent input streams (defeat the prefetcher on the direct-DDR path)",
+    "boundary int8 values injected (127/-128)",
+    "output is 2x per-stream length (768KB > L2)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_swapped.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "50c75a17729f0ea974c2319c70e268332c8fba36886f5d9f88b4b5b42b7364a7",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_interleave",
+  "origin": "expert",
+  "params": {
+    "formula": "out[2*i]=a[i], out[2*i+1]=b[i]",
+    "op": "interleave2",
+    "streams": 2
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_interleave",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 151605,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 66691,
+    "expert_speedup": 2.27,
+    "source": "v6 corpus build (simulator)"
+  }
+}

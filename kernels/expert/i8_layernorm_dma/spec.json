@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "each row normalized independently using ITS OWN mean/variance (gamma/beta shared per-column across rows, inv_lut shared but indexed per-row)",
+    "constant-value row (var=0, LUT index 0), max-variance row (alternating -128/127), first/last row",
+    "fully random per-element input so rows genuinely differ in statistics (defeats any global/cross-row confusion)",
+    "R*W*2 > 1MB (>> L2) -> DDR-bandwidth-bound row-block streaming"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_global_stats.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "76e69a0482d6743eb8574891c009b0bb968a362a78fb4b192af6d9a144e1bb23",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_layernorm_dma",
+  "origin": "expert",
+  "params": {
+    "R": 4224,
+    "SHIFT": 8,
+    "W": 128,
+    "formula": "per-row integer LayerNorm: mu=trunc(sum/W), var=trunc(sum((x-mu)^2)/W), inv=inv_lut[clamp(var,0,255)], out=clamp(round((round((x-mu)*gamma,7)*inv,8))+beta)",
+    "op": "row_layernorm_int_lut"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_layernorm_dma",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "layernorm",
+    "normalization",
+    "dma",
+    "vtcm",
+    "fixed-point",
+    "no-float",
+    "lut",
+    "row-wise"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 14305106,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 7242814,
+    "expert_speedup": 1.97,
+    "source": "v6 corpus build (simulator)"
+  }
+}

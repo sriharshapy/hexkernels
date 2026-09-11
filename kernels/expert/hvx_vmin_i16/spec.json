@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int16",
+  "edge_cases": [
+    "signed vs unsigned disagreement: min(-1,1)=-1 (unsigned would say 1)",
+    "min(-32768,32767)=-32768",
+    "min(100,100)=100 (equal operands)",
+    "n=700 tail path (10*64 + 60)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_unsigned.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "012fb77b85001f3312901543b09a73c5084a35dac26bba125c13eb7914d641a9",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vmin_i16",
+  "origin": "expert",
+  "params": {
+    "n": 700,
+    "op": "vmin_i16"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vmin_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "elementwise",
+    "min",
+    "signed-compare",
+    "int16",
+    "Q6_Vh_vmin_VhVh"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 5080,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 696,
+    "expert_speedup": 7.3,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "comms",
+  "dtype": "uint8",
+  "edge_cases": [
+    "in==64 -> 255 (inclusive)",
+    "in==191 -> 255 (inclusive)",
+    "in==63 -> 0",
+    "in==192 -> 0",
+    "0 and 255 -> 0",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_exclusive.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "397898dfb24aad23a38c4a853412be10a659384ba726e60e46677bd34fa1d7dc",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "u8_in_range_dma",
+  "origin": "expert",
+  "params": {
+    "compare_hi": "<=",
+    "compare_lo": ">=",
+    "hi": 191,
+    "lo": 64
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "u8_in_range_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 141382,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 42278,
+    "expert_speedup": 3.34,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int16",
+  "edge_cases": [
+    "block-granular op, defined only over full 64-element int16 vector pairs",
+    "g=3 blocks (no scalar tail -- see prompt.md)",
+    "vcombine's lo=second-arg/hi=first-arg convention pinned via sim experiment",
+    "identity-ramp block 0 lets the concatenation be hand-verified"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_swapped_args.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "1a4719caa6c7f83f1e3aedd0865781716e6afd3b78145443bd451e6a9351ff24",
+  "level": "L1",
+  "mechanisms_declared": [],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vcombine_i16",
+  "origin": "expert",
+  "params": {
+    "g": 3,
+    "op": "vcombine_i16"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vcombine_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "concatenate",
+    "combine",
+    "int16",
+    "Q6_W_vcombine_VV"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 982,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 222,
+    "expert_speedup": 4.42,
+    "source": "v6 corpus build (simulator)"
+  }
+}

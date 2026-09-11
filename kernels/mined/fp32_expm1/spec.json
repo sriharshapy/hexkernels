@@ -1,0 +1,63 @@
+{
+  "bundle": "harness-regenerable",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "HARNESS.md",
+    "PROMPT.md",
+    "kernel.c",
+    "reference.c"
+  ],
+  "harness_bytes": 2241940,
+  "kernel_sha256": "843944caed987791bb659fbc28c86a149b5a7b8d685cf734cff0cb23d981d67d",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 1572864 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ],
+    [
+      "dma",
+      "working set 1572864 B exceeds L2 1048576 B, so the data does not stay resident and staging is what buys bandwidth"
+    ],
+    [
+      "vtcm",
+      "the staged tiles need a software-managed scratchpad"
+    ]
+  ],
+  "mechanisms_declared": [
+    "dma",
+    "hvx",
+    "l2fetch",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_expm1",
+  "op": "expm1",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "da6eac896a1205339ca698d277c411544581136def145e209959a924596c9b9b",
+    "source_tier": "T1",
+    "task_tier": "T2",
+    "tier_match": false
+  },
+  "schema": "aten::expm1(Tensor self) -> Tensor",
+  "shape": [
+    384,
+    512
+  ],
+  "tier": "T2",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 1572864
+}

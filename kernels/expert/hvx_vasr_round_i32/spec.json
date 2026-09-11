@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int32",
+  "edge_cases": [
+    "tie round lo=16,shift=5 -> 1 (truncating would give 0)",
+    "negative tie lo=-16 -> 0",
+    "tie 2.5 hi=80 -> 3",
+    "positive/negative saturation at +-2000000000 -> 32767/-32768",
+    "interleave order: Vv(lo) at even output lanes, Vu(hi) at odd (empirically verified)",
+    "n=200 tail path (6*32 + 8)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_round.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "88ec991f29f6c291142e68eb4f432ae79486bcd03faa0e8c1a16f91dc53cb03c",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vasr_round_i32",
+  "origin": "expert",
+  "params": {
+    "n": 200,
+    "op": "vasr_round_i32",
+    "shift": 5
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vasr_round_i32",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "shift",
+    "rounding",
+    "saturating",
+    "int32",
+    "int16",
+    "Q6_Vh_vasr_VwVwR_rnd_sat"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2195,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 548,
+    "expert_speedup": 4.01,
+    "source": "v6 corpus build (simulator)"
+  }
+}

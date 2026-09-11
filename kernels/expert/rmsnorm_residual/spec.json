@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "saturating residual add (x[0]=127 + residual[0]=1 => 127)",
+    "saturating residual add (x[1]=-128 + residual[1]=-1 => -128)",
+    "zero segment after add (rms2=0, r_idx=0 path)",
+    "n not a multiple of 128 (tail)",
+    "3 distinct (gamma, inv_lut) sets (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_mean_sub.c",
+    "nearmiss_no_residual.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a12507ff04bf174f3d22db15f3f5c249580e5980dd04d54da147d8b930399c97",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "rmsnorm_residual",
+  "origin": "expert",
+  "params": {
+    "SHIFT": 8,
+    "gamma": "int8 per-element scale (runtime)",
+    "inv_lut": "256 uint8 entries, index=clamp(rms2,0,255) (runtime)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "rmsnorm_residual",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "rmsnorm",
+    "residual",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float",
+    "lut",
+    "no-mean-sub"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2452,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": null,
+    "expert_speedup": null,
+    "source": "v6 corpus build (simulator)"
+  }
+}

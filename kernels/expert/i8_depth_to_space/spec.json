@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "W_in=5 not a multiple of 128",
+    "inverse of space_to_depth",
+    "size-preserving (IN_SIZE == OUT_SIZE)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_order.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "95e9ac5e9337801bed66a57e13dc6696aed578288bb05e480d11e450ba3fd9eb",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_depth_to_space",
+  "origin": "expert",
+  "params": {
+    "block": 2,
+    "formula": "out[c*H_out*W_out + (oh*b+bh)*W_out + (ow*b+bw)] = in[(c*b*b+bh*b+bw)*H_in*W_in + oh*W_in + ow]",
+    "op": "depth_to_space"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_depth_to_space",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "depth_to_space",
+    "layout",
+    "block",
+    "AI",
+    "data-movement",
+    "param"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1833,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 1199,
+    "expert_speedup": 1.529,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "OW=19 not a multiple of 128",
+    "border pixels must be exactly zero",
+    "interior values must not be corrupted"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_edge_replicate.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "58ac2fc0d0f9f11dcacae5a2c8e8133daa4e230eafa460ef153a4a4cf1cb92d8",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_pad2d",
+  "origin": "expert",
+  "params": {
+    "formula": "out[r*(W+2P)+c] = in[(r-P)*W+(c-P)] if in-bounds else 0",
+    "mode": "zero",
+    "op": "pad2d",
+    "pad": 3
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_pad2d",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "pad",
+    "zero-pad",
+    "layout",
+    "AI",
+    "data-movement",
+    "param"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1994,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 662,
+    "expert_speedup": 3.01,
+    "source": "v6 corpus build (simulator)"
+  }
+}

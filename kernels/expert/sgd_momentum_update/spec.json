@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": "Optimizer step",
+  "domain": "ai",
+  "dtype": "fp32",
+  "edge_cases": [
+    "grad = 0 (momentum decays, w unchanged)",
+    "grad very large (momentum accumulates quickly)",
+    "v already non-zero (momentum carry-over)",
+    "negative gradients (w increases)",
+    "n not a multiple of 32 (tail path)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_momentum.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "27b85b3c02351a0cf2b1cc615a3c2c263021e51d4003da41e54487aefe7675c0",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "sgd_momentum_update",
+  "origin": "expert",
+  "params": {
+    "lr": 0.01,
+    "mu": 0.9,
+    "n": 512
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "sgd_momentum_update",
+    "upstream": "v4-gap"
+  },
+  "signal": "memory-bound (in-place read-modify-write, 3 arrays)",
+  "tags": [
+    "sgd",
+    "momentum",
+    "optimizer",
+    "in_place",
+    "fp32",
+    "ai",
+    "training"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 7580,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 618,
+    "expert_speedup": 12.265,
+    "source": "v6 corpus build (simulator)"
+  }
+}

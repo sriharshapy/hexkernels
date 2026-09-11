@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "1x1 conv contracts the channel axis -> out = In * W^T",
+    "weight crouton packed from W TRANSPOSED (aB[crouton(ci,co)]=W[co][ci])",
+    "fp16 crouton layout off(r,c)=(r/2)*64+c*2+(r&1)",
+    "HVX/HMX qf16 arithmetic is non-IEEE -> tolerance compare",
+    "not-transposed-weight near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_notransp.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "9c12f4a6a00c8df057e5ccd54917a2dd949ed5663d765be28d5b527189cb5a0b",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_conv1x1_fp16",
+  "origin": "expert",
+  "params": {
+    "Cin": 32,
+    "Cout": 32,
+    "P": 32,
+    "op": "conv1x1"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_conv1x1_fp16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "conv1x1",
+    "matmul",
+    "hmx",
+    "fp16",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 12285,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 10484,
+    "expert_speedup": 1.17,
+    "source": "v6 corpus build (simulator)"
+  }
+}

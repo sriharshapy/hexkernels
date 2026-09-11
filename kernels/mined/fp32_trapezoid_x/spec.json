@@ -1,0 +1,47 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "f8d47721ee5c865e46b5bd47fb0079404f8aab870ba79191ca6ffa0e2fe1b84e",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_trapezoid_x",
+  "op": "trapezoid",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "5e03081f2f0896cbdea803d258b56f99d208420b8336734d0cfc345140d5dced",
+    "source_tier": "T1",
+    "task_tier": "T0",
+    "tier_match": false
+  },
+  "schema": "aten::trapezoid.x(Tensor y, Tensor x, *, int dim=-1) -> Tensor",
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T0",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 4128
+}

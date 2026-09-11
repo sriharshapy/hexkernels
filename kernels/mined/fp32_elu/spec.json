@@ -1,0 +1,67 @@
+{
+  "bundle": "harness-regenerable",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "HARNESS.md",
+    "PROMPT.md",
+    "kernel.c",
+    "reference.c"
+  ],
+  "harness_bytes": 14918065,
+  "kernel_sha256": "5edd940e5abfb7ae4557b905f827de43da24d67eba1ad8d587d4997576275dac",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 10485760 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ],
+    [
+      "dma",
+      "working set 10485760 B exceeds L2 1048576 B, so the data does not stay resident and staging is what buys bandwidth"
+    ],
+    [
+      "vtcm",
+      "the staged tiles need a software-managed scratchpad"
+    ],
+    [
+      "dma",
+      "working set 10485760 B also exceeds VTCM 8388608 B, so it must be streamed in tiles -- double-buffered"
+    ]
+  ],
+  "mechanisms_declared": [
+    "dma",
+    "hvx",
+    "l2fetch",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_elu",
+  "op": "elu",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "7f09ab041d65857ef17a78fde40b137ba4c2f268f72d36c4ca8f2c998289cea9",
+    "source_tier": "T3",
+    "task_tier": "T3",
+    "tier_match": true
+  },
+  "schema": "aten::elu(Tensor self, Scalar alpha=1, Scalar scale=1, Scalar input_scale=1) -> Tensor",
+  "shape": [
+    1280,
+    1024
+  ],
+  "tier": "T3",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 10485760
+}

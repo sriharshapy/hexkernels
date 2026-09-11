@@ -1,0 +1,84 @@
+{
+  "bundle": "complete",
+  "category": "Grouped-query attention block (transformer layer)",
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "full grouped-query attention: H_Q=2 query heads share H_KV=1 KV head (GROUP_SIZE=2); per head QK^T (HMX) -> scale+softmax (HVX) -> A.V (HMX)",
+    "GQA mechanism: the shared KV head's HMX weight croutons -- K (QK^T) and V (A.V) -- are packed into VTCM ONCE and left resident, reused across both query heads without re-packing; only the query/probs activation side is re-packed per head",
+    "K stored [H_KV,S,D] row-major (row j IS key vector j) -> QK^T needs only swapped crouton tile indices, no transpose buffer",
+    "A.V reduction axis is the key axis S; V is a generic B[K,N] operand (no transpose)",
+    "softmax over the KEY axis; scale applied as >>4 on the 0x40-requant field",
+    "softmax probs are a normalized row (sum ~255) so the A.V accumulator stays < 2048 -> requant field exact",
+    "query head 1 row 0 all-zeros -> uniform softmax edge case",
+    "both HMX matmuls per head: 2x2 grid of 32x32 crouton tiles, 2-tile reduction, one mxclracc per output tile",
+    "crouton pack/unpack staged in cacheable DDR + bulk 128B HVX vector copies to/from VTCM (scalar VTCM access ~48 cyc)",
+    "LCG fill draws from bits >>13 (not the raw low 3 bits) so head0 and head1's Q data don't alias -- the raw low bits repeat with a period dividing S*D=4096 and would mask a wrong-head-grouping bug",
+    "wrong-grouping near-miss (forgets to advance the query pointer per head -- head1 reads head0's Q) must fail, specifically on head1's output range (first_bad=4096)",
+    "poisoned output buffer (0xA5A5)",
+    "input ranges chosen so every requant field < 2048 (12-bit field exact, whole block bit-exact)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_grouping.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e4f1c9416c3ec833693b3f50659ad2f9c408562aa05f143fd1d43cb63fda3b2e",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_gqa_attention_block",
+  "origin": "expert",
+  "params": {
+    "D": 64,
+    "GROUP_SIZE": 2,
+    "H_KV": 1,
+    "H_Q": 2,
+    "S": 64,
+    "exp_lut": "256 uint8 entries (runtime), fixed-point exp, index 255 = exp(0)",
+    "scale": "arithmetic >>4 on the 0x40-requant field (net ~1/15, in the 1/sqrt(D) regime)",
+    "softmax_tau": 24
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gqa_attention_block",
+    "upstream": null
+  },
+  "signal": "grouped-query attention block (matmul + softmax, shared-KV-head weight reuse)",
+  "tags": [
+    "attention",
+    "gqa",
+    "grouped-query",
+    "transformer",
+    "block",
+    "matmul",
+    "softmax",
+    "hmx",
+    "hvx",
+    "vtcm",
+    "int8",
+    "requant",
+    "weight-reuse",
+    "tiling",
+    "l3",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 974371,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 485511,
+    "expert_speedup": 2.01,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "large products (127*127*64)",
+    "sign in K-reduction",
+    "large negative bias triggers relu",
+    "large positive bias",
+    "zero bias",
+    "negative mult",
+    "shift==0 (no rounding)",
+    "non-zero zero-point",
+    "saturation to +127/-128",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "4551db39e9570e227f32ce08500ebcff8b856cfa11f6c077413514e96ab5c14d",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "gemm_bias_relu_requant",
+  "origin": "expert",
+  "params": {
+    "bias": "int32[N] (input data, per output channel)",
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "gemm_bias_relu_requant",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "matmul",
+    "bias",
+    "relu",
+    "requantize",
+    "fused",
+    "param",
+    "dense",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 160392,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 19168,
+    "expert_speedup": 8.368,
+    "source": "v6 corpus build (simulator)"
+  }
+}

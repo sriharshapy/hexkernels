@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": "FP32 pointwise activation",
+  "domain": "ai",
+  "dtype": "fp32",
+  "edge_cases": [
+    "x=0: silu(0)=0 exactly",
+    "large negative: silu->0 (not 0, so identity fails)",
+    "large positive: silu->x (not exactly x, so identity fails)",
+    "negative inputs: silu(x)!=relu(x) for x<0",
+    "sigmoid-only (forgets *x) fails everywhere except x=1",
+    "n%128 tail (candidate must not read/write past n)",
+    "poisoned output buffer (0xA5A5A5A5 per float)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_relu.c",
+    "nearmiss_sigmoid.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "5031f73fff9ad6c57aee70864889c259a26161953aa70aef100fe56df0dc1bd2",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "ai_fp32_silu",
+  "origin": "expert",
+  "params": {
+    "n": 1024
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ai_fp32_silu",
+    "upstream": "v4-gen:ai_fp32_silu__n1024"
+  },
+  "signal": "memory-bound + transcendental (expf per element)",
+  "tags": [
+    "silu",
+    "swish",
+    "activation",
+    "fp32",
+    "pointwise",
+    "ai",
+    "elementwise"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 91353,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 3810,
+    "expert_speedup": 23.977,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "all-same window",
+    "all-negative window",
+    "3/4=0 and -3/4=0 truncate toward zero",
+    "saturate after requant",
+    "shift==0",
+    "negative mult",
+    "non-zero zp",
+    "2 param sets swept (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_maxpool.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "857027965bd4dd90f1ca59de2e6e6ab5d8427afb9cff0b7490920429a380838d",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_avgpool_requant_dma",
+  "origin": "expert",
+  "params": {
+    "H": 768,
+    "W": 1024,
+    "mult": "runtime-swept",
+    "requant": "round-half-away",
+    "rounding": "truncate-toward-zero",
+    "shift": "runtime-swept",
+    "stride": [
+      2,
+      2
+    ],
+    "window": [
+      2,
+      2
+    ],
+    "zp": "runtime-swept"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_avgpool_requant_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound + compute",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 190000,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 101425,
+    "expert_speedup": 1.88,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": "Lookup-table function",
+  "domain": "comms",
+  "dtype": "int8",
+  "edge_cases": [
+    "hi=0/lo=0 (exact at boundary)",
+    "hi=15/lo=15 (near next segment end)",
+    "lo=0 (no interpolation)",
+    "lo=15 (almost next entry)",
+    "sign bit in input (b=0x80)",
+    "n%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nearest.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "ebb082fb32bc9d6182546240a661c63105488193c6e236a02d885a9bf97c2097",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_lut16_interp",
+  "origin": "expert",
+  "params": {
+    "formula": "lut[hi] + (((lut[hi+1]-lut[hi]) * lo) >> 4)",
+    "fraction": "((uint8_t)in[i]) & 0xF",
+    "index": "((uint8_t)in[i]) >> 4",
+    "lut_entries": 17,
+    "shift_mode": "truncating"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_lut16_interp",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "lut",
+    "interpolation",
+    "nibble",
+    "piecewise-linear",
+    "nonlinear",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 14346,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 2628,
+    "expert_speedup": 5.459,
+    "source": "v6 corpus build (simulator)"
+  }
+}

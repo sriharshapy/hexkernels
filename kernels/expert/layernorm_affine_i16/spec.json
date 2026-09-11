@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int16",
+  "edge_cases": [
+    "row of all-identical values (var=0, exercises vidx=0)",
+    "row with large spread / high variance (exercises vidx clamp to 255)",
+    "negative and positive gamma[r]/beta[r] across different rows (per-row scalar, not per-column)",
+    "C=90 not a multiple of 64 int16 lanes (tail path)",
+    "epilogue step order flipped vs. layernorm_row_i16: inv-scale first, gamma-scale second"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_beta.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "74c96af15ba8dc4e8384e1e64bde1b4a9d98c2ae53f36c3ba8b80f8cddf17b33",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "layernorm_affine_i16",
+  "origin": "expert",
+  "params": {
+    "C": 90,
+    "R": 6,
+    "SHIFT1": 6,
+    "SHIFT2": 10,
+    "VSHIFT": 5,
+    "op": "layernorm_row_affine"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "layernorm_affine_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "layernorm",
+    "normalization",
+    "int16",
+    "batched-rows",
+    "per-row-affine",
+    "fixed-point",
+    "no-float",
+    "lut"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 14746,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 11679,
+    "expert_speedup": 1.263,
+    "source": "v6 corpus build (simulator)"
+  }
+}

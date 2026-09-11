@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8->uint16",
+  "edge_cases": [
+    "3x3 grid of 32x32 output tiles; each accumulates over 3 K-tiles (bigger amortization than the 64x64/2x2 sibling)",
+    "HMX accumulator persists across K-tile matmuls (one mxclracc per out tile)",
+    "activation int8 in high byte of crouton slot (low bytes dead)",
+    "weight 4-deep packed; different load limit than activation",
+    "0x40-config requant: round(acc*17/16), 12-bit two's-complement field",
+    "signed weights / negative accumulators",
+    "input range chosen so |requant| < 2048 (12-bit field exact, no saturation)",
+    "n=96 = 3/4 HVX vector -> HVX baseline exercises the vsetq tail-mask path",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "transposed-B near-miss must fail",
+    "SIZING NOTE: authored+verified bit-exact at 128x128/4x4 first, but that shape's O(n^3) scalar reference pushed sim wall time to ~58s (over the ~40s budget); 96x96/3x3 is the largest grid in-budget (~31s) while still amortizing more than the 64x64 sibling"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transB.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "6825b30e6930c9a51c9bd838a04e463d286af0033839fb6538bc7116c7f9b8ee",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_matmul_hmx_96x96",
+  "origin": "expert",
+  "params": {
+    "K": 96,
+    "M": 96,
+    "N": 96
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_matmul_hmx_96x96",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine)",
+  "tags": [
+    "matmul",
+    "hmx",
+    "int8",
+    "requant",
+    "tiling",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 388350,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 162505,
+    "expert_speedup": 2.39,
+    "source": "v6 corpus build (simulator)"
+  }
+}

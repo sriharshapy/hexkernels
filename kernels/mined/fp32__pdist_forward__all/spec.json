@@ -1,0 +1,44 @@
+{
+  "bundle": "complete",
+  "dtype": null,
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "59c26ed1f2196986c8559f2b2a9fe102797c1ebdda23e0e3d5e608b2d5cde194",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32__pdist_forward__all",
+  "op": null,
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "db19d034b9d838c373260847cc07f2c985f923304f369daf9168f8388a73fc27",
+    "source_tier": "T0",
+    "task_tier": "T0",
+    "tier_match": true
+  },
+  "schema": null,
+  "shape": null,
+  "tier": "T0",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 2052
+}

@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "idx[0]=0 (first vocab row), idx[1]=VOCAB-1 (last vocab row)",
+    "repeated index (idx[2]=0) \u2014 same embedding row, same LN result",
+    "constant embedding row (vocab row 0 all=5, var=0, v_idx=0)",
+    "2 distinct index arrays (anti-hardcode gather)",
+    "3 distinct (gamma, beta, inv_lut) sets (anti-hardcode norm params)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_layernorm.c",
+    "nearmiss_shared_stats.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "004e96da9c5b32c6ebdd1125be1d88a7e5576dd8da535b7e0767ce74ab67ef59",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "embedding_layer_norm",
+  "origin": "expert",
+  "params": {
+    "SHIFT": 8,
+    "beta": "int8[D] per-dim bias (runtime)",
+    "gamma": "int8[D] per-dim scale (runtime)",
+    "inv_lut": "uint8[256] (runtime; shared across tokens)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "embedding_layer_norm",
+    "upstream": "v3"
+  },
+  "signal": "memory-bound",
+  "tags": [
+    "embedding",
+    "gather",
+    "layernorm",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float",
+    "lut"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 50696,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 3117,
+    "expert_speedup": 16.264,
+    "source": "v6 corpus build (simulator)"
+  }
+}

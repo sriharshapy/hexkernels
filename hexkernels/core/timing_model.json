@@ -1,0 +1,185 @@
+{
+  "arch": "v68n_1024",
+  "bandwidth_bytes_per_cycle": {
+    "L1D": 122.735,
+    "L2": 118.725,
+    "DDR": 19.692,
+    "VTCM": 118.725
+  },
+  "bandwidth_model": {
+    "L1D": {
+      "r_inf_bytes_per_cycle": 122.735,
+      "half_bytes": 2312.5,
+      "fit": {
+        "a_cycles": 18.842,
+        "b_cycles_per_byte": 0.00814761,
+        "r2": 0.99934,
+        "dropped_outliers_B": [
+          2048
+        ],
+        "max_observed_bw": 113.253,
+        "sweep_points": [
+          [
+            256,
+            19.0
+          ],
+          [
+            512,
+            21.0
+          ],
+          [
+            1024,
+            27.0
+          ],
+          [
+            2048,
+            182.0
+          ],
+          [
+            4096,
+            55.0
+          ],
+          [
+            8192,
+            87.0
+          ],
+          [
+            12288,
+            121.0
+          ],
+          [
+            16384,
+            151.0
+          ],
+          [
+            20480,
+            187.0
+          ],
+          [
+            24576,
+            217.0
+          ]
+        ]
+      }
+    },
+    "L2": {
+      "r_inf_bytes_per_cycle": 118.725,
+      "half_bytes": 0.0,
+      "fit": {
+        "a_cycles": -92.051,
+        "b_cycles_per_byte": 0.009063256,
+        "r2": 0.99899,
+        "dropped_outliers_B": [],
+        "max_observed_bw": 118.725,
+        "sweep_points": [
+          [
+            49152,
+            414.0
+          ],
+          [
+            98304,
+            833.0
+          ],
+          [
+            196608,
+            1710.0
+          ],
+          [
+            393216,
+            3372.0
+          ],
+          [
+            786432,
+            6865.0
+          ],
+          [
+            1048576,
+            9567.0
+          ]
+        ]
+      }
+    },
+    "DDR": {
+      "r_inf_bytes_per_cycle": 19.692,
+      "half_bytes": 17244.9,
+      "fit": {
+        "a_cycles": 875.714,
+        "b_cycles_per_byte": 0.050781114,
+        "r2": 1.0,
+        "dropped_outliers_B": [],
+        "max_observed_bw": 19.652,
+        "sweep_points": [
+          [
+            3145728,
+            160621.0
+          ],
+          [
+            4194304,
+            213865.0
+          ],
+          [
+            8388608,
+            426859.0
+          ]
+        ]
+      }
+    },
+    "VTCM": {
+      "r_inf_bytes_per_cycle": 118.725,
+      "half_bytes": 0.0,
+      "fit": {
+        "a_cycles": -92.051,
+        "b_cycles_per_byte": 0.009063256,
+        "r2": 0.99899,
+        "dropped_outliers_B": [],
+        "max_observed_bw": 118.725,
+        "sweep_points": [
+          [
+            49152,
+            414.0
+          ],
+          [
+            98304,
+            833.0
+          ],
+          [
+            196608,
+            1710.0
+          ],
+          [
+            393216,
+            3372.0
+          ],
+          [
+            786432,
+            6865.0
+          ],
+          [
+            1048576,
+            9567.0
+          ]
+        ]
+      }
+    }
+  },
+  "ddr_spec_bytes_per_cycle": 36.6,
+  "ddr_measured_over_spec": 0.538,
+  "level_size_bytes": {
+    "L1D": 16384,
+    "L2": 1048576,
+    "VTCM": 4194304
+  },
+  "compute_peak_ops_per_cycle": {
+    "hvx_int8": 128,
+    "hvx_int16": 64,
+    "hvx_fp16": 64,
+    "hvx_fp32": 32,
+    "hmx_int8": 1024,
+    "hmx_fp16": 512
+  },
+  "bus_params": {
+    "buspenalty": 75,
+    "busratio": 2
+  },
+  "ddr_source": "Snapdragon 888 spec: 4x16b LPDDR5-6400 = 51.2 GB/s; cDSP ~1.4 GHz -> ~36.6 B/DSP-cycle (qualcomm public spec)"
+}

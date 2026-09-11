@@ -1,0 +1,67 @@
+{
+  "bundle": "complete",
+  "category": "Gather / scatter",
+  "domain": "mem",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "idx[0]=0 (first table entry)",
+    "idx[1]=N_TABLE-1 (last table entry)",
+    "repeated index (same gather, different output positions)",
+    "last output position N-1",
+    "n not a multiple of 128 (tail path)",
+    "shift==0 (no rounding half)",
+    "negative mult (sign handling)",
+    "non-zero zero-point",
+    "5 distinct (mult,shift,zp) parameter sweeps (anti-hardcode params)",
+    "2 distinct index sweeps (anti-hardcode indices)",
+    "round-half-away-from-zero saturation to [-128,127]"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_requant.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "2c86238625173d513ae875bf6ac50da2237fd759f9a3ffdb51df6751ada3285b",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_gather_requant",
+  "origin": "expert",
+  "params": {
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gather_requant",
+    "upstream": "v3"
+  },
+  "signal": "memory-bound + compute (gather + requantize)",
+  "tags": [
+    "gather",
+    "requantize",
+    "fused",
+    "indexed",
+    "param",
+    "memory-bound",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 9745,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 329,
+    "expert_speedup": 29.62,
+    "source": "v6 corpus build (simulator)"
+  }
+}

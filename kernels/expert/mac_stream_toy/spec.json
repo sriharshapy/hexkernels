@@ -1,0 +1,51 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8_x_int8",
+  "edge_cases": [
+    "a=255 max uint8",
+    "b=-128 min int8",
+    "a=0",
+    "signed weight x unsigned act"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_bothsigned.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "924d17e0f3fbd407c6f9181611c2baf50748c11292ecd1862acbe83b3246ce8f",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "mac_stream_toy",
+  "origin": "expert",
+  "params": {
+    "blk": 16384
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "mac_stream_toy",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 55414,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 32056,
+    "expert_speedup": 1.73,
+    "source": "v6 corpus build (simulator)"
+  }
+}

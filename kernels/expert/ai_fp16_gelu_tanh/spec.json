@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": "FP16 pointwise activation",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "x=0: gelu(0)=0",
+    "large negative: gelu->0 (not 0 exactly, so identity fails)",
+    "large positive: gelu->x (not exactly x, so identity fails)",
+    "negative inputs: gelu(x)>0 for x in (-inf,0), so relu fails",
+    "n%128 tail (candidate must not read/write past n)",
+    "poisoned output buffer (0xA5A5)",
+    "quarter-integer inputs cover full [-4,4] range"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_identity.c",
+    "nearmiss_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "adfd84a9d653b3ff3c427175971d009ae9ebe4f9b173e59d0fc3a8b64af245f3",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "ai_fp16_gelu_tanh",
+  "origin": "expert",
+  "params": {
+    "n": 1024
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ai_fp16_gelu_tanh",
+    "upstream": "v4-gen:ai_fp16_gelu_tanh__n1024"
+  },
+  "signal": "memory-bound + transcendental (tanhf per element)",
+  "tags": [
+    "gelu",
+    "activation",
+    "fp16",
+    "pointwise",
+    "ai",
+    "elementwise",
+    "tanh"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 208546,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 39383,
+    "expert_speedup": 5.296,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply + fused epilogue",
+  "domain": "ai",
+  "dtype": "uint8xint8->int8",
+  "edge_cases": [
+    "2x2 grid of 32x32 output tiles; each accumulates over 2 K-tiles",
+    "HMX accumulator persists across K-tile matmuls (one mxclracc per out tile)",
+    "activation int8 in high byte of crouton slot (low bytes dead)",
+    "weight 4-deep packed; different load limit than activation",
+    "HMX 0x40-config requant gives the native matrix-engine output r=(acc*17+8)>>4, sign-extended from the 12-bit field",
+    "per-output-column int32 bias, saturate to int8, then a 256-entry GELU LUT (index=val+128) fused into the HVX epilogue",
+    "gelu_lut is a runtime parameter -- candidate must not hardcode it",
+    "bias includes extreme (-3000/+3000) and zero edge values to force both LUT-saturation ends and a zero-bias column",
+    "signed weights / negative accumulators",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "transposed-B near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transB.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "16489ce75646306900827aaa18503e0ef1af6c549fabe22deb451443222ecb24",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_matmul_bias_gelu_hmx",
+  "origin": "expert",
+  "params": {
+    "K": 64,
+    "M": 64,
+    "N": 64
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_matmul_bias_gelu_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine + fused epilogue)",
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "bias",
+    "gelu",
+    "lut",
+    "epilogue",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 194319,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 125091,
+    "expert_speedup": 1.55,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": "Neighborhood image filter",
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "top/bottom/left/right borders",
+    "gradient row",
+    "constant row",
+    "w%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_zeroborder.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "57564ed4e6654cb02db2b9da6361dc47d7fe5b0ae0f4949d1716e89c365d0dc8",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "u8_box3x3",
+  "origin": "expert",
+  "params": {
+    "border": "clamp-to-edge",
+    "divide": 9
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "u8_box3x3",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "image",
+    "convolution",
+    "border"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 52745,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 32484,
+    "expert_speedup": 1.62,
+    "source": "v6 corpus build (simulator)"
+  }
+}

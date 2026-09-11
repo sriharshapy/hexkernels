@@ -1,0 +1,75 @@
+{
+  "bundle": "complete",
+  "category": "Neighborhood image filter",
+  "domain": "dsp",
+  "dtype": "uint8->int16",
+  "edge_cases": [
+    "top/bottom/left/right border pixels (clamp-to-edge changes neighbour count effectively)",
+    "flat patch (Laplacian must be exactly 0)",
+    "step edge (exercises full negative/positive range of int16 output)",
+    "gradient top row",
+    "w%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_sharpen.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "007b2d8779035d65d48f0acc5e81d1ee8d1531c2ecc6fa91c99dc9e4bfc3b9b1",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_laplacian3x3",
+  "origin": "expert",
+  "params": {
+    "border": "clamp-to-edge",
+    "kernel": [
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        1,
+        -4,
+        1
+      ],
+      [
+        0,
+        1,
+        0
+      ]
+    ],
+    "output_type": "int16",
+    "saturation": "none"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_laplacian3x3",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "image",
+    "laplacian",
+    "edge-detection",
+    "border",
+    "signed-output"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 121788,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 7121,
+    "expert_speedup": 17.103,
+    "source": "v6 corpus build (simulator)"
+  }
+}

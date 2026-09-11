@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "random indices into a 64KB table (larger than L1) -> scalar misses to DDR",
+    "first/last table entry, repeated index",
+    "n_idx not necessarily a multiple of 32 (gather width); scalar tail in expert",
+    "int8 narrowing of int32 table values (127/-128 boundary)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_off_by_one.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "fb4bc34c1ebc994d06c1b9f1bd131366f31ffa3533c969d85d7ffe93653b83ed",
+  "level": "L2",
+  "mechanisms_declared": [
+    "gather",
+    "vtcm",
+    "dma"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_gather_vtcm_i8",
+  "origin": "expert",
+  "params": {
+    "n_idx": 32768,
+    "op": "table_lookup_narrow_i8",
+    "table_words": 16384
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_gather_vtcm_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "gather",
+    "vtcm",
+    "dma",
+    "table-lookup",
+    "narrow"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 519100,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 201489,
+    "expert_speedup": 2.577,
+    "source": "v6 corpus build (simulator)"
+  }
+}

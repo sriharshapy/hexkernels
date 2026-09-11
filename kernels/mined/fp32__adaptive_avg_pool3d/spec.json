@@ -1,0 +1,55 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "43acc72e85016cc4661c7df69cf3c79c4bd66caec24575d745ad83d8682f6e02",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 147456 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32__adaptive_avg_pool3d",
+  "op": "_adaptive_avg_pool3d",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "236a62e7e0affd7823502cc1ab2c28dadb7e3971a266c904f627cacb29ed91fd",
+    "source_tier": "T1",
+    "task_tier": "T1",
+    "tier_match": true
+  },
+  "schema": "aten::_adaptive_avg_pool3d(Tensor self, SymInt[3] output_size) -> Tensor",
+  "shape": [
+    1,
+    8,
+    16,
+    16,
+    16
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 147456
+}

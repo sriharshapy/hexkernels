@@ -1,0 +1,77 @@
+{
+  "bundle": "complete",
+  "category": "Convolution (3x3) + fused bias+ReLU via matrix engine",
+  "domain": "ai",
+  "dtype": "uint8xint8->int32",
+  "edge_cases": [
+    "3x3 VALID conv lowered to a P x K x C_out matmul, K = C_in*Kh*Kw = 72 (im2col)",
+    "reduction K=72 zero-padded to 3 crouton K-tiles; division-free pack (koff/poff)",
+    "HMX native output r = sign-extend of the 12-bit 0x40 requant field (round(acc*17/16))",
+    "per-output-channel int32 bias then ReLU fused into the HVX epilogue",
+    "bias includes extreme (-3000/+3000) and zero edge values so both ReLU branches fire",
+    "signed weights / negative accumulators",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "ReLU-omitted near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_norelu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "93db1d7c48faadeb80957de7c2eb9d721b391ffd478118e7d3b2c4a29d59bbb0",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_conv2d_bias_relu_hmx",
+  "origin": "expert",
+  "params": {
+    "C_in": 8,
+    "C_out": 32,
+    "IH": 10,
+    "IW": 10,
+    "K": 72,
+    "Kh": 3,
+    "Kw": 3,
+    "OH": 8,
+    "OW": 8,
+    "P": 64,
+    "padding": "VALID",
+    "stride": 1
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_conv2d_bias_relu_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine via im2col + fused epilogue)",
+  "tags": [
+    "conv",
+    "conv3x3",
+    "im2col",
+    "hmx",
+    "hvx",
+    "int8",
+    "bias",
+    "relu",
+    "epilogue",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 141808,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 87091,
+    "expert_speedup": 1.63,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "comms",
+  "dtype": "uint8",
+  "edge_cases": [
+    "in==128 -> 255 (inclusive)",
+    "in==127 -> 0",
+    "0 and 255 extremes",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_strictgt.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "78020dd8b98239d39a1baaf65c0398e435d2948aaf8e1e603f7a6f7634fe5e51",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "u8_threshold_dma",
+  "origin": "expert",
+  "params": {
+    "compare": ">=",
+    "thresh": 128
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "u8_threshold_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 99876,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 34128,
+    "expert_speedup": 2.93,
+    "source": "v6 corpus build (simulator)"
+  }
+}

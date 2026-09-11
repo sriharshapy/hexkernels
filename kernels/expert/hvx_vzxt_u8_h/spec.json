@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "block-granular op, defined only over full 128B vectors",
+    "n=384 is exactly 3 blocks (no byte tail -- see prompt.md)",
+    "even/odd deinterleaved output layout pinned via sim experiment (NOT sequential widen)",
+    "identity-ramp block 0 lets the deinterleave be hand-verified"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_swapped_halves.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "391cbded542a8281dbfc068e63f4cd596f3c9716d7695c404db1cfbede07cb22",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vzxt_u8_h",
+  "origin": "expert",
+  "params": {
+    "n": 384,
+    "op": "vzxt_u8_h"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vzxt_u8_h",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "widen",
+    "zero-extend",
+    "deinterleave",
+    "uint8",
+    "uint16",
+    "Q6_Wuh_vzxt_Vub"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 798,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 238,
+    "expert_speedup": 3.35,
+    "source": "v6 corpus build (simulator)"
+  }
+}

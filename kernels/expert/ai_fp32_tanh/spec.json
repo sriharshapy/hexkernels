@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": "FP32 pointwise activation",
+  "domain": "ai",
+  "dtype": "fp32",
+  "edge_cases": [
+    "x=0: tanh(0)=0 exactly",
+    "large negative (x=-6): tanh->-1.0 (not -1 exactly, but near-1; identity fails)",
+    "large positive (x=6): tanh->+1.0 (not +1 exactly; identity fails)",
+    "sigmoid 1/(1+exp(-x)) fails (range is [0,1], not [-1,1])",
+    "identity fails (tanh(x)!=x for |x|>0)",
+    "n%128 tail (candidate must not read/write past n)",
+    "poisoned output buffer (0xA5A5A5A5 per float)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_identity.c",
+    "nearmiss_sigmoid.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "848b44946f4f50afddc60b4cac3e9272eda2ccb55c5745524d2676638df90f15",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "ai_fp32_tanh",
+  "origin": "expert",
+  "params": {
+    "n": 1024
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ai_fp32_tanh",
+    "upstream": "v4-gen:ai_fp32_tanh__n1024"
+  },
+  "signal": "memory-bound + transcendental (tanhf per element)",
+  "tags": [
+    "tanh",
+    "activation",
+    "fp32",
+    "pointwise",
+    "ai",
+    "elementwise"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 157982,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 2788,
+    "expert_speedup": 56.665,
+    "source": "v6 corpus build (simulator)"
+  }
+}

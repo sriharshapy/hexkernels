@@ -1,0 +1,47 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "eaa4742c6583a1d2f8df8a06c0dc00a1536d46942d7e0eaf6b9a519fae0b34a4",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_log",
+  "op": "log",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "9821a330ce5537fdd1499aa1883956e2b7c0f848966e81728401d77de065b861",
+    "source_tier": "T2",
+    "task_tier": "T0",
+    "tier_match": false
+  },
+  "schema": "aten::log(Tensor self) -> Tensor",
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T0",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 4096
+}

@@ -1,0 +1,69 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "HW=20000 not a multiple of the band width (TC=4096 in expert/s1, TC=128 in s2/nearmiss) -- clipped final band",
+    "C=64 is the small/chained dimension (one Q6_dmstart_A per band triggers a chain of C per-channel descriptors)",
+    "per-image processing generalizes to N>1 even though the test uses N=1",
+    "first/last byte of the whole tensor + one mid-channel/mid-spatial cell pinned as boundary values in the harness",
+    "nearmiss_no_transpose copies the band into VTCM without swapping the channel/spatial index (a differently-shaped copy, not a transpose) -> INCORRECT"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_transpose.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "b33eb83e25d532999cfcef474b0814a6719155f6197384e6cfe37cf63b34d8f4",
+  "level": "L2",
+  "mechanisms_declared": [
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": false
+  },
+  "name": "dma_nchw_nhwc_i8",
+  "origin": "expert",
+  "params": {
+    "C": 64,
+    "H": 100,
+    "N": 1,
+    "W": 200,
+    "band_width_TC": 4096,
+    "op": "nchw_to_nhwc"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_nchw_nhwc_i8",
+    "upstream": null
+  },
+  "signal": "DDR-bandwidth-bound at full size (C*H*W=1.22MB per image > L2); dominated by the scalar on-chip VTCM transpose, not DMA overhead -- same root cause as dma_2d_transpose_i8, whose banded gather-DMA-chain transpose algorithm this task reuses per-image (C plays the role of the small/chained dimension, H*W the banded dimension)",
+  "tags": [
+    "dma",
+    "vtcm",
+    "nchw",
+    "nhwc",
+    "layout",
+    "transpose",
+    "gather",
+    "chained-descriptor",
+    "ai",
+    "l2",
+    "int8",
+    "not-accelerable"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 4947305,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 61622149,
+    "expert_speedup": 0.08,
+    "source": "v6 corpus build (simulator)"
+  }
+}

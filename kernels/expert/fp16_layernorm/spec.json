@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "n=2048 = 32 HVX vectors of 64 fp16 lanes (clean single-tile size, no remainder)",
+    "x[0]=3.0, x[1]=-3.0 (extremes at the head of the reduction)",
+    "x[N-1]=0.0",
+    "per-feature gamma (0.5..1.5 cycling) and beta (-0.75..0.75 cycling, mostly nonzero) are runtime arrays, must be read (anti-hardcode)",
+    "mean/var/inv_std computed as O(1) scalars from a vectorized O(n) reduction (single scalar sqrtf call, not per-element)",
+    "HVX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "poisoned output buffer",
+    "omitted-beta near-miss must fail (beta is pinned nonzero for most indices)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nobeta.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "0e1debc6c84e661b2a1766a1d083c871e554cd2691010e91c4546b35b0e74793",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp16_layernorm",
+  "origin": "expert",
+  "params": {
+    "eps": 0.001,
+    "n": 2048
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_layernorm",
+    "upstream": null
+  },
+  "signal": "compute-bound reduction + elementwise affine (HVX qf16 vs scalar fp16)",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 179354,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 3609,
+    "expert_speedup": 49.7,
+    "source": "v6 corpus build (simulator)"
+  }
+}

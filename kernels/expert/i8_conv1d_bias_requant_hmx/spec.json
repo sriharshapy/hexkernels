@@ -1,0 +1,75 @@
+{
+  "bundle": "complete",
+  "category": "Convolution (1D, dense) + bias + requant via matrix engine",
+  "domain": "dsp",
+  "dtype": "uint8xint8->int8",
+  "edge_cases": [
+    "dense cross-channel 1D conv (VALID) lowered to a OL x K x C_out matmul, K = C_in*Kw = 80",
+    "im2col gathers each output position's C_in*Kw window into a crouton row",
+    "reduction K=80 zero-padded to 3 crouton K-tiles; division-free pack (koff/poff)",
+    "im2col activation packed once per M-tile and REUSED across N-tiles (amortizes im2col)",
+    "HMX native output r = sign-extend of the 12-bit 0x40 requant field",
+    "per-channel int32 bias then saturating int8 requant fused into the HVX epilogue",
+    "edge biases force -128 / +127 saturation and no-bias passthrough",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "transposed-weight (C_in<->C_out) near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transW.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "9a1cd1fd2cb372033494a6994020aa0cca90a06735a60254aa37f6806c6655b6",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_conv1d_bias_requant_hmx",
+  "origin": "expert",
+  "params": {
+    "C_in": 16,
+    "C_out": 64,
+    "K": 80,
+    "Kw": 5,
+    "L_in": 68,
+    "OL": 64,
+    "P": 64,
+    "layout": "dense cross-channel (NCL)",
+    "padding": "VALID"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_conv1d_bias_requant_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine via im2col)",
+  "tags": [
+    "conv",
+    "conv1d",
+    "im2col",
+    "hmx",
+    "hvx",
+    "int8",
+    "bias",
+    "requant",
+    "reroute",
+    "dsp"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 192456,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 155467,
+    "expert_speedup": 1.24,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "true max planted mid-stream (not at an edge)",
+    "min value 0x00 also planted (rules out a min/max confusion silently passing)",
+    "unsigned max semantics (uint8, not signed int8)",
+    "n not a multiple of the 16384-byte DMA tile size (tail handled scalar)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_min_confusion.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "cbd053420d9630380eb924ac6eb1a2ba413ba7991a8b8a45306453d3396a593a",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_stream_max_u8",
+  "origin": "expert",
+  "params": {
+    "n": 1100000,
+    "op": "max_reduce"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_stream_max_u8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "dma",
+    "vtcm",
+    "double-buffer",
+    "reduction",
+    "max",
+    "ddr-bound"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 61154,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 37787,
+    "expert_speedup": 1.618,
+    "source": "v6 corpus build (simulator)"
+  }
+}

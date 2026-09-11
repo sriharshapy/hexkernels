@@ -1,0 +1,68 @@
+{
+  "bundle": "complete",
+  "category": "Downsample / pooling",
+  "domain": "ai",
+  "dtype": "u8",
+  "edge_cases": [
+    "odd input dims: ow=65, oh=49 (ceiling division)",
+    "tail: output width 65 not multiple of 128",
+    "zero-pad vs clamp-to-edge: distinct at border pixels (zero < any nonzero pixel)",
+    "last column window: right pair is zero-padded",
+    "last row window: bottom pair is zero-padded"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_clampborder.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "8cae54d0dab5fe38f9d86caaa6a3d4659adf485751de070edc0ad33ca42d8a1e",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "u8_maxpool2x2_pad",
+  "origin": "expert",
+  "params": {
+    "output_h_formula": "(h+1)/2",
+    "output_w_formula": "(w+1)/2",
+    "padding": "zero-pad",
+    "stride": [
+      2,
+      2
+    ],
+    "window": [
+      2,
+      2
+    ]
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "u8_maxpool2x2_pad",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "pooling",
+    "maxpool",
+    "2x2",
+    "stride2",
+    "zero-pad",
+    "ai",
+    "cat7"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 42081,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 1642,
+    "expert_speedup": 25.628,
+    "source": "v6 corpus build (simulator)"
+  }
+}

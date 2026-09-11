@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int32->int32",
+  "edge_cases": [
+    "bias broadcast across ROWS per COLUMN (not per-row) -- axis-swap discriminator",
+    "an all-zero-acc row -> output must equal bias exactly (not scaled/duplicated)",
+    "bias sign/magnitude mix incl. +-1,000,000 extremes",
+    "acc extremes (+-2,000,000,000) paired with extreme-bias columns, kept within int32 sum headroom",
+    "C=100 not a multiple of 32 int32 lanes -- tail path exercised on every row",
+    "row stride (C*4=400B) is not 128B-aligned -- unaligned vector load/store required"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_row_broadcast.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "12553cb27a407ba6bc25f03b6dfeca83a61c5df81ef5b2271d42ba3ec4819acb",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "epilogue_bias_i32",
+  "origin": "expert",
+  "params": {
+    "C": 100,
+    "R": 20,
+    "op": "bias_add_2d_broadcast"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "epilogue_bias_i32",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "bias",
+    "epilogue",
+    "broadcast",
+    "layout",
+    "gemm-epilogue",
+    "2d"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 11318,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 1612,
+    "expert_speedup": 7.02,
+    "source": "v6 corpus build (simulator)"
+  }
+}

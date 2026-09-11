@@ -1,0 +1,71 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "large products (127*127*128)",
+    "sign in K-reduction",
+    "large negative bias triggers relu (output clamped to 0)",
+    "large positive bias",
+    "zero bias",
+    "planted row with forced negative acc+bias (relu must fire)",
+    "negative mult",
+    "shift==0 (no rounding)",
+    "non-zero zero-point",
+    "saturation to +127/-128",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7034953cfb3d922dd3034fa2689705eff049ff7e53ffa406b3cb015f4a35cc38",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_linear_relu_requant",
+  "origin": "expert",
+  "params": {
+    "bias": "int32[M] (input data, per output neuron)",
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_linear_relu_requant",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "matvec",
+    "linear",
+    "bias",
+    "relu",
+    "requantize",
+    "fused",
+    "fully-connected",
+    "param",
+    "dense",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 42968,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 9381,
+    "expert_speedup": 4.58,
+    "source": "v6 corpus build (simulator)"
+  }
+}

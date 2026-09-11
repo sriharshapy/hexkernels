@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8->int8",
+  "edge_cases": [
+    "first window all-255: mean 255 -> (int8)-1",
+    "last window all-0: 0",
+    "window == one DMA tile",
+    "int8 wrap when mean>127"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_signed.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "c47c01d7a20f60b4a2d66eff2308641e46d7aa62370240fea25db8da9e7e0adc",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_adaptive_avgpool_dma",
+  "origin": "expert",
+  "params": {
+    "cast": "int8 wrapping",
+    "rounding": "truncate",
+    "stride": "k (non-overlapping)",
+    "window": "k=n/m=16384"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_adaptive_avgpool_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 95477,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 48565,
+    "expert_speedup": 1.97,
+    "source": "v6 corpus build (simulator)"
+  }
+}

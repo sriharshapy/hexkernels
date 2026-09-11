@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": "Comms / bit ops",
+  "domain": "comms",
+  "dtype": "int32->int32",
+  "edge_cases": [
+    "a[i] == b[i]  -> distance 0",
+    "a[i] == ~b[i] -> distance 32 (all bits differ)",
+    "a[i] == 0, b[i] == 0 -> distance 0",
+    "a[i] == 0, b[i] == 0xFFFFFFFF -> distance 32",
+    "a[i] == 0x55555555, b[i] == 0xAAAAAAAA -> distance 32 (all bits differ, alternating)",
+    "n%128 tail",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_and_popcount.c",
+    "nearmiss_xor_only.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "acd64948dd22b680b9b4b905cce4808322bf2f82bd4a8e87d12dcc01ad009457",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "comms_hamming_distance_i32",
+  "origin": "expert",
+  "params": {
+    "hamming_rule": "out[i] = popcount( a[i] ^ b[i] ) \u2014 number of differing bits (0..32)",
+    "n": 1024
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "comms_hamming_distance_i32",
+    "upstream": "v4-gen:comms_hamming_distance_i32__n1024"
+  },
+  "signal": "bitwise Hamming distance per word pair",
+  "tags": [
+    "hamming",
+    "popcount",
+    "xor",
+    "bitops",
+    "int32",
+    "comms",
+    "param"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 10034,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 668,
+    "expert_speedup": 15.02,
+    "source": "v6 corpus build (simulator)"
+  }
+}

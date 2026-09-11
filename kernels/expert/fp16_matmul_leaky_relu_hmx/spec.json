@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply + fused epilogue",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "M=N=32 (single crouton tile) but K=128: deep reduction accumulated over 4 K-tiles",
+    "fp16 crouton layout off(r,c)=(r/2)*64+c*2+(r&1) for A, weight, output, per K-tile",
+    "leaky ReLU (slope 1/8) fused as native HVX vector ops on the crouton-order output block: max(v,0) + min(v,0)*0.125, both maxes/mins native at v68, final combine via qf16 add (v68 lacks native Vhf+Vhf add)",
+    "input range keeps matmul outputs near zero on both sides so both the positive-passthrough and negative-scaled leaky branches fire across the 1024 outputs",
+    "HVX/HMX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "unlike the bias_relu/residual siblings this epilogue CLEARS the 1.2x gate (1.23x) despite having MORE vector ops (5 vs 3/2) -- the epilogue touches only the matmul-warm crouton block (no extra full-size operand like residual's C, no extra live array like bias_relu's biasCr[64] that appeared to perturb codegen)",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "row/col-swapped-within-tile near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transB.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "b6b4860a9a3ed9e92ea5948e01107d74edb88b07041ce4a5f45f6261645bdc83",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "fp16_matmul_leaky_relu_hmx",
+  "origin": "expert",
+  "params": {
+    "K": 128,
+    "M": 32,
+    "N": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_matmul_leaky_relu_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine + fused epilogue)",
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "fp16",
+    "leaky_relu",
+    "epilogue",
+    "deep-k",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 29865,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 24185,
+    "expert_speedup": 1.23,
+    "source": "v6 corpus build (simulator)"
+  }
+}

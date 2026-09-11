@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint16",
+  "edge_cases": [
+    "1>>5 = 0",
+    "0xFFFF>>5 = 2047 (max value)",
+    "0x8000>>5 = 0x0400 (no sign extension, high bit set)",
+    "3>>5 = 0",
+    "n=619 tail path (9*64 + 43)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_arithmetic.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "5af96ef9e778993f18362666448e3dbff060ae9730d098c5961c9e11ee7a52a7",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vlsr_u16",
+  "origin": "expert",
+  "params": {
+    "n": 619,
+    "op": "vlsr_u16",
+    "shift": 5
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vlsr_u16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "shift-right",
+    "logical",
+    "uint16",
+    "Q6_Vuh_vlsr_VuhR"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2668,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 465,
+    "expert_speedup": 5.74,
+    "source": "v6 corpus build (simulator)"
+  }
+}

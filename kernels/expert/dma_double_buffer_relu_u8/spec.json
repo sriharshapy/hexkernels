@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "tail path n % tile_bytes != 0",
+    "zero-point boundary values 0,127,128,129,255"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wraparound.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "eefe71ee0541ad14489fb48127a04eae5d7a9886fe18ba1b3df66d0f3758f367",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_double_buffer_relu_u8",
+  "origin": "expert",
+  "params": {
+    "n": 524388,
+    "op": "relu_zeropoint128",
+    "tile_bytes": 131072
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_double_buffer_relu_u8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "dma",
+    "vtcm",
+    "relu",
+    "double-buffer",
+    "negative-finding"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 18224,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 19248,
+    "expert_speedup": 0.947,
+    "source": "v6 corpus build (simulator)"
+  }
+}

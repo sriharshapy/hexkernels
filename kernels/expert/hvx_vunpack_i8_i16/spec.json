@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "sign-extend -128 stays -128 (no overflow, int16 covers int8 range)",
+    "sign-extend 127 stays 127",
+    "sign-extend -1 stays -1 (all sign bits must extend)",
+    "n=1000 tail path (7*128 + 104)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_zeroextend.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "3ebb51197f419e8b077404750580e4592a4815f23bb858a244f2fd0b0be66280",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vunpack_i8_i16",
+  "origin": "expert",
+  "params": {
+    "n": 1000,
+    "op": "vunpack_i8_i16"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vunpack_i8_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "unpack",
+    "sign-extend",
+    "widen",
+    "int8",
+    "int16",
+    "Q6_Wh_vunpack_Vb"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2184,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 498,
+    "expert_speedup": 4.39,
+    "source": "v6 corpus build (simulator)"
+  }
+}

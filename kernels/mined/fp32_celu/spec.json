@@ -1,0 +1,63 @@
+{
+  "bundle": "harness-regenerable",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "HARNESS.md",
+    "PROMPT.md",
+    "kernel.c",
+    "reference.c"
+  ],
+  "harness_bytes": 2241940,
+  "kernel_sha256": "a14489378e4e186f54ac4cb380325cbd3b119231fa52530fc500f6391f8ac70a",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 1572864 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ],
+    [
+      "dma",
+      "working set 1572864 B exceeds L2 1048576 B, so the data does not stay resident and staging is what buys bandwidth"
+    ],
+    [
+      "vtcm",
+      "the staged tiles need a software-managed scratchpad"
+    ]
+  ],
+  "mechanisms_declared": [
+    "dma",
+    "hvx",
+    "l2fetch",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_celu",
+  "op": "celu",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "042b885e399a8e97fd2a1c111ba7e17c5480afbbf9dc843ec8f47e4d9b2b85ef",
+    "source_tier": "T1",
+    "task_tier": "T2",
+    "tier_match": false
+  },
+  "schema": "aten::celu(Tensor self, Scalar alpha=1.) -> Tensor",
+  "shape": [
+    384,
+    512
+  ],
+  "tier": "T2",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 1572864
+}

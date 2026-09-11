@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->u8",
+  "edge_cases": [
+    "A row all-max (127) x B col all-max (127) -> acc saturates to 127",
+    "A row all-min (-128) x B col all-max (127) -> acc saturates to -128",
+    "A row all-zero -> all scores=0 for that row -> uniform softmax",
+    "3 distinct LUT sweep sets (anti-hardcode)",
+    "nearmiss_no_clamp: truncation vs saturating clamp",
+    "nearmiss_col_softmax: wrong reduction axis"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_col_softmax.c",
+    "nearmiss_no_clamp.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "393cc6e3bb0083ac8e592b809b2038fc1e0f0fad4121d4452d2c983e2c25652e",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_gemm_softmax_tile",
+  "origin": "expert",
+  "params": {
+    "exp_lut": "256 uint8 entries (runtime), index 255=exp(0)=max"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gemm_softmax_tile",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "gemm",
+    "softmax",
+    "lut",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 27367,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 12256,
+    "expert_speedup": 2.233,
+    "source": "v6 corpus build (simulator)"
+  }
+}

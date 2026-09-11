@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "odd sum 3+4=7 -> rnd=4 (floor would give 3)",
+    "odd sum 0+255=255 -> rnd=128 (floor would give 127)",
+    "even sum 255+255=510 -> rnd=floor=255",
+    "odd sum 1+2=3 -> rnd=2 (floor would give 1)",
+    "n=900 tail path (7*128 + 4)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_floor.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "2af32e38dcb4c83d0be01e6f1258a23f251d354ce2ca663464cef629bc6179cb",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vavg_u8",
+  "origin": "expert",
+  "params": {
+    "n": 900,
+    "op": "vavg_rnd_u8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vavg_u8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "elementwise",
+    "average",
+    "rounding",
+    "uint8",
+    "Q6_Vub_vavg_VubVub_rnd"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 8276,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 289,
+    "expert_speedup": 28.64,
+    "source": "v6 corpus build (simulator)"
+  }
+}

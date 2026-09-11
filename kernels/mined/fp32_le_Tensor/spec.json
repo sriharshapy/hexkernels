@@ -1,0 +1,47 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "8d4217bb48284d481ff60fe3691f76088e361ee2fdb2df6fa0decede61610656",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_le_Tensor",
+  "op": "le",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "adbfaba12c89ae85f4390aeef849998661d6597723e3ec2f8cccbf73a4fe47ca",
+    "source_tier": "T0",
+    "task_tier": "T0",
+    "tier_match": true
+  },
+  "schema": "aten::le.Tensor(Tensor self, Tensor other) -> Tensor",
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T0",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 6144
+}

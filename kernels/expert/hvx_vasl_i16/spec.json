@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int16",
+  "edge_cases": [
+    "1<<4=16 (no truncation)",
+    "wrap -1<<4 = -16 (all-ones shifted, low bits zero)",
+    "wrap 0x4000<<4 truncates to 0 (bit lost past bit15)",
+    "wrap 0x8000<<4 truncates to 0",
+    "n=583 tail path (9*64 + 7)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_saturating.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "d2a328c3ddf94707d3958a1cdf15dee6b65177e4c638f946016a495886f754cb",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vasl_i16",
+  "origin": "expert",
+  "params": {
+    "n": 583,
+    "op": "vasl_i16",
+    "shift": 4
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vasl_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "shift-left",
+    "wraparound",
+    "int16",
+    "Q6_Vh_vasl_VhR"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2523,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 397,
+    "expert_speedup": 6.36,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "0b8fc2797b9eb5f557e4bfe403d7c05b21d9ef271c5669b902930aa788bd34dd",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 20480 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32__upsample_nearest_exact2d",
+  "op": "_upsample_nearest_exact2d",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "5793f95f756b6447193cf80fd512cbe79975544c9f1c9d76fc4c4cd018401a63",
+    "source_tier": "T1",
+    "task_tier": "T1",
+    "tier_match": true
+  },
+  "schema": "aten::_upsample_nearest_exact2d(Tensor self, SymInt[2] output_size, float? scales_h=None, float? scales_w=None) -> Tensor",
+  "shape": [
+    1,
+    16,
+    16,
+    16
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 20480
+}

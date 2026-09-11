@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "pred true (a>b): out_hi=a, out_lo=b",
+    "pred false (a<b, symmetric check): out_hi=b, out_lo=a",
+    "equal values -> strict > is false: out_hi=out_lo=value",
+    "extremes 127 vs -128",
+    "lo/hi VectorPair convention pinned via sim experiment (lo=pred?Vu:Vv)",
+    "n=1005 tail path (7*128 + 109)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_swapped_halves.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "526c88a69943dd8a98a33d7615dda3e7a00260b17614c3e799c9dae4c8b965be",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vswap_i8",
+  "origin": "expert",
+  "params": {
+    "n": 1005,
+    "op": "vswap_i8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vswap_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "select",
+    "swap",
+    "predicate",
+    "int8",
+    "Q6_W_vswap_QVV"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 10249,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 1473,
+    "expert_speedup": 6.96,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": "Downsample / pooling",
+  "domain": "ai",
+  "dtype": "u8",
+  "edge_cases": [
+    "tail: output width 65 not multiple of 128",
+    "all-255 window: sqrt(4*255^2)=510 \u00e2\u2020\u2019 saturate to 255",
+    "uniform 127: sqrt(4*127^2)=254 (no saturation)",
+    "all-0: output 0"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_avgpool.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "bcdcc8c0f5339f17ecee2f6611b5bb4570b44313596a998cc7e80a6c7321cc86",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "u8_l2pool2x2",
+  "origin": "expert",
+  "params": {
+    "reduction": "sqrt(sum_of_squares)",
+    "saturation": "clamp to 255",
+    "stride": [
+      2,
+      2
+    ],
+    "window": [
+      2,
+      2
+    ]
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "u8_l2pool2x2",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "pooling",
+    "l2pool",
+    "2x2",
+    "stride2",
+    "sqrt",
+    "ai",
+    "cat7"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 176374,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 145779,
+    "expert_speedup": 1.21,
+    "source": "v6 corpus build (simulator)"
+  }
+}

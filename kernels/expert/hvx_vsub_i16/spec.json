@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int16",
+  "edge_cases": [
+    "wrap -32768-1 = 32767 (underflow, two's-complement)",
+    "wrap 0-(-32768) = -32768 (overflow)",
+    "wrap 32767-(-1) = -32768 (overflow)",
+    "no-wrap 100-200 = -100",
+    "n=651 tail path (10*64 + 11)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_saturating.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "fcde556200f1c5a1de10b11e7f1e80e585604fb821d929420c5ac97c4463ed03",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vsub_i16",
+  "origin": "expert",
+  "params": {
+    "n": 651,
+    "op": "vsub_i16"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vsub_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "elementwise",
+    "subtract",
+    "wraparound",
+    "int16",
+    "Q6_Vh_vsub_VhVh"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 4737,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 353,
+    "expert_speedup": 13.42,
+    "source": "v6 corpus build (simulator)"
+  }
+}

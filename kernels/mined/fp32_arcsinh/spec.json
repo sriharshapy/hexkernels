@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "062aef821b74517d135574d78a038ffe7fddcf36eb438c8173987951cc0c92d9",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 49152 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_arcsinh",
+  "op": "arcsinh",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "c1644f64fa6166daa1262469cf824b16438bb460d349325c556fe95e137c5281",
+    "source_tier": "T1",
+    "task_tier": "T1",
+    "tier_match": true
+  },
+  "schema": "fused: aten::arcsinh then aten::celu",
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 4096
+}

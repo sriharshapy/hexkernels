@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "tail path n % tile_bytes != 0 (100-byte remainder)",
+    "boundary int8 values at start/end of buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_tail.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "586adc98e5d7af199949ede72a7abc721edc6b69efa3a320c88ee8e03f842072",
+  "level": "L2",
+  "mechanisms_declared": [
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_load_tile_i8",
+  "origin": "expert",
+  "params": {
+    "n": 786532,
+    "op": "tile_load_copy",
+    "tile_bytes": 16384
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_load_tile_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "dma",
+    "vtcm",
+    "load",
+    "copy",
+    "double-buffer"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 79958,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 32274,
+    "expert_speedup": 2.477,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "dtype": "fp16",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "1ce33557a059d9bca0f43c7f430fd4d277394522adbbe369a3a2264b29e6d819",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 525312 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp16_diagflat",
+  "op": "diagflat",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "6cf79f2ba60bbbee9b5865d120506feafd85942cad4b9905fd4d9526193f4d3d",
+    "source_tier": "T1",
+    "task_tier": "T1",
+    "tier_match": true
+  },
+  "schema": "aten::diagflat(Tensor self, int offset=0) -> Tensor",
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 525312
+}

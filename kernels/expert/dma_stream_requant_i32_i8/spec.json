@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int32->int8",
+  "edge_cases": [
+    "mult applied via low-16-bit vmpyie splat trick",
+    "rounding half-add before arithmetic shift",
+    "zp offset added after requant, not before",
+    "large-magnitude a[i] near overflow boundary for a[i]*mult (explicit +-2,000,000 elements)",
+    "general fill kept small-magnitude so zp is a total-coverage discriminator (not masked by int8 saturation)",
+    "tail n not multiple of chunk (300000 % 4096 = 992)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nozp.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "4fef994129f54658fc53b2bb4831f2619ef699d8212fd966ba43404c422fe089",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_stream_requant_i32_i8",
+  "origin": "expert",
+  "params": {
+    "chunk_bytes": 16384,
+    "mult": 200,
+    "n": 300000,
+    "op": "requantize_sign_aware",
+    "shift": 8,
+    "zp": 5
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_stream_requant_i32_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "requantize",
+    "dma",
+    "vtcm",
+    "double-buffer",
+    "epilogue",
+    "zero-point",
+    "bandwidth-bound"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 429647,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 134539,
+    "expert_speedup": 3.19,
+    "source": "v6 corpus build (simulator)"
+  }
+}

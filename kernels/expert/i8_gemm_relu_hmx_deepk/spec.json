@@ -1,0 +1,69 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8xint8->int32",
+  "edge_cases": [
+    "large contraction K=128 = 4 accumulating K-tiles into one 32x32 output tile",
+    "single mxclracc; accumulator persists across four matmul packets",
+    "ReLU fused into the HVX unpack epilogue (not a separate pass)",
+    "signed B input so ReLU's clamp-to-0 branch fires on a large fraction of cells",
+    "narrow input range keeps the 12-bit requant field exact under long accumulation",
+    "0x40 requant field sign-extended from 12 bits before the ReLU clamp",
+    "crouton pack staged via cacheable buffers + bulk vector copy",
+    "missing-ReLU near-miss (raw signed requant field) must fail",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_missing_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e9671edd5d6ae1c1968547ca26ca15acabf07b2414f0110d112509cb6ec952c9",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_gemm_relu_hmx_deepk",
+  "origin": "expert",
+  "params": {
+    "K": 128,
+    "M": 32,
+    "N": 32,
+    "ktiles": 4,
+    "op": "i8_gemm_relu_hmx_deepk"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gemm_relu_hmx_deepk",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "gemm",
+    "hmx",
+    "hvx",
+    "int8",
+    "deep-k",
+    "relu",
+    "epilogue",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 540428,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 30509,
+    "expert_speedup": 17.71,
+    "source": "v6 corpus build (simulator)"
+  }
+}

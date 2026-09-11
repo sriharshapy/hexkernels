@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "4-deep contraction packing: k/4 group, k%4 lane",
+    "dense 1024-byte tile, every byte written",
+    "full signed int8 range preserved",
+    "poisoned output buffer",
+    "transposed-source near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transposed.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a6bf5a3111e2c54cc3198da668ccb118651b004d964efa42f2621f4f7d390070",
+  "level": "L1",
+  "mechanisms_declared": [],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": false
+  },
+  "name": "hmx_weight_pack_i8",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "N": 32,
+    "deep": 4,
+    "op": "hmx_weight_pack",
+    "tile_bytes": 1024
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_weight_pack_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "hmx",
+    "int8",
+    "crouton",
+    "pack",
+    "weight",
+    "layout",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2590,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 2574,
+    "expert_speedup": 1.01,
+    "source": "v6 corpus build (simulator)"
+  }
+}

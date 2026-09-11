@@ -1,0 +1,67 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "Q[0]=127, K[0]=127 (large positive QKT)",
+    "Q[HEAD_DIM]=-128, K[HEAD_DIM]=127 (sign interaction)",
+    "V[0]=127, V[1]=-128 (sign in AV)",
+    "planted values in second KV head to catch wrong head mapping",
+    "2 distinct exp_lut tables (anti-hardcode LUT)",
+    "2 distinct param sets (smult/sshift/amult/ashift swept)",
+    "hq=0,1->hkv=0; hq=2,3->hkv=1 (wrong grouping fails)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode_lut.c",
+    "nearmiss_wrong_grouping.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "d7a3f668ccc884d4591ec630c516141f8ca1b604e5f91cc1860ba2ffa6237f85",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "gqa_attention",
+  "origin": "expert",
+  "params": {
+    "av_mult": "int32 (runtime, swept)",
+    "av_shift": "int (runtime, swept)",
+    "exp_lut": "256 uint8 entries (runtime, swept -- 2 tables)",
+    "scale_mult": "int32 (runtime, swept)",
+    "scale_shift": "int (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "gqa_attention",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "attention",
+    "grouped-query",
+    "gqa",
+    "softmax",
+    "lut",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 47861,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 23798,
+    "expert_speedup": 2.011,
+    "source": "v6 corpus build (simulator)"
+  }
+}

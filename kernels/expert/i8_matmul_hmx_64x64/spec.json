@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8->uint16",
+  "edge_cases": [
+    "2x2 grid of 32x32 output tiles; each accumulates over 2 K-tiles",
+    "HMX accumulator persists across K-tile matmuls (one mxclracc per out tile)",
+    "activation int8 in high byte of crouton slot (low bytes dead)",
+    "weight 4-deep packed; different load limit than activation",
+    "0x40-config requant: round(acc*17/16), 12-bit two's-complement field",
+    "signed weights / negative accumulators",
+    "input range chosen so |requant| < 2048 (12-bit field exact, no saturation)",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "transposed-B near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transB.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "8204e4b945d8378978490d5eb7b75713514ad8e3e7345aa4e0a6f15a7be3a7c4",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_matmul_hmx_64x64",
+  "origin": "expert",
+  "params": {
+    "K": 64,
+    "M": 64,
+    "N": 64
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_matmul_hmx_64x64",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine)",
+  "tags": [
+    "matmul",
+    "hmx",
+    "int8",
+    "requant",
+    "tiling",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 172948,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 55115,
+    "expert_speedup": 3.14,
+    "source": "v6 corpus build (simulator)"
+  }
+}

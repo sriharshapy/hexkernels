@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "wrap 127+127 = -2 (overflow, two's-complement)",
+    "wrap 100+100 = -56 (overflow)",
+    "wrap -128+(-1) = 127 (underflow)",
+    "wrap 127+1 = -128 (overflow)",
+    "n=1037 tail path (8*128 + 13)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_saturating.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "678db806a9241b342865a2852fd759b8f2372e0fde0f459452e7326ed75a4e08",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vadd_i8",
+  "origin": "expert",
+  "params": {
+    "n": 1037,
+    "op": "vadd_i8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vadd_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "elementwise",
+    "add",
+    "wraparound",
+    "int8",
+    "Q6_Vb_vadd_VbVb"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 7437,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 362,
+    "expert_speedup": 20.54,
+    "source": "v6 corpus build (simulator)"
+  }
+}

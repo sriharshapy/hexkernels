@@ -1,0 +1,47 @@
+{
+  "bundle": "complete",
+  "dtype": "i32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "c46a1bb1bf95a2bdbff3c31ca21e3ac5d14a938c9f89c1336a65d7ed5602d6b4",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i32___and___Tensor",
+  "op": "__and__",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "db1099b13de1854e436405e43c327ca5a5ae26f97a0b6525b328d21f5f6c0a7e",
+    "source_tier": "T0",
+    "task_tier": "T0",
+    "tier_match": true
+  },
+  "schema": "aten::__and__.Tensor(Tensor self, Tensor other) -> Tensor",
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T0",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 6144
+}

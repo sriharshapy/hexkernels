@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": "FP32 elementwise product",
+  "domain": "ai",
+  "dtype": "fp32",
+  "edge_cases": [
+    "product negative (one operand < 0)",
+    "zero operand (product == 0.0f)",
+    "product requiring fp32 rounding (non-exact intermediate)",
+    "n%128 tail",
+    "poisoned output buffer (0xA5A5A5A5)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_add.c",
+    "nearmiss_square.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "cb6a45f2510cfd4b6ccb72a5c4f009373d107f62e8dc07d40f8d87dee7979bdd",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "ai_fp32_hadamard_mul",
+  "origin": "expert",
+  "params": {
+    "n": 1000
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ai_fp32_hadamard_mul",
+    "upstream": "v4-gen:ai_fp32_hadamard_mul__n1000"
+  },
+  "signal": "memory-bound, vectorizable",
+  "tags": [
+    "hadamard",
+    "elementwise",
+    "multiply",
+    "fp32",
+    "gating",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 8177,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 667,
+    "expert_speedup": 12.259,
+    "source": "v6 corpus build (simulator)"
+  }
+}

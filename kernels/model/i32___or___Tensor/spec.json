@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "dtype": "i32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "fc0ba582f2dbc91e30bf01e092c62e600268235a09c2b200948167a7a82f014b",
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i32___or___Tensor",
+  "op": "__or__",
+  "origin": "model",
+  "provenance": {
+    "corpus": "model",
+    "eval_set": "core128",
+    "generated_at": "2026-08-25T11:19:23+00:00",
+    "model": "gpt-5.6-luna",
+    "rung": 2,
+    "seed_index": 2,
+    "task_key": "b36i3_i32___or___Tensor",
+    "turns_used": 3
+  },
+  "shape": [
+    24,
+    64
+  ],
+  "tier": "T1",
+  "verified": {
+    "compiled": true,
+    "correct": true,
+    "elf_confirmed": true,
+    "expert_kernel_cycles": null,
+    "kernel_cycles": null,
+    "mechanisms_fired": {
+      "dma": false,
+      "hmx": false,
+      "hvx": true,
+      "hvx_compute": true,
+      "l2fetch": false,
+      "vtcm": false
+    },
+    "source": "anticheat disassembly scan"
+  }
+}

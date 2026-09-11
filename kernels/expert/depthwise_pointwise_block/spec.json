@@ -1,0 +1,68 @@
+{
+  "bundle": "complete",
+  "category": "Fused conv block",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "border pixels (zero-padding in depthwise)",
+    "intermediate values clipped at int8 before pointwise",
+    "two independent requant param sets swept",
+    "poisoned out and mid buffers",
+    "nearmiss: skip depthwise stage",
+    "nearmiss: hardcode quant params"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_skip_dw.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "256b6a08f1a322867012c5ebba98486b769f8ebb530801cb4e73bee2c0094f6c",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "depthwise_pointwise_block",
+  "origin": "expert",
+  "params": {
+    "dw_mult": "int32 (runtime, swept)",
+    "dw_shift": "int (runtime, swept)",
+    "dw_zp": "int8 (runtime, swept)",
+    "pw_mult": "int32 (runtime, swept)",
+    "pw_shift": "int (runtime, swept)",
+    "pw_zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "depthwise_pointwise_block",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "depthwise",
+    "pointwise",
+    "separable",
+    "mobilenet",
+    "conv2d",
+    "requantize",
+    "fused",
+    "param",
+    "NHWC",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 206620,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 46074,
+    "expert_speedup": 4.485,
+    "source": "v6 corpus build (simulator)"
+  }
+}

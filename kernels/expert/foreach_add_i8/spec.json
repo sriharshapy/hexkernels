@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": "Foreach (multi-tensor)",
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "wrap 127+127 = -2 (overflow, int8 two's-complement)",
+    "wrap 100+100 = -56 (overflow)",
+    "wrap -128+(-1) = 127 (underflow)",
+    "last tensor's tail (tensor t=3, indices 768..1023)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_subtract.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "d8d31ef113fae58219c8a88e6ae69eda56f2af97de0c8005c1c1fabe9e8440b4",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "foreach_add_i8",
+  "origin": "expert",
+  "params": {
+    "L": 256,
+    "T": 4
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "foreach_add_i8",
+    "upstream": "v4-gap"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "foreach",
+    "elementwise",
+    "multi-tensor",
+    "wraparound",
+    "int8"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 7370,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 258,
+    "expert_speedup": 28.566,
+    "source": "v6 corpus build (simulator)"
+  }
+}

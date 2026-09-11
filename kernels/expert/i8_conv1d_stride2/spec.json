@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Sliding-window filter (1D)",
+  "domain": "dsp",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "max-magnitude products",
+    "n%128 tail",
+    "stride skips samples",
+    "valid window (no padding)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_stride1.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "824b98d905393a3ef92356bf0f9b2fc34af2e408494bd11581079e7cf87efc9e",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_conv1d_stride2",
+  "origin": "expert",
+  "params": {
+    "accumulator": "int32",
+    "mode": "correlation",
+    "ntaps": 8,
+    "stride": 2
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_conv1d_stride2",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "fir",
+    "conv1d",
+    "strided",
+    "vrmpy",
+    "windowed",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 17750,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 3726,
+    "expert_speedup": 4.764,
+    "source": "v6 corpus build (simulator)"
+  }
+}

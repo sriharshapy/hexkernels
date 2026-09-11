@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "2e0698a988e3fde35f1d18eaad8e16a72e7d5e3f55d72ef55ef531fa5a3b2656",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "reduction loops vectorise through an accumulator plus a horizontal reduce"
+    ],
+    [
+      "l2fetch",
+      "working set 20480 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_avg_pool2d",
+  "op": "avg_pool2d",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "31cf2a6fc004e6a24caa75e6072760fcfb0d064d7d8d7f51ac381900bff920c4",
+    "source_tier": "T2",
+    "task_tier": "T1",
+    "tier_match": false
+  },
+  "schema": "aten::avg_pool2d(Tensor self, int[2] kernel_size, int[2] stride=[], int[2] padding=0, bool ceil_mode=False, bool count_include_pad=True, int? divisor_override=None) -> Tensor",
+  "shape": [
+    1,
+    16,
+    16,
+    16
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 20480
+}

@@ -1,0 +1,78 @@
+{
+  "bundle": "complete",
+  "category": "MLP-Mixer block (token-mixing + channel-mixing MLPs, composition)",
+  "domain": "ai",
+  "dtype": "uint8xint8->int8",
+  "edge_cases": [
+    "token-mixing weights Wt1/Wt2 are SHARED across every channel d (applying the SAME 1-D MLP independently per channel) -- the defining Mixer structure, distinct from any per-row FFN",
+    "channel-mixing weights Wc1/Wc2 are SHARED across every token s -- a normal transformer FFN reduction, but over the OTHER (feature) axis of the same tensor",
+    "token-mix hidden saturation columns: bt1[0]=-4000 (always-kill), bt1[1]=+4000 (always-fire)",
+    "token-mix output saturation columns: bt2[0]=-300 (sat-low), bt2[1]=+300 (sat-high)",
+    "channel-mix hidden saturation columns: bc1[0]=-4000 (always-kill), bc1[1]=+4000 (always-fire)",
+    "channel-mix output saturation columns: bc2[0]=-300 (sat-low), bc2[1]=+300 (sat-high)",
+    "reduction lengths S=32/St=64/D=64/Dff=64 are all <128 -- every HVX dot uses a partial-vector predicate mask (Q6_Q_vsetq_R)",
+    "nearmiss_skip_token_residual drops the FIRST (token-mixing) residual add (Y=TMo, no +X) -> INCORRECT (1455/2048 wrong)",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_skip_token_residual.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7936d8578e569b8955a04a9b725c066c22cb5e71fbbccb2d46eccd48513f8195",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_mlp_mixer_block",
+  "origin": "expert",
+  "params": {
+    "CM_SH1": 8,
+    "CM_SH2": 7,
+    "D": 64,
+    "Dff": 64,
+    "S": 32,
+    "St": 64,
+    "TM_SH1": 2,
+    "TM_SH2": 7,
+    "op": "mlp_mixer_block"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_mlp_mixer_block",
+    "upstream": null
+  },
+  "signal": "MLP-Mixer block: token-mixing MLP (mix over sequence axis) then channel-mixing MLP (mix over feature axis), each with ReLU activation + residual",
+  "tags": [
+    "mlp-mixer",
+    "mixer",
+    "token-mixing",
+    "channel-mixing",
+    "mlp",
+    "residual",
+    "matmul",
+    "transpose",
+    "hvx",
+    "int8",
+    "requant",
+    "composition",
+    "l3",
+    "ai",
+    "holdout"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2249044,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 480629,
+    "expert_speedup": 4.68,
+    "source": "v6 corpus build (simulator)"
+  }
+}

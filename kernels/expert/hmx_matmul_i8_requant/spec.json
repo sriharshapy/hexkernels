@@ -1,0 +1,67 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8xint8->int8",
+  "edge_cases": [
+    "requantize-to-int8 with SATURATION to [-128,127]; truncating near-miss fails",
+    "wider input range (A 0..15, B -4..4) so |r| exceeds 127 often",
+    "int8 output dtype (contrast the int32-field tasks)",
+    "single 32x32 tile, one K-tile",
+    "activation high-byte crouton (lim 2047), weight 4-deep (lim 1023)",
+    "0x40 requant field sign-extended from 12 bits",
+    "crouton pack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nosat.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "544b51939b3b26bc3c4f631521399479369f09a9b35dd4e22d7d13d99fdd0a05",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_requant",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "epilogue": "requant_sat_i8",
+    "op": "hmx_matmul_i8_requant"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_requant",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "requant",
+    "saturate",
+    "quantize",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 146440,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 27775,
+    "expert_speedup": 5.27,
+    "source": "v6 corpus build (simulator)"
+  }
+}

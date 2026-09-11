@@ -1,0 +1,51 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "9479dedcee821abac0f75d8deb0237e9e099d2459ad40fd8560a6addf7572c9a",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "hmx",
+      "NOT granted: the shape matches, but a 4-byte dtype exceeds the int8/fp16 HMX datapath"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32__euclidean_dist",
+  "op": "_euclidean_dist",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "b664ddc78b968795ba9d906d49b0f846cc882023199644a537c52144f12d453b",
+    "source_tier": "T0",
+    "task_tier": "T0",
+    "tier_match": true
+  },
+  "schema": "aten::_euclidean_dist(Tensor x1, Tensor x2) -> Tensor",
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T0",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 4352
+}

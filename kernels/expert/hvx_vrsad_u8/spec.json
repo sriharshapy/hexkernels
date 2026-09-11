@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "group0 all-zero vs pattern: sad=100",
+    "group1 exact pattern match: sad=0",
+    "group2 all-255 (max distance from pattern)",
+    "g=98 tail path (3*32 + 2 groups)",
+    "Iu1=0 group-alignment convention pinned via sim experiment"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_iu1.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e9845898beb999ddffce2801d65451aca2fd604f1c31dbeda8871ad316973640",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vrsad_u8",
+  "origin": "expert",
+  "params": {
+    "g": 98,
+    "op": "vrsad_u8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vrsad_u8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "sad",
+    "block-match",
+    "uint8",
+    "uint32",
+    "Q6_Wuw_vrsad_WubRubI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1193,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 455,
+    "expert_speedup": 2.62,
+    "source": "v6 corpus build (simulator)"
+  }
+}

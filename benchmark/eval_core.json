@@ -1,0 +1,777 @@
+{
+ "n": 128,
+ "per_tier": 32,
+ "seed": 0,
+ "strata": {
+  "__and__.Tensor.int32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "__or__.Tensor.int32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "__xor__.Tensor.int32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "_convolution.default.float16.T0": {
+   "stratum": "hmx",
+   "tier": "T0",
+   "weight": 0.39999999999999997
+  },
+  "_convolution.default.float16.T1": {
+   "stratum": "hmx",
+   "tier": "T1",
+   "weight": 0.4
+  },
+  "_convolution.default.float16.T2": {
+   "stratum": "hmx",
+   "tier": "T2",
+   "weight": 0.4
+  },
+  "_convolution.default.float16.T3": {
+   "stratum": "hmx",
+   "tier": "T3",
+   "weight": 0.4
+  },
+  "_convolution.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "_euclidean_dist.default.float16.T0": {
+   "stratum": "hmx",
+   "tier": "T0",
+   "weight": 0.39999999999999997
+  },
+  "_euclidean_dist.default.float16.T1": {
+   "stratum": "hmx",
+   "tier": "T1",
+   "weight": 0.4
+  },
+  "_euclidean_dist.default.float16.T2": {
+   "stratum": "hmx",
+   "tier": "T2",
+   "weight": 0.4
+  },
+  "_euclidean_dist.default.float16.T3": {
+   "stratum": "hmx",
+   "tier": "T3",
+   "weight": 0.4
+  },
+  "_euclidean_dist.default.float32.T3.all.default": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "_prelu_kernel.default.float32.T0.amax.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "_prelu_kernel.default.float32.T0.amin.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "_prelu_kernel.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "_scaled_dot_product_attention_math.default.float16.T1": {
+   "stratum": "hmx",
+   "tier": "T1",
+   "weight": 0.4
+  },
+  "_scaled_dot_product_attention_math.default.float16.T2": {
+   "stratum": "hmx",
+   "tier": "T2",
+   "weight": 0.4
+  },
+  "_scaled_dot_product_attention_math.default.float16.T3": {
+   "stratum": "hmx",
+   "tier": "T3",
+   "weight": 0.4
+  },
+  "_to_copy.default.float32.T3.any.dims": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "_weight_norm.default.float32.T1.any.default": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "_weight_norm_interface.default.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "acos.default.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "any.default.float32.T2": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "any.dim.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "any.dims.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "arcsin.default.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "arctan.default.float32.T2.celu.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "arctan2.default.float32.T2.celu.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "atleast_3d.default.float32.T0.elu.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "binary_cross_entropy.default.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "binary_cross_entropy_with_logits.default.float32.T3.erf.default": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "bitwise_not.default.int32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "cosh.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "count_nonzero.default.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "cross_entropy_loss.default.float32.T0.gelu.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "cummin.default.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "cumulative_trapezoid.dx.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "deg2rad.default.float32.T2.hardswish.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "elu.default.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "exp2.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "exp2.default.float32.T2.log_sigmoid.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "expm1.default.float32.T2": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "fft_ifftshift.default.float32.T0.mish.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "fft_ifftshift.default.float32.T3.log_sigmoid.default": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "fft_ifftshift.default.float32.T3.mean.default": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "fix.default.float32.T0.mish.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "floor.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "hardsigmoid.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "hypot.default.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "hypot.default.float32.T0.selu.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "i0.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "inner.default.float16.T0": {
+   "stratum": "hmx",
+   "tier": "T0",
+   "weight": 0.39999999999999997
+  },
+  "inner.default.float16.T1": {
+   "stratum": "hmx",
+   "tier": "T1",
+   "weight": 0.4
+  },
+  "inner.default.float16.T2": {
+   "stratum": "hmx",
+   "tier": "T2",
+   "weight": 0.4
+  },
+  "inner.default.float16.T3": {
+   "stratum": "hmx",
+   "tier": "T3",
+   "weight": 0.4
+  },
+  "inner.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "isclose.default.int32.T2": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "isfinite.default.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "isneginf.default.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "kron.default.float32.T2.softshrink.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "l1_loss.default.float32.T2": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "le.Scalar.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "lerp.Scalar.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "lgamma.default.float32.T2.special_expit.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "linalg_matrix_norm.default.float32.T2.special_expit.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "linear.default.float16.T0": {
+   "stratum": "hmx",
+   "tier": "T0",
+   "weight": 0.39999999999999997
+  },
+  "linear.default.float16.T1": {
+   "stratum": "hmx",
+   "tier": "T1",
+   "weight": 0.4
+  },
+  "linear.default.float16.T2": {
+   "stratum": "hmx",
+   "tier": "T2",
+   "weight": 0.4
+  },
+  "linear.default.float16.T3": {
+   "stratum": "hmx",
+   "tier": "T3",
+   "weight": 0.4
+  },
+  "log.default.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "logit.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "max.other.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "mish.default.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "mse_loss.default.float32.T0.abs.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "nanmean.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "nanmean.default.float32.T2.all.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "nansum.default.float32.T1.all.default": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "nansum.default.float32.T2": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "nansum.default.float32.T2.any.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "neg.default.float32.T2.amax.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "negative.default.float32.T3.any.default": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "nextafter.default.float32.T0.any.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "norm_except_dim.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "pairwise_distance.default.float32.T2": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "pdist.default.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "reciprocal.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "remainder.Scalar.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "rnn_relu_cell.default.float16.T1": {
+   "stratum": "hmx",
+   "tier": "T1",
+   "weight": 0.4
+  },
+  "rnn_relu_cell.default.float16.T2": {
+   "stratum": "hmx",
+   "tier": "T2",
+   "weight": 0.4
+  },
+  "rnn_relu_cell.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "rnn_tanh_cell.default.float16.T1": {
+   "stratum": "hmx",
+   "tier": "T1",
+   "weight": 0.4
+  },
+  "rnn_tanh_cell.default.float16.T2": {
+   "stratum": "hmx",
+   "tier": "T2",
+   "weight": 0.4
+  },
+  "rnn_tanh_cell.default.float16.T3": {
+   "stratum": "hmx",
+   "tier": "T3",
+   "weight": 0.4
+  },
+  "rnn_tanh_cell.default.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "scaled_dot_product_attention.default.float16.T0": {
+   "stratum": "hmx",
+   "tier": "T0",
+   "weight": 0.39999999999999997
+  },
+  "scaled_dot_product_attention.default.float16.T1": {
+   "stratum": "hmx",
+   "tier": "T1",
+   "weight": 0.4
+  },
+  "scaled_dot_product_attention.default.float16.T2": {
+   "stratum": "hmx",
+   "tier": "T2",
+   "weight": 0.4
+  },
+  "scaled_dot_product_attention.default.float16.T3": {
+   "stratum": "hmx",
+   "tier": "T3",
+   "weight": 0.4
+  },
+  "scaled_dot_product_attention.default.float32.T2": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "sin.default.float32.T2": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "sinh.default.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "smooth_l1_loss.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "softshrink.default.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "special_digamma.default.float32.T0.erf.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "special_entr.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "special_entr.default.float32.T2.erf.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "special_erfc.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "special_ndtr.default.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "special_sinc.default.float32.T3.hardshrink.default": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "special_xlog1py.default.float32.T0.gelu.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "special_xlogy.default.float32.T2.hardsigmoid.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "sqrt.default.float32.T3.hardswish.default": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "subtract.Tensor.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "sum.default.float32.T1": {
+   "stratum": "non_hmx",
+   "tier": "T1",
+   "weight": 1.2347826086956522
+  },
+  "tensordot.default.float16.T0": {
+   "stratum": "hmx",
+   "tier": "T0",
+   "weight": 0.39999999999999997
+  },
+  "tensordot.default.float16.T1": {
+   "stratum": "hmx",
+   "tier": "T1",
+   "weight": 0.4
+  },
+  "tensordot.default.float16.T2": {
+   "stratum": "hmx",
+   "tier": "T2",
+   "weight": 0.4
+  },
+  "tensordot.default.float16.T3": {
+   "stratum": "hmx",
+   "tier": "T3",
+   "weight": 0.4
+  },
+  "tensordot.default.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "trace.default.float32.T3": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  },
+  "trapezoid.x.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "trapz.default.float32.T2.linalg_vector_norm.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "true_divide.Tensor.float32.T2": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "upsample_nearest1d.default.float32.T0": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "xlogy.default.float32.T0.mean.default": {
+   "stratum": "non_hmx",
+   "tier": "T0",
+   "weight": 1.1384615384615384
+  },
+  "zero.default.float32.T2.log_sigmoid.default": {
+   "stratum": "non_hmx",
+   "tier": "T2",
+   "weight": 1.2347826086956522
+  },
+  "zero.default.float32.T3.mean.default": {
+   "stratum": "non_hmx",
+   "tier": "T3",
+   "weight": 1.2
+  }
+ },
+ "task_ids": [
+  "linear.default.float16.T0",
+  "scaled_dot_product_attention.default.float16.T0",
+  "_convolution.default.float16.T0",
+  "_euclidean_dist.default.float16.T0",
+  "inner.default.float16.T0",
+  "tensordot.default.float16.T0",
+  "fix.default.float32.T0.mish.default",
+  "isneginf.default.float32.T0",
+  "xlogy.default.float32.T0.mean.default",
+  "atleast_3d.default.float32.T0.elu.default",
+  "mse_loss.default.float32.T0.abs.default",
+  "cross_entropy_loss.default.float32.T0.gelu.default",
+  "lerp.Scalar.float32.T0",
+  "log.default.float32.T0",
+  "special_xlog1py.default.float32.T0.gelu.default",
+  "acos.default.float32.T0",
+  "fft_ifftshift.default.float32.T0.mish.default",
+  "sinh.default.float32.T0",
+  "rnn_tanh_cell.default.float32.T0",
+  "subtract.Tensor.float32.T0",
+  "any.dim.float32.T0",
+  "special_digamma.default.float32.T0.erf.default",
+  "_prelu_kernel.default.float32.T0.amax.default",
+  "cummin.default.float32.T0",
+  "arcsin.default.float32.T0",
+  "hypot.default.float32.T0.selu.default",
+  "nextafter.default.float32.T0.any.default",
+  "trapezoid.x.float32.T0",
+  "upsample_nearest1d.default.float32.T0",
+  "_prelu_kernel.default.float32.T0.amin.default",
+  "__and__.Tensor.int32.T0",
+  "hypot.default.float32.T0",
+  "linear.default.float16.T1",
+  "scaled_dot_product_attention.default.float16.T1",
+  "_scaled_dot_product_attention_math.default.float16.T1",
+  "rnn_tanh_cell.default.float16.T1",
+  "_euclidean_dist.default.float16.T1",
+  "inner.default.float16.T1",
+  "_convolution.default.float16.T1",
+  "rnn_relu_cell.default.float16.T1",
+  "tensordot.default.float16.T1",
+  "cosh.default.float32.T1",
+  "cumulative_trapezoid.dx.float32.T1",
+  "i0.default.float32.T1",
+  "exp2.default.float32.T1",
+  "special_entr.default.float32.T1",
+  "_prelu_kernel.default.float32.T1",
+  "reciprocal.default.float32.T1",
+  "rnn_relu_cell.default.float32.T1",
+  "nanmean.default.float32.T1",
+  "_convolution.default.float32.T1",
+  "bitwise_not.default.int32.T1",
+  "max.other.float32.T1",
+  "inner.default.float32.T1",
+  "hardsigmoid.default.float32.T1",
+  "smooth_l1_loss.default.float32.T1",
+  "logit.default.float32.T1",
+  "_weight_norm.default.float32.T1.any.default",
+  "nansum.default.float32.T1.all.default",
+  "sum.default.float32.T1",
+  "norm_except_dim.default.float32.T1",
+  "special_erfc.default.float32.T1",
+  "floor.default.float32.T1",
+  "__or__.Tensor.int32.T1",
+  "linear.default.float16.T2",
+  "_scaled_dot_product_attention_math.default.float16.T2",
+  "_convolution.default.float16.T2",
+  "rnn_relu_cell.default.float16.T2",
+  "rnn_tanh_cell.default.float16.T2",
+  "_euclidean_dist.default.float16.T2",
+  "inner.default.float16.T2",
+  "scaled_dot_product_attention.default.float16.T2",
+  "tensordot.default.float16.T2",
+  "linalg_matrix_norm.default.float32.T2.special_expit.default",
+  "lgamma.default.float32.T2.special_expit.default",
+  "nansum.default.float32.T2.any.default",
+  "scaled_dot_product_attention.default.float32.T2",
+  "zero.default.float32.T2.log_sigmoid.default",
+  "pairwise_distance.default.float32.T2",
+  "exp2.default.float32.T2.log_sigmoid.default",
+  "special_xlogy.default.float32.T2.hardsigmoid.default",
+  "special_entr.default.float32.T2.erf.default",
+  "isclose.default.int32.T2",
+  "expm1.default.float32.T2",
+  "true_divide.Tensor.float32.T2",
+  "nanmean.default.float32.T2.all.default",
+  "any.default.float32.T2",
+  "arctan.default.float32.T2.celu.default",
+  "sin.default.float32.T2",
+  "l1_loss.default.float32.T2",
+  "neg.default.float32.T2.amax.default",
+  "trapz.default.float32.T2.linalg_vector_norm.default",
+  "arctan2.default.float32.T2.celu.default",
+  "nansum.default.float32.T2",
+  "kron.default.float32.T2.softshrink.default",
+  "deg2rad.default.float32.T2.hardswish.default",
+  "scaled_dot_product_attention.default.float16.T3",
+  "_scaled_dot_product_attention_math.default.float16.T3",
+  "_convolution.default.float16.T3",
+  "rnn_tanh_cell.default.float16.T3",
+  "_euclidean_dist.default.float16.T3",
+  "inner.default.float16.T3",
+  "linear.default.float16.T3",
+  "tensordot.default.float16.T3",
+  "zero.default.float32.T3.mean.default",
+  "mish.default.float32.T3",
+  "pdist.default.float32.T3",
+  "count_nonzero.default.float32.T3",
+  "elu.default.float32.T3",
+  "any.dims.float32.T3",
+  "sqrt.default.float32.T3.hardswish.default",
+  "le.Scalar.float32.T3",
+  "tensordot.default.float32.T3",
+  "negative.default.float32.T3.any.default",
+  "binary_cross_entropy.default.float32.T3",
+  "_weight_norm_interface.default.float32.T3",
+  "softshrink.default.float32.T3",
+  "isfinite.default.float32.T3",
+  "__xor__.Tensor.int32.T3",
+  "fft_ifftshift.default.float32.T3.log_sigmoid.default",
+  "special_sinc.default.float32.T3.hardshrink.default",
+  "binary_cross_entropy_with_logits.default.float32.T3.erf.default",
+  "remainder.Scalar.float32.T3",
+  "fft_ifftshift.default.float32.T3.mean.default",
+  "special_ndtr.default.float32.T3",
+  "_euclidean_dist.default.float32.T3.all.default",
+  "trace.default.float32.T3",
+  "_to_copy.default.float32.T3.any.dims"
+ ]
+}

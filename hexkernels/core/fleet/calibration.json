@@ -1,0 +1,24 @@
+{
+  "Windows-AMD64-16cpu": {
+    "recommended_width": 1,
+    "peak_throughput": 0.3377237419778927,
+    "curve": [
+      {
+        "width": 1,
+        "throughput": 0.3377237419778927,
+        "mean_wall": 2.9610000000102445
+      },
+      {
+        "width": 2,
+        "throughput": 0.2909090909090909,
+        "mean_wall": 3.4375
+      },
+      {
+        "width": 4,
+        "throughput": 0.29837386245056147,
+        "mean_wall": 3.3514999999897555
+      }
+    ],
+    "timestamp": 1785435371.2458918
+  }
+}

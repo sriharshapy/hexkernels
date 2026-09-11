@@ -1,0 +1,48 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "b0fd45a4757d55d2b81f01663c45c8aeed9db188cb88a3be03157f1a6214c0f3",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_adaptive_avg_pool1d",
+  "op": "adaptive_avg_pool1d",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "3e72c780666eaea0305f316f5de178da0c2b2c1131edfa20d0ca414228d45683",
+    "source_tier": "T1",
+    "task_tier": "T0",
+    "tier_match": false
+  },
+  "schema": "aten::adaptive_avg_pool1d(Tensor self, int[1] output_size) -> Tensor",
+  "shape": [
+    1,
+    4,
+    8
+  ],
+  "tier": "T0",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 192
+}

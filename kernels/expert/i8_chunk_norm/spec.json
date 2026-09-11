@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "chunk 0: constant value -> var=0 (tests inv_lut[0] path)",
+    "chunk 1: extremes +127/-128 -> large variance",
+    "chunk 2: all zeros",
+    "chunk 3: alternating +64/-64",
+    "3 distinct (gamma, beta, inv_lut) sweep sets (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_global_norm.c",
+    "nearmiss_hardcode.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "ef9daf1a3c4a3903de878a451d14322fb52d8eb3da2848addafd33dbe011ec9a",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_chunk_norm",
+  "origin": "expert",
+  "params": {
+    "beta": "per-element int8 offset (runtime)",
+    "gamma": "per-element int8 scale (runtime)",
+    "inv_lut": "256 uint8 entries (runtime), index = clamp(var,0,255)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_chunk_norm",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "layernorm",
+    "group-norm",
+    "chunk-norm",
+    "lut",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 3421,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 2565,
+    "expert_speedup": 1.334,
+    "source": "v6 corpus build (simulator)"
+  }
+}

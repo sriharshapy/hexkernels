@@ -1,0 +1,65 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8xint8->int32",
+  "edge_cases": [
+    "ReLU fused into the HVX epilogue after the 12-bit requant field decode",
+    "~half of accumulators negative -> ReLU clamps them; no-ReLU near-miss fails",
+    "single 32x32 tile, one K-tile",
+    "activation high-byte crouton (lim 2047), weight 4-deep (lim 1023)",
+    "signed weights / negative accumulators",
+    "crouton pack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_norelu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "eacb070d6f0a4d644f5bfdab66dc202197001ab908864979eaa33eb75fc44c2d",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_relu",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "epilogue": "relu",
+    "op": "hmx_matmul_i8_relu"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_relu",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "relu",
+    "epilogue",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 146269,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 15912,
+    "expert_speedup": 9.19,
+    "source": "v6 corpus build (simulator)"
+  }
+}

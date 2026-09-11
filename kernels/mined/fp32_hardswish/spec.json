@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "3f20ea2079e4e81f2ed415ed5df6b0bca52945152b93f3f2467454a4c5b8e127",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 49152 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_hardswish",
+  "op": "hardswish",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "6aa040a68be61f8d3c7045b1e16d379922e53fd66648f22914b306fe3d6afbe1",
+    "source_tier": "T2",
+    "task_tier": "T1",
+    "tier_match": false
+  },
+  "schema": "aten::hardswish(Tensor self) -> Tensor",
+  "shape": [
+    48,
+    128
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 49152
+}

@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8xint8->int32",
+  "edge_cases": [
+    "fused per-column bias add THEN ReLU (order matters); no-ReLU near-miss fails",
+    "bias +-700 so both ReLU branches fire; edge biases -700/700/0",
+    "single 32x32 tile, one K-tile (contrast the 64x64 bias_relu task)",
+    "activation high-byte crouton (lim 2047), weight 4-deep (lim 1023)",
+    "0x40 requant field sign-extended from 12 bits",
+    "crouton pack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_norelu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "82ced32dfae676096071bd2563c9293529e0a26b91384072df4224751fd720b9",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_bias_relu",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "epilogue": "bias_relu",
+    "op": "hmx_matmul_i8_bias_relu"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_bias_relu",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "bias",
+    "relu",
+    "epilogue",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 147351,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 17874,
+    "expert_speedup": 8.24,
+    "source": "v6 corpus build (simulator)"
+  }
+}

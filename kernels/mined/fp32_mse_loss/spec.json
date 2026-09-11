@@ -1,0 +1,47 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e4a1b9f79ac30b186dc32d8e69cb3a34c8c19f2d2b9c5e2df90a88941f3d0276",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_mse_loss",
+  "op": "mse_loss",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "7c56da4d92d2f51915182834a86a78be98be75ab728eddd3a76bedbae15f86ed",
+    "source_tier": "T0",
+    "task_tier": "T0",
+    "tier_match": true
+  },
+  "schema": "aten::mse_loss(Tensor self, Tensor target, int reduction=1) -> Tensor",
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T0",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 4100
+}

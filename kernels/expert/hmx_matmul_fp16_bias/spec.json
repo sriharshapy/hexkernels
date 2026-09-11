@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "per-output-column bias add fused into the HVX un-crouton epilogue",
+    "zero-bias edge column",
+    "fp16 crouton layout off(r,c)=(r/2)*64+c*2+(r&1)",
+    "HVX/HMX qf16 arithmetic is non-IEEE -> tolerance compare",
+    "no-bias near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nobias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "be2620a892100294a70cb3238ad865fb556684ec3c2c8598c8085fff989d6cff",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_fp16_bias",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "op": "matmul_bias"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_fp16_bias",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "bias",
+    "hmx",
+    "fp16",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 9816,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 8115,
+    "expert_speedup": 1.21,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "0xF0 | 0x0F = 0xFF",
+    "0xAA | 0x55 = 0xFF (disjoint bit union)",
+    "x | 0 = x",
+    "n=1033 tail path (8*128 + 9)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_xor.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e4b41bae2739b45073876143a87f760c2ce264071e1825a624d92fb69087fed1",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vor_u8",
+  "origin": "expert",
+  "params": {
+    "n": 1033,
+    "op": "vor_u8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vor_u8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "elementwise",
+    "bitwise",
+    "or",
+    "uint8",
+    "Q6_V_vor_VV"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 7409,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 324,
+    "expert_speedup": 22.87,
+    "source": "v6 corpus build (simulator)"
+  }
+}

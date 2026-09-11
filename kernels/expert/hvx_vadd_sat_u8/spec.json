@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "saturate 200+200 -> 255 (would wrap to 144)",
+    "saturate 255+1 -> 255",
+    "no-sat 0+0 -> 0",
+    "no-sat 100+50 -> 150",
+    "n=777 tail path (6*128 + 9)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wraparound.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "ee76008517e55065a9f3c6c124a940602955395a7fe88095f23bb1a9cf0605ed",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vadd_sat_u8",
+  "origin": "expert",
+  "params": {
+    "n": 777,
+    "op": "vadd_sat_u8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vadd_sat_u8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "elementwise",
+    "add",
+    "saturating",
+    "uint8",
+    "Q6_Vub_vadd_VubVub_sat"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 6392,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 332,
+    "expert_speedup": 19.25,
+    "source": "v6 corpus build (simulator)"
+  }
+}

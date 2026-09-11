@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8xint8->int32",
+  "edge_cases": [
+    "rectangular M!=N: 32x64 output = 1x2 grid of 32x32 tiles",
+    "B row stride is the real N (64), not the 32-wide tile edge; wrong-stride near-miss fails",
+    "one K-tile per output tile",
+    "activation high-byte crouton (lim 2047), weight 4-deep (lim 1023)",
+    "0x40 requant field sign-extended from 12 bits",
+    "crouton pack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrongN.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "81576065c87fe5c08284b0b0a90f7dba5b06d9e7a5e56e17bea2179d9e79f9f9",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_rect_32x64",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 64,
+    "op": "hmx_matmul_i8_rect"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_rect_32x64",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "rectangular",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 288199,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 26857,
+    "expert_speedup": 10.73,
+    "source": "v6 corpus build (simulator)"
+  }
+}

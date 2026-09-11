@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "OW=7 not a multiple of 128",
+    "channel-major row ordering",
+    "no padding (valid convolution)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_offbyone.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "5d01f1d0110e9de2e6890d2fed63dbbc28d2ddcff97f412672cfa704dd1b6ca0",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_im2col",
+  "origin": "expert",
+  "params": {
+    "formula": "out[(c*K*K + kh*K + kw) * OH*OW + oh*OW + ow] = in[c*H*W + (oh*S+kh)*W + (ow*S+kw)]",
+    "op": "im2col"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_im2col",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "im2col",
+    "conv",
+    "layout",
+    "AI",
+    "data-movement",
+    "param"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 5237,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 3411,
+    "expert_speedup": 1.535,
+    "source": "v6 corpus build (simulator)"
+  }
+}

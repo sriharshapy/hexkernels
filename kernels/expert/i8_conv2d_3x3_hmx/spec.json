@@ -1,0 +1,76 @@
+{
+  "bundle": "complete",
+  "category": "Convolution (3x3) via im2col + matrix engine",
+  "domain": "ai",
+  "dtype": "uint8xint8->uint16",
+  "edge_cases": [
+    "3x3 VALID conv lowered to a P x K x C_out matmul, K = C_in*Kh*Kw = 72",
+    "im2col gathers each output position's 3x3xC_in receptive field into a crouton row",
+    "reduction K=72 zero-padded to 3 crouton K-tiles (out-of-range k slots = 0)",
+    "division-free pack via precomputed koff/poff tables; weight index = co*K + kg",
+    "partial output tile: P=64 (2 tiles) x C_out=32 (1 tile); k-pad tile guarded",
+    "HMX accumulator persists across 3 K-tiles (one mxclracc per output tile)",
+    "0x40-config requant: round(acc*17/16), 12-bit two's-complement field",
+    "input range chosen so |requant| < 2048 (12-bit field exact, no saturation)",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "flipped-kernel (kh/kw swapped) near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_flipkernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a4b37270cfdca87eaa5b617fc17ba1be53e5c86f76e5cfbd455bdb224e376340",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_conv2d_3x3_hmx",
+  "origin": "expert",
+  "params": {
+    "C_in": 8,
+    "C_out": 32,
+    "IH": 10,
+    "IW": 10,
+    "K": 72,
+    "Kh": 3,
+    "Kw": 3,
+    "OH": 8,
+    "OW": 8,
+    "P": 64,
+    "padding": "VALID",
+    "stride": 1
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_conv2d_3x3_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine via im2col)",
+  "tags": [
+    "conv",
+    "conv3x3",
+    "im2col",
+    "hmx",
+    "hvx",
+    "int8",
+    "requant",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 165630,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 76910,
+    "expert_speedup": 2.15,
+    "source": "v6 corpus build (simulator)"
+  }
+}

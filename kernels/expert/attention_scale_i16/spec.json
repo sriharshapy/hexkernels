@@ -1,0 +1,72 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int32->int16",
+  "edge_cases": [
+    "raw near the safe-bound ceiling (+/-2,000,000 and +/-3,000,000) saturates the scale_shift=0 set",
+    "zero, +1, -1 (discriminate round vs truncate)",
+    "rounding TIE cases (raw=+/-4, mult=1,shift=3 -> r=+/-4, half=4 -> exactly x.5*8)",
+    "scale_shift=0 no-rounding branch (half=0)",
+    "N=37 not a multiple of 32 int32 lanes (tail path; 592 = 18*32 + 16)",
+    "3 distinct (scale_mult, scale_shift) sweep sets, all scale_mult positive (anti-hardcode)",
+    "set 0 approximates 1/sqrt(64) exactly (1/8); set 1 approximates 1/sqrt(128) (181/2048)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_round.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7ab0dd8a39c1cff90be1108e7d27dc793b2ee1cb93683ef4ce8da867a585ad09",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "attention_scale_i16",
+  "origin": "expert",
+  "params": {
+    "M": 16,
+    "N": 37,
+    "mult_sweep": [
+      1,
+      181,
+      500
+    ],
+    "op": "attention_scale_requant",
+    "shift_sweep": [
+      3,
+      11,
+      0
+    ]
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "attention_scale_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "attention",
+    "requantize",
+    "rounding",
+    "saturation",
+    "fixed-point",
+    "transformer",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 5731,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 956,
+    "expert_speedup": 5.995,
+    "source": "v6 corpus build (simulator)"
+  }
+}

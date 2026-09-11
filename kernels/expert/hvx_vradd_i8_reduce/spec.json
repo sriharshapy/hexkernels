@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "group0 known sum: 1+2+3+4=10",
+    "group1 signed extremes: 127+127-128-128=-2",
+    "group2 cancellation sum == 0",
+    "g=106 tail path (3*32 + 10 groups)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_unsigned.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "9314b1cd7fac12426b6807cf04415b8a229bd0d8586e8b62fe411ceb34e1316d",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vradd_i8_reduce",
+  "origin": "expert",
+  "params": {
+    "g": 106,
+    "op": "vradd_i8_reduce"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vradd_i8_reduce",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "reduce-add",
+    "dot-product-by-1",
+    "int8",
+    "int32",
+    "Q6_Vw_vrmpy_VbVb"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 816,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 275,
+    "expert_speedup": 2.97,
+    "source": "v6 corpus build (simulator)"
+  }
+}

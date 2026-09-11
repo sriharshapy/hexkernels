@@ -1,0 +1,68 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "large product in layer 1 GEMM",
+    "negative pre-activation (GELU suppresses)",
+    "large negative b1 forces sat to -128",
+    "residual extremes (+127/-128)",
+    "constant residual token exercises LayerNorm var=0 path",
+    "two GELU LUT + LayerNorm LUT variants (anti-hardcode sweep)",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode_lut.c",
+    "nearmiss_skip_residual.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "294b3ba29aa45fa8b753c0f48e4061739115a768676e86512213711209007d30",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "gelu_ffn_residual",
+  "origin": "expert",
+  "params": {
+    "D": 16,
+    "K": 16,
+    "M": 8,
+    "V": 32,
+    "gelu_lut": "int8[256] (runtime GELU LUT; index=sat8(acc+b1)+128; NOT hardcoded)",
+    "inv_lut": "uint8[256] (runtime LayerNorm inverse-sqrt LUT; NOT hardcoded)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "gelu_ffn_residual",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "ffn",
+    "gelu",
+    "residual",
+    "layernorm",
+    "lut",
+    "fused",
+    "transformer",
+    "AI",
+    "L3"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 40274,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 9553,
+    "expert_speedup": 4.216,
+    "source": "v6 corpus build (simulator)"
+  }
+}

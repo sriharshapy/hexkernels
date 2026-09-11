@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "weight pre-transposed Bt[j*n+k]=B_logical[k][j]; weight crouton reads Bt[j][k]",
+    "int8 activation in HIGH byte of crouton slot, weight 4-deep packed",
+    "0x40-config requant (acc*17+8)>>4 & 0xFFF, 12-bit sign-extend epilogue",
+    "input ranges keep the 12-bit requant field exact (no saturation)",
+    "forgot-transpose near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_forgottranspose.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "4e6f64d1bff41326f33daeb28081d270a741a93f97853fd0e4a25853d3d7ea2b",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_transposeB",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "op": "matmul_transposeB"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_transposeB",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "transposeB",
+    "hmx",
+    "int8",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 41441,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 15165,
+    "expert_speedup": 2.73,
+    "source": "v6 corpus build (simulator)"
+  }
+}

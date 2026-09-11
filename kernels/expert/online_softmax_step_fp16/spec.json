@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "first block: running_max initialized very negative but finite (-30000.0), running_sum=0, acc=0 (corr ~= 0, old state contributes ~nothing)",
+    "second block with a REAL rescale: prior nonzero running_max/running_sum/acc, block max forced above the prior running_max (m_new>m_old, corr<1)",
+    "second block with corr==1 but nonzero prior state (m_new==m_old, distinguishes from the all-zero first-block case)",
+    "BLK=24 and D=48, neither a multiple of 64 fp16 lanes -- real tail/padding on both axes",
+    "exp is UNAVOIDABLY scalar (no HVX vector transcendental); only the accumulate/rescale is vectorized",
+    "fp16 tolerance compare (HVX qf16 arithmetic is non-IEEE), covers running_max, running_sum, and every acc[] element",
+    "classic dropped-rescale near-miss must fail whenever corr<1 is exercised"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_rescale.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "733eedfbac02a257056bc936bad64e9f2972aec40ad7c421e0cc2f6bab64820c",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "online_softmax_step_fp16",
+  "origin": "expert",
+  "params": {
+    "BLK": 24,
+    "D": 48,
+    "op": "online_softmax_update"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "online_softmax_step_fp16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "online-softmax",
+    "flash-attention",
+    "running-max",
+    "rescale",
+    "fp16",
+    "transformer"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 23364,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 7439,
+    "expert_speedup": 3.141,
+    "source": "v6 corpus build (simulator)"
+  }
+}

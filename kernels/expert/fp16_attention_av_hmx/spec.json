@@ -1,0 +1,65 @@
+{
+  "bundle": "complete",
+  "category": "Attention matmul",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "S=D=32 (single output crouton tile) but Skv=128 (deep reduction over 128 keys/values, accumulated over 4 K-tiles)",
+    "V is already in the generic B[K,N] matmul layout (no transpose/index-swap trick needed, unlike the QK^T sibling)",
+    "Q6_mxclracc_hf clears the persistent hf accumulator ONCE; 4 (activation,weight) load pairs accumulate into it before the single store",
+    "fp16 crouton layout off(r,c)=(r/2)*64+c*2+(r&1) for P, V, output, per K-tile",
+    "HVX/HMX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "Skv=128 is a deep reduction -> qf16 rounding drifts more (near-cancellation outputs close to zero); widened tolerance atol=8e-3/rtol=1.2e-2",
+    "expert_speedup is a THIN margin (1.22x, just above the 1.2x gate) -- fp16 HMX barely beats the efficient HVX qf16 baseline; deep-K amortizes crouton overhead less than the int8 multi-output-tile siblings since S=D=32 stays a single output tile",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "transposed-V near-miss must fail the tolerance gate"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transposed_V.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e014f770b19a3bc9d972c1d9223b9e4db55d09026cd240e51140cc907987af7f",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "fp16_attention_av_hmx",
+  "origin": "expert",
+  "params": {
+    "D": 32,
+    "S": 32,
+    "Skv": 128
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_attention_av_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine, deep-K reduction)",
+  "tags": [
+    "attention",
+    "av",
+    "matmul",
+    "hmx",
+    "fp16",
+    "deep-k",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 29264,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 24001,
+    "expert_speedup": 1.22,
+    "source": "v6 corpus build (simulator)"
+  }
+}

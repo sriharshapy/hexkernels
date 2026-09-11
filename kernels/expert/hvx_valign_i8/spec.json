@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "block-granular op, defined only over full 128B vector pairs",
+    "n=1024 is exactly 8 blocks (no byte tail -- see prompt.md)",
+    "combined-window operand order {Vv:Vu} pinned via sim experiment (Vv is low/first, Vu is high/second)",
+    "identity-ramp block 0 lets the window offset be hand-verified"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_swapped_operands.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "941936e061919959e0c38dbce598dd292e5fca0e7f58f683aa5718956630106f",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_valign_i8",
+  "origin": "expert",
+  "params": {
+    "n": 1024,
+    "op": "valign_i8",
+    "rt": 37
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_valign_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "permute",
+    "align",
+    "cross-block",
+    "int8",
+    "Q6_V_valign_VVR"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 4354,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 248,
+    "expert_speedup": 17.56,
+    "source": "v6 corpus build (simulator)"
+  }
+}

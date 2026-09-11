@@ -1,0 +1,67 @@
+{
+  "bundle": "complete",
+  "category": "Integer RNN cells",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "max-product weight (127*127) in update gate",
+    "max-negative product (-128*127) in reset gate",
+    "large positive bias",
+    "large negative bias",
+    "zero h_prev (reset gate no-op)",
+    "min h_prev (-128)",
+    "LUT index boundary 0/128/255",
+    "requant saturation",
+    "poisoned output buffer (0xA5)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_swap_gates.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "dd7d999b71bdb4c81b5edf1ecb46265d95fdca77b49c667767359950d83bf8ef",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "gru_cell_i8",
+  "origin": "expert",
+  "params": {
+    "mult": "int32 (runtime, swept x2)",
+    "shift": "int (runtime, swept x2)",
+    "sig_lut": "int8[256] sigmoid LUT (swept x2)",
+    "tanh_lut": "int8[256] tanh LUT (swept x2)",
+    "zp": "int8 (runtime, swept x2)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "gru_cell_i8",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "gru",
+    "recurrent",
+    "matvec",
+    "requantize",
+    "lut",
+    "gate",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 63748,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 45285,
+    "expert_speedup": 1.408,
+    "source": "v6 corpus build (simulator)"
+  }
+}

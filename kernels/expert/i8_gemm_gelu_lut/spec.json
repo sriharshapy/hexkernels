@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "large products (acc overflows int8 before saturation)",
+    "sign in K-reduction",
+    "negative acc (GELU suppresses near-zero output)",
+    "acc boundary (saturate to -128 and 127)",
+    "LUT index boundary (0 and 255)",
+    "poisoned out buffer",
+    "LUT swept across 2 variants"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode_lut.c",
+    "nearmiss_no_sat.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "beca21fad4f3e9c4aecddca2191c2e232183d227a9368583a58dbddf109d1b93",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_gemm_gelu_lut",
+  "origin": "expert",
+  "params": {
+    "gelu_lut": "int8[256] (runtime GELU approximation LUT; index = saturated_acc + 128)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gemm_gelu_lut",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "matmul",
+    "gelu",
+    "lut",
+    "fused",
+    "activation",
+    "no-bias",
+    "dense",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 144092,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 11938,
+    "expert_speedup": 12.07,
+    "source": "v6 corpus build (simulator)"
+  }
+}

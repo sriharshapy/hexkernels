@@ -1,0 +1,47 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "1c805eb12f405fb861269f62a8ffd65ca43a8d6c79f579142249ef79266ba719",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_lerp_Scalar",
+  "op": "lerp",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "f434c733b690f9cd387f9e6ee9d312dd27ea72804ca6e1e0841296596b319646",
+    "source_tier": "T1",
+    "task_tier": "T0",
+    "tier_match": false
+  },
+  "schema": "aten::lerp.Scalar(Tensor self, Tensor end, Scalar weight) -> Tensor",
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T0",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 6144
+}

@@ -1,0 +1,65 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8xint8->int32",
+  "edge_cases": [
+    "one 32x32 output tile, K=64 = 2 accumulating K-tiles",
+    "single mxclracc; accumulator persists across two matmul packets",
+    "clracc-in-loop near-miss (last-tile-only) must fail",
+    "0x40 requant field sign-extended from 12 bits",
+    "signed weights / negative accumulators",
+    "crouton pack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_clracc_inloop.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "f93633482478fc5fe1238546cf20750957cf975cfbe02089d6de058dce2a97b3",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_kacc_i8_2tile",
+  "origin": "expert",
+  "params": {
+    "K": 64,
+    "M": 32,
+    "N": 32,
+    "ktiles": 2,
+    "op": "hmx_kacc_2tile"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_kacc_i8_2tile",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "k-accumulate",
+    "primitive",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 276227,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 20571,
+    "expert_speedup": 13.43,
+    "source": "v6 corpus build (simulator)"
+  }
+}

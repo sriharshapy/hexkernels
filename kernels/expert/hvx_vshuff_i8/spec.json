@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "block-granular permutation, defined only over full 128B vectors",
+    "n=640 is exactly 5 blocks (no byte tail -- see prompt.md)",
+    "identity-ramp block 0 (a[i]=i) lets the interleave be hand-verified"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_deal.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "abeac2cc28f0f50fa547c0ca427f6d6e171219c82342dce9b2e227b4a8ae03e5",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vshuff_i8",
+  "origin": "expert",
+  "params": {
+    "n": 640,
+    "op": "vshuff_i8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vshuff_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "permute",
+    "shuffle",
+    "interleave",
+    "int8",
+    "Q6_Vb_vshuff_Vb"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1203,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 211,
+    "expert_speedup": 5.7,
+    "source": "v6 corpus build (simulator)"
+  }
+}

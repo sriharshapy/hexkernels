@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "W=13 not a multiple of 128",
+    "axis reorder (all three spatial axes permuted)",
+    "channel-last output"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_axis.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "fd806a914033eb2f25af8937a288256dcf660ca12623064aac2b591228c93b78",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "nchw_to_nhwc",
+  "origin": "expert",
+  "params": {
+    "formula": "out[h*W*C + w*C + c] = in[c*H*W + h*W + w]",
+    "op": "nchw_to_nhwc"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "nchw_to_nhwc",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "layout",
+    "nchw",
+    "nhwc",
+    "transpose",
+    "AI",
+    "data-movement"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1779,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 645,
+    "expert_speedup": 2.758,
+    "source": "v6 corpus build (simulator)"
+  }
+}

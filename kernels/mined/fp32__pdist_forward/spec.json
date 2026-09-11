@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "6bd2a13b3e08c112ac3d1b79500cd6cdc672694e7a0fb9fb4d43ff1c81d8678c",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 29088 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32__pdist_forward",
+  "op": "_pdist_forward",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "bd7b48e5afa2e53c14d587b485f5d1b8d4d83faf2c5f8990b8fe452fe501c009",
+    "source_tier": "T1",
+    "task_tier": "T1",
+    "tier_match": true
+  },
+  "schema": "fused: aten::_pdist_forward then aten::all",
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 2052
+}

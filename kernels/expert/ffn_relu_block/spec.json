@@ -1,0 +1,68 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "large positive product in layer 1",
+    "sign edge in K-reduction",
+    "large negative b1 forces ReLU clamp to 0",
+    "large positive b1 forces large hidden value",
+    "planted negative acc+b1 exercises ReLU on row 2",
+    "two requant param sets (mult/shift/zp swept)",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_skip_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "b768beaadb9dd57acb2754fc8a89d0259882eb2c387e74c717ee20b2245f222b",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "ffn_relu_block",
+  "origin": "expert",
+  "params": {
+    "D": 16,
+    "K": 16,
+    "M": 8,
+    "V": 32,
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ffn_relu_block",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "ffn",
+    "two-layer",
+    "relu",
+    "requantize",
+    "fused",
+    "transformer",
+    "AI",
+    "L3"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 39313,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 8003,
+    "expert_speedup": 4.912,
+    "source": "v6 corpus build (simulator)"
+  }
+}

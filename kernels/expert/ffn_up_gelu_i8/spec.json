@@ -1,0 +1,71 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "large positive product at k=0 (A[0]=127,B[0]=127)",
+    "sign edge in K-reduction (A=-128,B=127)",
+    "K tail path: K=90 not a multiple of 4 (90 = 22*4 + 2)",
+    "large negative bias forces pre-LUT saturate to -128",
+    "large positive bias forces pre-LUT saturate to 127",
+    "zero bias, activations both signs",
+    "LUT index boundary (0 and 255)",
+    "poisoned out buffer",
+    "gelu_lut swept across 2 variants to prevent hardcoding"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_lut_before_bias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "381e91b0f308d8a9b1f4ea0f4ea31fd929d85dd6f34b0ba85a9ed26ac412b60f",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "ffn_up_gelu_i8",
+  "origin": "expert",
+  "params": {
+    "B_layout": "[N x K] row-major, TRANSPOSED (row j contiguous over K)",
+    "K": 90,
+    "M": 8,
+    "N": 8,
+    "bias": "int32[N] (runtime, per output column)",
+    "gelu_lut": "int8[256] (runtime GELU-approximation LUT; index = saturated_biased_acc + 128)",
+    "op": "ffn_up_gelu"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ffn_up_gelu_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "gemm",
+    "bias",
+    "gelu",
+    "lut",
+    "fused",
+    "ffn",
+    "transposed-B",
+    "dense",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 24319,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 7296,
+    "expert_speedup": 3.33,
+    "source": "v6 corpus build (simulator)"
+  }
+}

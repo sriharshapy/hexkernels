@@ -1,0 +1,49 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "9d3bc9ec3ed454eb0b89a394362ea5b8bc6851c0d68e7c51dddaed3fa20e80b5",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "reduction loops vectorise through an accumulator plus a horizontal reduce"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_max_pool2d",
+  "op": "max_pool2d",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "c2ca2ff07925431175250291dd8ede933cc19af7c24dbc04df21515f6aea6d04",
+    "source_tier": "T1",
+    "task_tier": "T0",
+    "tier_match": false
+  },
+  "schema": "aten::max_pool2d(Tensor self, int[2] kernel_size, int[2] stride=[], int[2] padding=0, int[2] dilation=1, bool ceil_mode=False) -> Tensor",
+  "shape": [
+    1,
+    4,
+    8,
+    8
+  ],
+  "tier": "T0",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 1280
+}

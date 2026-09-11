@@ -1,0 +1,71 @@
+{
+  "bundle": "complete",
+  "category": "Convolution (pointwise, deep-channel) via matrix engine",
+  "domain": "ai",
+  "dtype": "uint8xint8->uint16",
+  "edge_cases": [
+    "deep-channel pointwise conv: C_in=96 = 3 crouton K-tiles (distinct from i8_conv2d_1x1_hmx)",
+    "1x1 conv over channels lowered to a P x C_in x C_out matmul (no im2col gather)",
+    "NCHW <-> position-major gather in the crouton activation/weight pack",
+    "HMX accumulator persists across 3 K-tiles (one mxclracc per output tile)",
+    "activation int8 in high byte of crouton slot; weight 4-deep packed (different load limits)",
+    "0x40-config requant: round(acc*17/16), 12-bit two's-complement field",
+    "input range chosen so |requant| < 2048 (12-bit field exact, no saturation)",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "transposed-weight near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transW.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "779df34cccc65dfd32f2ae304d1a55548fd4e35d740d12824b6e79ab6db2df29",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_pointwise_conv_hmx",
+  "origin": "expert",
+  "params": {
+    "C_in": 96,
+    "C_out": 64,
+    "H": 8,
+    "Kh": 1,
+    "Kw": 1,
+    "P": 64,
+    "W": 8,
+    "stride": 1
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_pointwise_conv_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine)",
+  "tags": [
+    "conv",
+    "pointwise",
+    "conv1x1",
+    "hmx",
+    "hvx",
+    "int8",
+    "requant",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 180196,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 73447,
+    "expert_speedup": 2.45,
+    "source": "v6 corpus build (simulator)"
+  }
+}

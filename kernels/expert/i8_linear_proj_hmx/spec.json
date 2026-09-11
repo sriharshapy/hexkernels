@@ -1,0 +1,73 @@
+{
+  "bundle": "complete",
+  "category": "Attention matmul + fused epilogue",
+  "domain": "ai",
+  "dtype": "uint8xint8->int8",
+  "edge_cases": [
+    "linear projection (attention QKV/output-projection shape): out = X . W^T + bias, NO activation",
+    "W stored [Dout,Din] nn.Linear row-major layout -- row o IS output-channel o's weight vector, already 'pre-transposed' relative to a generic matmul's B operand; weight pack uses swapped tile indices, no transpose buffer",
+    "2x2 grid of 32x32 output tiles; each accumulates over 2 Din-tiles",
+    "HMX accumulator persists across Din-tile matmuls (one mxclracc per out tile)",
+    "activation int8 in high byte of crouton slot (low bytes dead)",
+    "weight 4-deep packed; different load limit than activation",
+    "HMX 0x40-config requant gives r=(acc*17+8)>>4, sign-extended from the 12-bit field",
+    "per-output-channel int32 bias -> saturating narrow to int8, fused in HVX (no ReLU, distinguishing this from the gemm_bias_relu sibling task)",
+    "bias includes extreme (-2000/+2000) and zero edge values so both int8-saturate directions and passthrough occur",
+    "signed weights / negative accumulators",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "missing-transpose near-miss (computes X.W, not X.W^T) must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_missing_transpose.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "8a3de43d7e4e44c071a425ca58b256ea792c4329461e0f794aefdbbe6bf44a1a",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_linear_proj_hmx",
+  "origin": "expert",
+  "params": {
+    "Din": 64,
+    "Dout": 64,
+    "S": 64
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_linear_proj_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine + fused epilogue)",
+  "tags": [
+    "linear",
+    "projection",
+    "attention",
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "bias",
+    "requant",
+    "epilogue",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 164795,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 103902,
+    "expert_speedup": 1.59,
+    "source": "v6 corpus build (simulator)"
+  }
+}

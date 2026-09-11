@@ -1,0 +1,63 @@
+{
+  "bundle": "harness-regenerable",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "HARNESS.md",
+    "PROMPT.md",
+    "kernel.c",
+    "reference.c"
+  ],
+  "harness_bytes": 1497489,
+  "kernel_sha256": "6f9bae5bc37a9abb4ff8e274272747c4de2ead2e4d7d5726d424a4a2443f90f0",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 1048580 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ],
+    [
+      "dma",
+      "working set 1048580 B exceeds L2 1048576 B, so the data does not stay resident and staging is what buys bandwidth"
+    ],
+    [
+      "vtcm",
+      "the staged tiles need a software-managed scratchpad"
+    ]
+  ],
+  "mechanisms_declared": [
+    "dma",
+    "hvx",
+    "l2fetch",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_nansum",
+  "op": "nansum",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "9c83a521fada4537dee7f7450042178371a8b082060a2d6f62caca5ebd69b559",
+    "source_tier": "T0",
+    "task_tier": "T2",
+    "tier_match": false
+  },
+  "schema": "fused: aten::nansum then aten::amin",
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T2",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 2052
+}

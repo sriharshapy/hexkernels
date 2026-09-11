@@ -1,0 +1,73 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "group 0, idx=0: all 4 heads at +127 -> acc=508 (max positive sum)",
+    "group 0, idx=1: all 4 heads at -128 -> acc=-512 (max negative sum)",
+    "group 1, idx=5: all 4 heads at -128",
+    "M*N=136 not a multiple of 128 (tail path); tail region also carries planted +127 edge values (idx=130, idx=135)",
+    "2 distinct (scale_mult, scale_shift) sweep sets: set 0 is exactly the group AVERAGE (mult=1,shift=2 for HPG=4), set 1 is a different weighted reduce (mult=3,shift=4)",
+    "head-plane stride (M*N=136) is not 128B-aligned -- candidate must not assume alignment when loading head planes as HVX vectors"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_drop_last_head.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "de352d61ea10729271fe4ba9d36947648c1355e9251e9150497b9f37482665ef",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "gqa_group_reduce_i8",
+  "origin": "expert",
+  "params": {
+    "G": 2,
+    "H": 8,
+    "HPG": 4,
+    "M": 8,
+    "N": 17,
+    "mult_sweep": [
+      1,
+      3
+    ],
+    "op": "gqa_group_reduce",
+    "shift_sweep": [
+      2,
+      4
+    ]
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "gqa_group_reduce_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "attention",
+    "grouped-query",
+    "gqa",
+    "head-reduction",
+    "requantize",
+    "fixed-point",
+    "no-float",
+    "transformer"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 9577,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 5965,
+    "expert_speedup": 1.606,
+    "source": "v6 corpus build (simulator)"
+  }
+}

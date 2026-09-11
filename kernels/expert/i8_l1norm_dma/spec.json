@@ -1,0 +1,48 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "abs of -128 = 128 (no int8 saturate)",
+    "negative in tail",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_noabs.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7c7c3a897ec6efd190f63a67140573aa230daf15eb190ce7232e31a59f3f8ab4",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_l1norm_dma",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_l1norm_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 140287,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 57833,
+    "expert_speedup": 2.43,
+    "source": "v6 corpus build (simulator)"
+  }
+}

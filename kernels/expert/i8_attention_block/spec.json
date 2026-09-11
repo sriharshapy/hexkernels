@@ -1,0 +1,79 @@
+{
+  "bundle": "complete",
+  "category": "Attention block (transformer layer)",
+  "domain": "ai",
+  "dtype": "uint8xint8->uint16",
+  "edge_cases": [
+    "full single-head attention: QK^T (HMX) -> scale+softmax (HVX) -> A.V (HMX)",
+    "K stored [S,D] row-major (row j IS key vector j) -> QK^T needs only swapped crouton tile indices, no transpose buffer",
+    "A.V reduction axis is the key axis S; V is a generic B[K,N] operand (no transpose)",
+    "softmax over the KEY axis; nearmiss_wrongaxis softmaxes over the query axis (must fail)",
+    "attention scale applied as >>4 on the requant field; nearmiss_noscale omits it (must fail)",
+    "softmax probs are a normalized row (sum ~255) so the A.V accumulator stays < 2048 -> requant field exact",
+    "query row of all-zeros -> uniform softmax edge case",
+    "both HMX matmuls: 2x2 grid of 32x32 crouton tiles, 2-tile reduction, one mxclracc per output tile",
+    "crouton pack/unpack staged in cacheable DDR + bulk 128B HVX vector copies to/from VTCM (scalar VTCM access ~48 cyc)",
+    "scores/probs intermediates in cacheable DDR (4KB too small for DMA to beat a vector copy)",
+    "poisoned output buffer",
+    "input ranges chosen so every requant field < 2048 (12-bit field exact, whole block bit-exact)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_noscale.c",
+    "nearmiss_wrongaxis.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "9ade45af538cfafa122c8acfed200746e260babe4427fea7d7f2b81c99be2827",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_attention_block",
+  "origin": "expert",
+  "params": {
+    "D": 64,
+    "S": 64,
+    "exp_lut": "256 uint8 entries (runtime), fixed-point exp, index 255 = exp(0)",
+    "heads": 1,
+    "scale": "arithmetic >>4 on the 0x40-requant field (net ~1/15, in the 1/sqrt(D) regime)",
+    "softmax_tau": 24
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_attention_block",
+    "upstream": null
+  },
+  "signal": "attention block (matmul+softmax)",
+  "tags": [
+    "attention",
+    "transformer",
+    "block",
+    "matmul",
+    "softmax",
+    "hmx",
+    "hvx",
+    "vtcm",
+    "int8",
+    "requant",
+    "tiling",
+    "l3",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 490855,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 282396,
+    "expert_speedup": 1.738,
+    "source": "v6 corpus build (simulator)"
+  }
+}

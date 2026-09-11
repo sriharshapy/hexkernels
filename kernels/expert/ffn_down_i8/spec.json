@@ -1,0 +1,71 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "large positive product at k=0 (A[0]=127,B[0]=127)",
+    "sign edge in K-reduction (A=-128,B=127)",
+    "K tail path: K=110 not a multiple of 4 (110 = 27*4 + 2)",
+    "large negative bias, no activation clamp so negatives flow through",
+    "large positive bias",
+    "zero bias",
+    "requant round-half-away-from-zero, both signs",
+    "poisoned out buffer",
+    "(scale_mult, scale_shift) swept across 2 pairs to prevent hardcoding"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_bias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "2616787b94234936af63596d3d30316418ea8a5f3011bc1456b69ba53ce5b075",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "ffn_down_i8",
+  "origin": "expert",
+  "params": {
+    "B_layout": "[N x K] row-major, TRANSPOSED (row j contiguous over K)",
+    "K": 110,
+    "M": 8,
+    "N": 8,
+    "bias": "int32[N] (runtime, per output column)",
+    "op": "ffn_down_requant",
+    "scale_mult": "int32 (runtime, positive)",
+    "scale_shift": "int (runtime, >=0)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ffn_down_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "gemm",
+    "bias",
+    "requant",
+    "no-activation",
+    "ffn",
+    "transposed-B",
+    "dense",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 29949,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 9063,
+    "expert_speedup": 3.3,
+    "source": "v6 corpus build (simulator)"
+  }
+}

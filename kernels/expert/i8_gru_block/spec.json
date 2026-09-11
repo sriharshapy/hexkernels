@@ -1,0 +1,79 @@
+{
+  "bundle": "complete",
+  "category": "Multi-step integer GRU block (fused gate matmul, recurrence, composition)",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "FUSED z/r gate matmul: Wzr stacks Wz (rows [0,H)) then Wr (rows [H,2H)) -- ONE weight tensor, ONE loop computes both gates, distinct from gru_cell_i8's three separate weight matrices",
+    "multi-step (T=3) recurrence: h_t must be propagated as h_prev into the NEXT timestep -- extreme input pinned on the LAST timestep (x_seq[T*I-1]=-128) so a stale-h_prev bug is caught",
+    "max-product weight/input in the update gate (step 0), max-negative product in the reset gate row 0 (j=H)",
+    "large positive/negative biases (bzr[0]=32767, bzr[1]=-32768)",
+    "zero and min (-128) initial hidden state elements",
+    "LUT index boundary 0/128/255; requant saturation",
+    "2 (mult,shift,zp) sweeps x 2 (sig_lut,tanh_lut) sweeps = 4 anti-hardcode configurations, each over the full T=3 sequence",
+    "nearmiss_stale_hprev never propagates h_t across timesteps (every step reuses h0) -> INCORRECT (126/192 wrong; step 0 matches, steps 1-2 don't)",
+    "poisoned output buffer (0xA5)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_stale_hprev.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "53a5455747a8bebd385b2c06e4d1a8b816bdce9ff86be246dacc7e0a28c6eeee",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_gru_block",
+  "origin": "expert",
+  "params": {
+    "C": 32,
+    "H": 16,
+    "I": 16,
+    "T": 3,
+    "mult": "int32 (runtime, swept x2)",
+    "op": "gru_block",
+    "shift": "int (runtime, swept x2)",
+    "sig_lut": "int8[256] sigmoid LUT (swept x2)",
+    "tanh_lut": "int8[256] tanh LUT (swept x2)",
+    "zp": "int8 (runtime, swept x2)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gru_block",
+    "upstream": null
+  },
+  "signal": "multi-step (T=3) integer GRU block with a FUSED update+reset gate matmul (one weight tensor, one loop for both gates) and per-step hidden-state propagation -- distinct from gru_cell_i8's single-step three-separate-matrix cell",
+  "tags": [
+    "gru",
+    "recurrent",
+    "rnn",
+    "multi-step",
+    "fused-gate",
+    "matvec",
+    "requantize",
+    "lut",
+    "gate",
+    "hvx",
+    "int8",
+    "composition",
+    "l3",
+    "ai",
+    "holdout"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 97140,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 51342,
+    "expert_speedup": 1.89,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "bundle": "complete",
+  "category": "Add up an array",
+  "domain": "dsp",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "square of -128 in tail",
+    "n%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_sumabs.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "c60e3b34b7ce10f84c8bd3628be182f52cc394e4abc59498d84839d46f9cf9ca",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_sumsq_i32",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_sumsq_i32",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "reduction",
+    "sumsquares",
+    "l2"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2197,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 952,
+    "expert_speedup": 2.308,
+    "source": "v6 corpus build (simulator)"
+  }
+}

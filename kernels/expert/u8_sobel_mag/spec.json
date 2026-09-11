@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": "Neighborhood image filter",
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "top/bottom/left/right border pixels",
+    "horizontal ramp row (strong Gx near borders)",
+    "checkerboard patch (max both Gx and Gy, exercises saturation clamp)",
+    "w%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nosaturate.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "2004c7851ab91acfd077de4a480d128506bb566140e0b1d40b696898ae0febb0",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "u8_sobel_mag",
+  "origin": "expert",
+  "params": {
+    "border": "clamp-to-edge",
+    "clamp_output": 255,
+    "magnitude": "L1 (|Gx|+|Gy|)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "u8_sobel_mag",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "image",
+    "sobel",
+    "gradient",
+    "magnitude",
+    "border",
+    "saturate"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 114732,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 46192,
+    "expert_speedup": 2.484,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "+127 activation",
+    "-128 activation",
+    "zero",
+    "per-channel norm distinct across 16 channels",
+    "two-stage round-half-away",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_global_norm.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "4c22af0ae2f88c06da30770be3a0ffa519a6055693b2013c1b2eecb5e709932d",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_norm_requant_dma",
+  "origin": "expert",
+  "params": {
+    "mult": 5,
+    "norm_mult": [
+      3,
+      5,
+      7,
+      9,
+      11,
+      13,
+      15,
+      17,
+      3,
+      5,
+      7,
+      9,
+      11,
+      13,
+      15,
+      17
+    ],
+    "norm_shift": [
+      2,
+      3,
+      4,
+      5,
+      3,
+      4,
+      5,
+      6,
+      2,
+      3,
+      4,
+      5,
+      3,
+      4,
+      5,
+      6
+    ],
+    "note": "per-channel arrays + requant params baked; signature is (a,out,n); layout [NUM_CH][per_ch]",
+    "num_ch": 16,
+    "per_ch": 32768,
+    "shift": 4,
+    "zp": 0
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_norm_requant_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 762629,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 225048,
+    "expert_speedup": 3.39,
+    "source": "v6 corpus build (simulator)"
+  }
+}

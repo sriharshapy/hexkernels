@@ -1,0 +1,26 @@
+/* Near-miss: hardcodes mult=3,shift=4,zp=0 -- ignores runtime quant params.
+   The bias is still read correctly. Passes first param-sweep set (mult=3,shift=4,zp=0)
+   but FAILS on the other 4 sets in the harness sweep. */
+#include <stdint.h>
+void candidate_kernel(const int8_t *A, const int8_t *B,
+                      const int32_t *bias, int8_t *out,
+                      int M, int N, int K,
+                      int32_t mult, int shift, int8_t zp) {
+    (void)mult; (void)shift; (void)zp;  /* intentionally ignore runtime params */
+    for (int i = 0; i < M; i++) {
+        for (int j = 0; j < N; j++) {
+            int32_t acc = 0;
+            for (int k = 0; k < K; k++)
+                acc += (int32_t)A[i*K+k] * (int32_t)B[k*N+j];
+            int64_t biased = (int64_t)acc + (int64_t)bias[j];
+            if (biased < 0) biased = 0;  /* relu */
+            /* hardcoded mult=3, shift=4, zp=0 */
+            long long v = biased * 3LL;
+            long long h = 8LL;  /* 1 << (4-1) */
+            long long r = (v + h) >> 4;
+            if (r >  127) r =  127;
+            if (r < -128) r = -128;
+            out[i*N+j] = (signed char)r;
+        }
+    }
+}

@@ -1,0 +1,52 @@
+{
+  "bundle": "harness-regenerable",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "HARNESS.md",
+    "PROMPT.md",
+    "kernel.c",
+    "reference.c"
+  ],
+  "harness_bytes": 11934816,
+  "kernel_sha256": "c23e292294c4c5dd148d0d5a5e6a37d41821d14431fa6d6a8185f715a336fbeb",
+  "mechanisms_declared": [],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32__to_copy__any",
+  "op": null,
+  "origin": "model",
+  "provenance": {
+    "corpus": "model",
+    "eval_set": "core128",
+    "generated_at": "2026-08-25T11:31:33+00:00",
+    "model": "gpt-5.6-luna",
+    "rung": 2,
+    "seed_index": 4,
+    "task_key": "b76i2_fp32__to_copy__any",
+    "turns_used": 2
+  },
+  "shape": [
+    1024,
+    2048
+  ],
+  "tier": "T3",
+  "verified": {
+    "compiled": true,
+    "correct": true,
+    "elf_confirmed": true,
+    "expert_kernel_cycles": null,
+    "kernel_cycles": null,
+    "mechanisms_fired": {
+      "dma": false,
+      "hmx": false,
+      "hvx": true,
+      "hvx_compute": true,
+      "l2fetch": false,
+      "vtcm": false
+    },
+    "source": "anticheat disassembly scan"
+  }
+}

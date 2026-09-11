@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int16",
+  "edge_cases": [
+    "0.5*0.5 (16384*16384) -> 8192 (0.25)",
+    "0.5*-0.5 -> -8192",
+    "-1*-1 (0x8000*0x8000) -> saturates to 32767",
+    "32767*32767 (~1*1, just under 1.0) -> 32766, not 32767",
+    "tiny product 1*1 -> 0 (rounds down)",
+    "n=519 tail path (8*64 + 7)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_round.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "ed5acc308de3e0e69cd7ed1b9a1e8f802fd538529b46471b7662d6aebceff1e1",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vmpyh_i16",
+  "origin": "expert",
+  "params": {
+    "n": 519,
+    "op": "vmpyh_i16"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vmpyh_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "multiply",
+    "fixed-point",
+    "q15",
+    "rounding",
+    "saturating",
+    "int16",
+    "Q6_Vh_vmpy_VhVh_s1_rnd_sat"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 9552,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 525,
+    "expert_speedup": 18.19,
+    "source": "v6 corpus build (simulator)"
+  }
+}

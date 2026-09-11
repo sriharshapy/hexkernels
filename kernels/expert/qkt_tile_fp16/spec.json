@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "D=40 < 64 hf-lanes-per-HVX-vector -- zero-pad-tail, whole reduction fits one vector",
+    "large positive product at d=0,j=0; sign-mismatch cancellation at d=1",
+    "non-zero values at the D-tail boundary (d=D-2,D-1)",
+    "2 distinct runtime scale values swept (0.125, 1.0), including scale != 1"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_noscale.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "5762305f71c9ba18aea14160f36d5448258fdf12a151c79b7f7d4aa37d501046",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "qkt_tile_fp16",
+  "origin": "expert",
+  "params": {
+    "D": 40,
+    "M": 8,
+    "N": 8,
+    "op": "qkt_tile_colmajor_k_fp16"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "qkt_tile_fp16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "attention",
+    "qkt",
+    "matmul",
+    "fp16",
+    "qf16",
+    "fused",
+    "transformer",
+    "column-major-k",
+    "no-hardcoded-scale"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 86592,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 3261,
+    "expert_speedup": 26.554,
+    "source": "v6 corpus build (simulator)"
+  }
+}

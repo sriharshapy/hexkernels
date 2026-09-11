@@ -1,0 +1,53 @@
+{
+  "bundle": "complete",
+  "category": "Add up an array",
+  "domain": "dsp",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "max positive product (127*127)",
+    "max negative product (127*-128)",
+    "zero weight -> zero contribution",
+    "zero data -> zero contribution",
+    "both negative -> positive product"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_ignore_weights.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "bae0450457eb5c1a9db9a7bd7633be87c44cab62dc839482a85608bccf2d6374",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_weighted_sum",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_weighted_sum",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "reduction",
+    "weighted_sum",
+    "dot_product",
+    "inference"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 4302,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 568,
+    "expert_speedup": 7.574,
+    "source": "v6 corpus build (simulator)"
+  }
+}

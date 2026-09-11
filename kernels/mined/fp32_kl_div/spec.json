@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "554fb3e022498b9df837ea54ebb153b24460d8d6129730b0049de5113c51a7c3",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 16388 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_kl_div",
+  "op": "kl_div",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "2a5a48086e257b1704219234f2273a434e1b475921757b5cf0d2ff8cf55f9479",
+    "source_tier": "T2",
+    "task_tier": "T1",
+    "tier_match": false
+  },
+  "schema": "aten::kl_div(Tensor self, Tensor target, int reduction=1, *, bool log_target=False) -> Tensor",
+  "shape": [
+    32,
+    64
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 16388
+}

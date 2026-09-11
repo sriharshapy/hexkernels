@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": "Sliding-window filter (1D)",
+  "domain": "dsp",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "max-magnitude products (-128 * -128 = 16384)",
+    "negative mult (swept set)",
+    "shift==0 (no rounding)",
+    "non-zero zero-point",
+    "saturation to +127/-128",
+    "poisoned output buffer",
+    "hardcode-buster: 3 quant param sets swept"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_requant.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "dc9304a61b37f1a6b36b457eef96fe178f7b9be2a13c5e7d0f017b8dd24262ba",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_conv1d_depthwise_requant",
+  "origin": "expert",
+  "params": {
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_conv1d_depthwise_requant",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "conv1d",
+    "depthwise",
+    "requantize",
+    "fused",
+    "channels-first",
+    "VALID",
+    "param",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 97182,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 27964,
+    "expert_speedup": 3.475,
+    "source": "v6 corpus build (simulator)"
+  }
+}

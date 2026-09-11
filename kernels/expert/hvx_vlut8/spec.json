@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "idx 0 -> lut[0] boundary",
+    "idx 1 -> lut[1]",
+    "idx 127 -> lut[127] (signed/unsigned boundary just below)",
+    "idx 128 (from a[i]=-128 bit pattern 0x80) -> lut[128]",
+    "idx 255 (from a[i]=-1 bit pattern 0xFF) -> lut[255], also n=900 tail path (7*128 + 4)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_missing_segment.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "09f703ca928cab0e2a34738e8b0125c16a9ad9dbbf8c61189dea509dc18ceb77",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vlut8",
+  "origin": "expert",
+  "params": {
+    "lut_entries": 256,
+    "n": 900,
+    "op": "vlut8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vlut8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "lookup-table",
+    "gather",
+    "vlut32",
+    "int8",
+    "Q6_Vb_vlut32_VbVbR"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 4675,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 367,
+    "expert_speedup": 12.74,
+    "source": "v6 corpus build (simulator)"
+  }
+}

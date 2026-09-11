@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": "Sliding-window filter (1D)",
+  "domain": "dsp",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "dilation=1 is standard conv (baseline correctness)",
+    "dilation=2 skips every other sample",
+    "dilation=3 widest receptive field (xlen=530)",
+    "max-magnitude products (-128 * -128 = 16384)",
+    "shift==0 (no rounding)",
+    "non-zero zero-point",
+    "saturation to +127/-128",
+    "hardcode-buster: 3 dilations x 2 quant sets = 6 combinations swept",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_wrong_dilation.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "db532117b6d07dd1b5eadd48610f79579d6f0570ff2023d323e715e2ae02f66f",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_conv1d_dilated_requant",
+  "origin": "expert",
+  "params": {
+    "dilation": "int (runtime, swept 1/2/3)",
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_conv1d_dilated_requant",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "conv1d",
+    "dilated",
+    "requantize",
+    "fused",
+    "param",
+    "VALID",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 23574,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 6634,
+    "expert_speedup": 3.554,
+    "source": "v6 corpus build (simulator)"
+  }
+}

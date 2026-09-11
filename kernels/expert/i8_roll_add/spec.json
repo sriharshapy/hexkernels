@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "k=1 (adjacent roll)",
+    "k=128 (one HVX vector width)",
+    "k=300 (arbitrary mid-array)",
+    "k=1023 (n-1, near-full wrap)",
+    "wrap-around add extremes: 127+1=-128, -128-1=127",
+    "hardcode-k nearmiss caught by sweep"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_roll.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "67652849ccc2162ef538a157a06571ea5d6beccddd387496e4258f4c5008011d",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_roll_add",
+  "origin": "expert",
+  "params": {
+    "k": "int, circular shift amount (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_roll_add",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound + index arithmetic",
+  "tags": [
+    "rearrange",
+    "circular",
+    "roll",
+    "add",
+    "param",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 30228,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 933,
+    "expert_speedup": 32.399,
+    "source": "v6 corpus build (simulator)"
+  }
+}

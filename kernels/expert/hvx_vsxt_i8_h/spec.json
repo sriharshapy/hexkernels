@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "block-granular op, defined only over full 128B vectors",
+    "n=256 is exactly 2 blocks (no byte tail -- see prompt.md)",
+    "even/odd deinterleaved output layout pinned via sim experiment (NOT sequential widen)",
+    "identity ramp with negatives (-64..63) in block 0 hand-verifies sign-extension"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_unsigned.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "16db16f5891b28d78b417f11c27e0d1401686f1b545a014c7751f2b10a53cde4",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vsxt_i8_h",
+  "origin": "expert",
+  "params": {
+    "n": 256,
+    "op": "vsxt_i8_h"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vsxt_i8_h",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "widen",
+    "sign-extend",
+    "deinterleave",
+    "int8",
+    "int16",
+    "Q6_Wh_vsxt_Vb"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 591,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 211,
+    "expert_speedup": 2.8,
+    "source": "v6 corpus build (simulator)"
+  }
+}

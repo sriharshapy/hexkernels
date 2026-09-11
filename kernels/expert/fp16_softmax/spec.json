@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "R=8 rows x C=256 columns = 4 HVX vectors of 64 fp16 lanes per row (clean single-tile size)",
+    "row 0: all -3.0 except a single dominant max (+3.0) at column 7",
+    "row 1: all-identical values (uniform softmax = 1/C every element)",
+    "softmax over the LAST axis (per-row), independent across rows",
+    "exp is UNAVOIDABLY scalar (no HVX vector transcendental) -- only the max-reduce and the final normalize are vectorized",
+    "HVX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "poisoned output buffer",
+    "dropped-normalize near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nonormalize.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "c9e7033f057b5210b32b839c9b3bec0e52976c74a2303eafda5ef6fcad4408fc",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp16_softmax",
+  "origin": "expert",
+  "params": {
+    "C": 256,
+    "R": 8
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_softmax",
+    "upstream": null
+  },
+  "signal": "reduction + unavoidably-scalar exp + elementwise normalize (HVX qf16 vs scalar fp16)",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 281380,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 188850,
+    "expert_speedup": 1.49,
+    "source": "v6 corpus build (simulator)"
+  }
+}

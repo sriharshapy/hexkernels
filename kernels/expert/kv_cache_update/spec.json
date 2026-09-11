@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "pos=0 (first slot in cache)",
+    "pos=31 (middle)",
+    "pos=32 (second half)",
+    "pos=63 (last slot in cache)",
+    "boundary values in k_new/v_new (127, -128)",
+    "non-zero background in cache (only the written slot should change)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_wrong_stride.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "b053b910439e13ec3930c4cad367c9f583ebf94afd5ca36ef1a9448b4596cdd7",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "kv_cache_update",
+  "origin": "expert",
+  "params": {
+    "pos": "int write position in [0, cache_len) (runtime, varies per sweep)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "kv_cache_update",
+    "upstream": "v3"
+  },
+  "signal": "memory-bound",
+  "tags": [
+    "kv-cache",
+    "indexed-write",
+    "attention",
+    "transformer",
+    "no-float",
+    "pure-copy",
+    "multi-head"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 581,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 112,
+    "expert_speedup": 5.188,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8xint8->int32",
+  "edge_cases": [
+    "2x2 grid of 32x32 output tiles; each accumulates over 2 K-tiles",
+    "one mxclracc per output tile; accumulator persists across both K-tiles",
+    "activation high-byte crouton (lim 2047), weight 4-deep (lim 1023)",
+    "0x40 requant field sign-extended from 12 bits, int32 output",
+    "signed weights / negative accumulators",
+    "crouton pack staged via cacheable buffers + bulk vector copy",
+    "transposed-B near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transB.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "bc7f9e69f2d0dfb1ba0d7fe473ffc49cad579ec6bed9dba931e5e14c713d9ed5",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_64",
+  "origin": "expert",
+  "params": {
+    "K": 64,
+    "M": 64,
+    "N": 64,
+    "op": "hmx_matmul_i8_64"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_64",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "tiled",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1100285,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 67306,
+    "expert_speedup": 16.35,
+    "source": "v6 corpus build (simulator)"
+  }
+}

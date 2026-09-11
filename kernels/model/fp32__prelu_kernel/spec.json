@@ -1,0 +1,53 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e9e25fd59cb25f60804e5ae16e59080265ac3dbd320c2982579a01a692481b69",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32__prelu_kernel",
+  "op": "_prelu_kernel",
+  "origin": "model",
+  "provenance": {
+    "corpus": "model",
+    "eval_set": "core128",
+    "generated_at": "2026-08-25T11:16:53+00:00",
+    "model": "gpt-5.6-luna",
+    "rung": 2,
+    "seed_index": 2,
+    "task_key": "b34i1_fp32__prelu_kernel",
+    "turns_used": 2
+  },
+  "shape": [
+    24,
+    64
+  ],
+  "tier": "T1",
+  "verified": {
+    "compiled": true,
+    "correct": true,
+    "elf_confirmed": true,
+    "expert_kernel_cycles": null,
+    "kernel_cycles": null,
+    "mechanisms_fired": {
+      "dma": false,
+      "hmx": false,
+      "hvx": true,
+      "hvx_compute": true,
+      "l2fetch": false,
+      "vtcm": false
+    },
+    "source": "anticheat disassembly scan"
+  }
+}

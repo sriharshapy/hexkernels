@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a1088c90dfe0f6f1ce0337f98b5538504081338e141da16e8781f92342c78a21",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "reduction loops vectorise through an accumulator plus a horizontal reduce"
+    ],
+    [
+      "hmx",
+      "NOT granted: the shape matches, but a 4-byte dtype exceeds the int8/fp16 HMX datapath"
+    ],
+    [
+      "l2fetch",
+      "working set 24576 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32__convolution",
+  "op": "_convolution",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "1090bce96afe0e3bb7634d5f53bd8c6afd63e3f7474be43ea877429d03111575",
+    "source_tier": "T0",
+    "task_tier": "T1",
+    "tier_match": false
+  },
+  "schema": "aten::_convolution(Tensor input, Tensor weight, Tensor? bias, SymInt[] stride, SymInt[] padding, SymInt[] dilation, bool transposed, SymInt[] output_padding, SymInt groups, bool benchmark, bool determ",
+  "shape": [
+    1,
+    16,
+    16,
+    16
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 24576
+}

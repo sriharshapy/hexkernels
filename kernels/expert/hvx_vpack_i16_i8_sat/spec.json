@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int16",
+  "edge_cases": [
+    "both operands saturate: 1000->127, -1000->-128",
+    "exact boundary values 127/-128, no saturation",
+    "just-past-boundary 128/-129, saturate",
+    "block-granular op, g=2 blocks (no scalar tail)",
+    "vpack's lo=second-arg/hi=first-arg convention pinned via sim experiment"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_swapped_args.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "230dc0a8468d5554a8f3d0b8f2756d7b750ce6484901a2211942256938b59713",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vpack_i16_i8_sat",
+  "origin": "expert",
+  "params": {
+    "g": 2,
+    "op": "vpack_i16_i8_sat"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vpack_i16_i8_sat",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "pack",
+    "saturate",
+    "narrow",
+    "int16",
+    "int8",
+    "Q6_Vb_vpack_VhVh_sat"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 954,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 195,
+    "expert_speedup": 4.89,
+    "source": "v6 corpus build (simulator)"
+  }
+}

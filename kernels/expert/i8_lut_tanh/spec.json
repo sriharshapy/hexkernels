@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": "Lookup-table function",
+  "domain": "comms",
+  "dtype": "int8",
+  "edge_cases": [
+    "in=-128 -> index 128",
+    "in=0   -> index 0",
+    "in=127 -> index 127",
+    "in=-1  -> index 255",
+    "n%128 tail (1024 mod 128 == 0, but harness uses 2x1024 sweep)",
+    "two-sweep anti-cheat (LUT A != LUT B)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_signedidx.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "bea81dc9946f7808ce36e72766ff46d9387dcde4572150333ace99a8e7cd4ca6",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_lut_tanh",
+  "origin": "expert",
+  "params": {
+    "activation": "tanh (LUT-based, runtime table)",
+    "index": "(uint8_t)in[i]",
+    "lut_entries": 256
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_lut_tanh",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "lut",
+    "vlut",
+    "tanh",
+    "nonlinear",
+    "activation",
+    "anti-cheat-sweep"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 5128,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 162,
+    "expert_speedup": 31.654,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "K=100 not a multiple of 128 (vrmpy reduction tail, K not a multiple of 4 either)",
+    "sign in the K reduction (A[1]=-128, B row1[0]=127)",
+    "large positive contribution (A[0]=127, B row0[0]=127)",
+    "N=24 not a multiple of 32 int32 lanes -- partial-vector output narrow/store path",
+    "poisoned C output detects untouched cells"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_layout.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7f1c6cd376afe7e9a7d8221ce82be126b53cc5fdeed4b3b214eb4b6f1e48f840",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "gemm_tile_i8",
+  "origin": "expert",
+  "params": {
+    "K": 100,
+    "M": 24,
+    "N": 24,
+    "op": "gemm_tile_btransposed"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "gemm_tile_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "vrmpy",
+    "gemm",
+    "transposed-b",
+    "dense",
+    "dot-product-shaped"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 234510,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 20183,
+    "expert_speedup": 11.617,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int16",
+  "edge_cases": [
+    "random indices into a 32KB int16 table (larger than L1)",
+    "first/last table entry, repeated index injected",
+    "n_idx multiple of 64 (HVX halfword gather width); scalar tail in expert"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_off_by_one.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "49a2fec766fdb77943923d9af43488843d6775c2a4e29a108eb488dcae5e9ecd",
+  "level": "L2",
+  "mechanisms_declared": [
+    "gather",
+    "vtcm",
+    "dma"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i16_table_lookup_gather",
+  "origin": "expert",
+  "params": {
+    "formula": "out[i] = table[idx[i]]",
+    "n_idx": 32768,
+    "op": "table_lookup",
+    "table_hwords": 16384
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i16_table_lookup_gather",
+    "upstream": null
+  },
+  "signal": "random-access / scatter-gather bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 400465,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 40893,
+    "expert_speedup": 9.79,
+    "source": "v6 corpus build (simulator)"
+  }
+}

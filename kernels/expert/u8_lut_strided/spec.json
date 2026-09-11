@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": "Lookup-table function",
+  "domain": "comms",
+  "dtype": "uint8",
+  "edge_cases": [
+    "i=0 always divisible by k (always LUT)",
+    "k=1 would apply LUT to all (not tested but corner)",
+    "tail elements near n that may or may not be divisible",
+    "lut[0]/lut[255] boundary indices",
+    "n%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_allelt.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "1487b8b0ad3bc13a3da1a0ee983f5fc432f3b6e96b20dfd6fae7d978b0496e44",
+  "level": "L1",
+  "mechanisms_declared": [],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "u8_lut_strided",
+  "origin": "expert",
+  "params": {
+    "formula": "i%k==0 ? lut[in[i]] : in[i]",
+    "k": "runtime (swept: 3, 7, 2, 5)",
+    "lut_entries": 256
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "u8_lut_strided",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "lut",
+    "strided",
+    "selective",
+    "copy",
+    "uint8",
+    "param",
+    "HO"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 37099,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 1487,
+    "expert_speedup": 24.949,
+    "source": "v6 corpus build (simulator)"
+  }
+}

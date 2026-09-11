@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int16",
+  "edge_cases": [
+    "tie 128 -> 1 (round half up towards +inf)",
+    "tie 384 -> 2",
+    "tie -128 -> 0",
+    "saturate 32767 -> 127 (rounded value 128 clamps down)",
+    "saturate -32768 -> -128 (exact, lands on boundary)",
+    "n=210 tail path (3*64 + 18); interleave: b at even, a at odd"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_swapped_interleave.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "2b6354a36e7506fa39856a92bf1cc5ebe0c4c8054919ff7bc244426c8dc12547",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vroundhb_i16",
+  "origin": "expert",
+  "params": {
+    "n": 210,
+    "op": "vroundhb_i16"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vroundhb_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "round",
+    "narrow",
+    "saturating",
+    "int16",
+    "int8",
+    "Q6_Vb_vround_VhVh_sat"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2299,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 564,
+    "expert_speedup": 4.08,
+    "source": "v6 corpus build (simulator)"
+  }
+}

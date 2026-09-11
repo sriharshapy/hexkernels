@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "dtype": "fp16",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "5950451b2291082c062462f0c32f0fa27a3aa84d117a0371d379026e801ca542",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": false
+  },
+  "name": "fp16__convolution",
+  "op": "_convolution",
+  "origin": "model",
+  "provenance": {
+    "corpus": "model",
+    "eval_set": "core128",
+    "generated_at": "2026-08-25T11:19:52+00:00",
+    "model": "gpt-5.6-luna",
+    "rung": 2,
+    "seed_index": 1,
+    "task_key": "b48i3_fp16__convolution",
+    "turns_used": 1
+  },
+  "shape": [
+    1,
+    64,
+    128,
+    128
+  ],
+  "tier": "T2",
+  "verified": {
+    "compiled": true,
+    "correct": null,
+    "elf_confirmed": false,
+    "expert_kernel_cycles": null,
+    "kernel_cycles": null,
+    "mechanisms_fired": {
+      "dma": false,
+      "hmx": false,
+      "hvx": false,
+      "hvx_compute": false,
+      "l2fetch": false,
+      "vtcm": false
+    },
+    "source": "anticheat disassembly scan"
+  }
+}

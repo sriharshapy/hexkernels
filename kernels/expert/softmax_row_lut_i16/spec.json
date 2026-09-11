@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int16",
+  "edge_cases": [
+    "row with all identical values (uniform softmax, idx=255 everywhere)",
+    "row with one dominant max and rest at INT16_MIN (huge underflow, exercises the clamp to -255 path with saturating-subtract-safe magnitudes)",
+    "alternating +32767/-32768 row (clamp path on ~every other element)",
+    "mild negative ramp row (dense non-clamped path)",
+    "C=113 not a multiple of 128 (tail / padding path)",
+    "3 distinct runtime exp_lut tables at different decay scales (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_clamp.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "067b0d270606606eac75d7281e3e68512634a04f10dbb48c432d1b9f38210a83",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "softmax_row_lut_i16",
+  "origin": "expert",
+  "params": {
+    "C": 113,
+    "R": 6,
+    "lut_entries": 256,
+    "op": "softmax_row_lut",
+    "out_scale": 32767
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "softmax_row_lut_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "softmax",
+    "rowwise",
+    "2d",
+    "lut",
+    "int16",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 31289,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 30310,
+    "expert_speedup": 1.032,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": "Sliding-window filter (1D)",
+  "domain": "dsp",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "max-magnitude products (-128 * -128 = 16384)",
+    "negative mult (swept set)",
+    "shift==0 (no rounding)",
+    "non-zero zero-point",
+    "saturation to +127/-128",
+    "non-trivial bias (500) -- ignored bias fails immediately",
+    "hardcode-buster: 3 quant param sets swept",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_bias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "0e6a4ce87006dd7c5f5bcb328297417780554c0dd6ffca612946f22c5a0dc6b7",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_fir_bias_requant",
+  "origin": "expert",
+  "params": {
+    "bias": "int32 scalar (fixed in harness, non-trivial)",
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_fir_bias_requant",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "conv1d",
+    "fir",
+    "bias",
+    "requantize",
+    "fused",
+    "VALID",
+    "param",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 45019,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 8127,
+    "expert_speedup": 5.539,
+    "source": "v6 corpus build (simulator)"
+  }
+}

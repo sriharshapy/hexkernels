@@ -1,0 +1,10 @@
+{
+  "torch_registry": {
+    "accessor": "torch._C._jit_get_all_schemas()",
+    "citation": "torch._C._jit_get_all_schemas() -- the operator schema registry of the installed torch build at C:\\python\\Lib\\site-packages\\torch",
+    "observed_schema_count": 4394,
+    "source": "torch_registry",
+    "torch_path": "C:\\python\\Lib\\site-packages\\torch",
+    "torch_version": "2.7.1+cu128"
+  }
+}

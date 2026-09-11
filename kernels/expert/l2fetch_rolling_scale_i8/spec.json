@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "a[i]=127 (max positive: 127*3+1=382, >>1=191, saturates to 127)",
+    "a[i]=-128 (max negative: -128*3+1=-383, >>1=-192 arithmetic-floor, saturates to -128)",
+    "the +1 round term before the arithmetic shift must not be dropped",
+    "tail n%128 (700000 = 5468*128 + 96)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_round.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "6b123d35718e2979122a009579eabd1260ea6f813baf69556ae36f9c841eeb6e",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "l2fetch_rolling_scale_i8",
+  "origin": "expert",
+  "params": {
+    "n": 700000,
+    "op": "scale15_round_sat"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "l2fetch_rolling_scale_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "l2fetch",
+    "rolling-prefetch",
+    "requantize",
+    "scale",
+    "ddr-bound",
+    "unroll"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 487816,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 274815,
+    "expert_speedup": 1.775,
+    "source": "v6 corpus build (simulator)"
+  }
+}

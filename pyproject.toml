@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hexkernels"
+version = "0.1.0"
+description = "538 Hexagon NSP kernels that actually use the accelerator, and the machinery that proves it"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+keywords = ["hexagon", "hvx", "hmx", "npu", "kernels", "qualcomm", "benchmark"]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Compilers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# The library, its metadata and the loader need NOTHING beyond the standard
+# library -- `pip install hexkernels` and `hexkernels.library.find()` works.
+# Everything below is for the machinery that builds and measures kernels.
+dependencies = []
+
+[project.optional-dependencies]
+# Tracing and lowering (hexkernels.forge.frontend). torch-mlir is needed for the
+# Linalg path; without it the traced-graph route still works.
+forge = ["torch>=2.4"]
+# Model clients (hexkernels.core.generator / api_generator).
+serve = ["vllm", "openai", "anthropic"]
+# On-silicon measurement through Qualcomm Device Cloud.
+device = ["qualcomm-device-cloud-sdk"]
+dev = ["pytest"]
+
+[project.urls]
+Source = "https://github.com/sriharshapy/hexkernels"
+
+[tool.setuptools]
+packages = [
+    "benchmark",
+    "hexkernels",
+    "hexkernels.anticheat",
+    "hexkernels.core",
+    "hexkernels.core.fleet",
+    "hexkernels.device",
+    "hexkernels.device.qdc",
+    "hexkernels.forge",
+    "hexkernels.forge.frontend",
+    "hexkernels.forge.sources",
+    "hexkernels.gym",
+    "hexkernels.library",
+]
+
+[tool.setuptools.package-data]
+"hexkernels.core" = ["timing_model.json"]
+"hexkernels.core.fleet" = ["calibration.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: needs the simulator or a device"]

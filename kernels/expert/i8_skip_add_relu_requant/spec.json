@@ -1,0 +1,67 @@
+{
+  "bundle": "complete",
+  "category": "Rescale & round",
+  "domain": "ai",
+  "dtype": "int8+int8->int8",
+  "edge_cases": [
+    "negative sum clamped to 0 by ReLU",
+    "sum = 0 after ReLU",
+    "large positive sum",
+    "a=-128 b=0 sum negative",
+    "negative mult",
+    "shift == 0 (no rounding)",
+    "non-zero zero-point",
+    "saturate to +127 / -128",
+    "n%128 tail",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "ac3be6c4d7eff33bcf840f5fbf260bbf90474c65172c966cb5bb2d5ef14a198a",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_skip_add_relu_requant",
+  "origin": "expert",
+  "params": {
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_skip_add_relu_requant",
+    "upstream": "v3"
+  },
+  "signal": "compute + memory-bound",
+  "tags": [
+    "elementwise",
+    "add",
+    "relu",
+    "requantize",
+    "skip-connection",
+    "fused",
+    "param",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 23574,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 462,
+    "expert_speedup": 51.026,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "output stored COLUMN-MAJOR out[j*n+i]",
+    "int8 activation in HIGH byte of crouton slot, weight 4-deep packed",
+    "0x40-config requant (acc*17+8)>>4 & 0xFFF, 12-bit sign-extend",
+    "row-major-store near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_rowmajor.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "958bfd1a8a0847c21c07396b4a0cefc1351233d77417c7207c5dc9b86d197768",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_col_major",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "op": "matmul_col_major"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_col_major",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "col-major",
+    "hmx",
+    "int8",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 44198,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 13783,
+    "expert_speedup": 3.21,
+    "source": "v6 corpus build (simulator)"
+  }
+}

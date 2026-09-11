@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Sliding-window filter (1D)",
+  "domain": "dsp",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "large negative bias triggers relu clamp to 0",
+    "large positive bias triggers saturation to +127",
+    "max-magnitude products (-128 * -128)",
+    "negative conv result + positive bias giving relu pass-through",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_bias.c",
+    "nearmiss_no_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "b2b2313910102536fa064f72328cc372142e22b00c17865d79968711be0e0f9d",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "conv1d_bias_relu",
+  "origin": "expert",
+  "params": {
+    "bias": "int32[C] (one per channel, input data)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "conv1d_bias_relu",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "conv1d",
+    "bias",
+    "relu",
+    "fused",
+    "channels-last",
+    "VALID",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 283855,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 6892,
+    "expert_speedup": 41.18,
+    "source": "v6 corpus build (simulator)"
+  }
+}

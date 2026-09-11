@@ -1,0 +1,77 @@
+{
+  "bundle": "complete",
+  "category": "Transformer FFN / MLP block (2 matmuls + activation, composition)",
+  "domain": "ai",
+  "dtype": "uint8xint8->int8",
+  "edge_cases": [
+    "two matmuls on HMX with a ReLU+requant activation between: H=ReLU((sx12((X.W1*17+8)>>4)+b1)>>8) [0..127], out=sat_i8((sx12((H.W2*17+8)>>4)+b2)>>3)",
+    "matmul1 X[64x128].W1[128x128] -> H[64x128]; matmul2 H[64x128].W2[128x128] -> out[64x128]; both are 2x4 grids of 32x32 output tiles, each accumulating over 4 K-tiles",
+    "intermediate activation H staged VTCM-resident between the two matmuls (bulk 128B vector copy in, bulk copy back out for matmul2 activation packing) alongside the HMX crouton operand slots -- hmx+hvx+vtcm = 3 mechanism groups",
+    "HMX accumulator persists across K-tiles (one mxclracc per output tile); activation int8 in high byte of crouton slot, weight 4-deep packed, different load limits in one packet",
+    "input ranges keep |r1|<=1224 and |r2|<=1904 (both < 2048) so both HMX 12-bit requant fields are exact (no HMX saturation) and the block is bit-exact",
+    "ReLU sparsity: b1[0]=-4000 (column always ReLU-killed to 0), b1[1]=+4000 (column always fires)",
+    "output int8 saturation: b2[0]=-4000 (saturate-low -128), b2[1]=+4000 (saturate-high +127)",
+    "crouton pack/unpack staged through cacheable buffers, moved to/from VTCM in bulk 128B vector copies (scalar VTCM access ~48 cyc would lose)",
+    "harness reference computed via two HVX vrmpy matmuls, cross-checked against an INDEPENDENT full scalar FFN golden on row 0 (both matmuls)",
+    "S,D,Dff are 32-multiples (crouton requirement); D=Dff=128 so each vrmpy reduction is one whole vector (no tail); discrimination via nearmiss + edge bias values",
+    "poisoned output buffer (0xA5)",
+    "transposed-W2 near-miss (still HMX+VTCM+HVX, correct ReLU) must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transW2.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e940d3007fded9e998ed2824ca366c8611324387a72fe2a7caa3aee6c858a0be",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_ffn_block",
+  "origin": "expert",
+  "params": {
+    "D": 128,
+    "Dff": 128,
+    "S": 64,
+    "tile": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_ffn_block",
+    "upstream": null
+  },
+  "signal": "FFN block (2 matmuls + activation)",
+  "tags": [
+    "ffn",
+    "mlp",
+    "transformer",
+    "feed_forward",
+    "two_matmul",
+    "hmx",
+    "vtcm",
+    "hvx",
+    "int8",
+    "relu",
+    "requant",
+    "activation",
+    "composition",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 845152,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 546522,
+    "expert_speedup": 1.55,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "min(0,255)=0",
+    "unsigned vs signed disagreement: min(128,127)=127 (signed compare would say 128)",
+    "min(0,0)=0 (equal operands)",
+    "min(200,100)=100",
+    "n=947 tail path (7*128 + 51)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_signed.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "ff2b62993bb8d393e97726b728c1d4be79679a5947c2824573a670fb2398c5ca",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vmin_u8",
+  "origin": "expert",
+  "params": {
+    "n": 947,
+    "op": "vmin_u8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vmin_u8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "elementwise",
+    "min",
+    "unsigned-compare",
+    "uint8",
+    "Q6_Vub_vmin_VubVub"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 6834,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 738,
+    "expert_speedup": 9.26,
+    "source": "v6 corpus build (simulator)"
+  }
+}

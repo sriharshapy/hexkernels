@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "N=40 < 64 hf-lanes-per-HVX-vector -- zero-pad-tail, whole reduction fits one vector",
+    "large positive product at j=0,d=0; sign-mismatch cancellation at j=1",
+    "non-zero values at the N-tail boundary (j=N-2,N-1)",
+    "M==D==8, so a transposed-output near-miss stays in-bounds but is still wrong"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transposed_out.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "f4ee041006c9c843be8745a02791e9950afc716c964d765f88aabffba659bfe4",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "av_tile_fp16",
+  "origin": "expert",
+  "params": {
+    "D": 8,
+    "M": 8,
+    "N": 40,
+    "op": "av_tile_colmajor_v_fp16"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "av_tile_fp16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "attention",
+    "av",
+    "matmul",
+    "fp16",
+    "qf16",
+    "transformer",
+    "column-major-v",
+    "dot-product-per-element"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 87219,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 5466,
+    "expert_speedup": 15.957,
+    "source": "v6 corpus build (simulator)"
+  }
+}

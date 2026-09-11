@@ -1,0 +1,25 @@
+#include <stdint.h>
+#include <math.h>
+
+static float v_expm1[196608];
+static unsigned char v_gt[196608];
+static float v_where[196608];
+
+extern "C" void candidate_kernel(const float *v_args_0, float *out0) {
+  for (int i0 = 0; i0 < 384; i0++) {
+    for (int i1 = 0; i1 < 512; i1++) {
+      v_expm1[i0*512 + i1*1] = expm1f(v_args_0[i0*512 + i1*1]);
+    }
+  }
+  for (int i0 = 0; i0 < 384; i0++) {
+    for (int i1 = 0; i1 < 512; i1++) {
+      v_gt[i0*512 + i1*1] = (v_args_0[i0*512 + i1*1] > 0);
+    }
+  }
+  for (int i0 = 0; i0 < 384; i0++) {
+    for (int i1 = 0; i1 < 512; i1++) {
+      v_where[i0*512 + i1*1] = (v_gt[i0*512 + i1*1] ? v_args_0[i0*512 + i1*1] : v_expm1[i0*512 + i1*1]);
+    }
+  }
+  for (int i = 0; i < 196608; i++) { out0[i] = v_where[i]; }
+}

@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "|0-255|=255 (max magnitude)",
+    "|255-0|=255 (order reversed, same result)",
+    "|100-100|=0 (equal operands)",
+    "|128-127|=1 (unsigned vs signed boundary)",
+    "n=1069 tail path (8*128 + 45)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_signed.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e4060dfd7a3b1660698923826c2e1d258bed814a1e2c72f67b3c65a86a7b0767",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vabsdiff_u8",
+  "origin": "expert",
+  "params": {
+    "n": 1069,
+    "op": "vabsdiff_u8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vabsdiff_u8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "elementwise",
+    "absolute-difference",
+    "unsigned",
+    "uint8",
+    "Q6_Vub_vabsdiff_VubVub"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 8729,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 655,
+    "expert_speedup": 13.33,
+    "source": "v6 corpus build (simulator)"
+  }
+}

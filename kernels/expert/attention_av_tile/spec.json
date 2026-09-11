@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i32",
+  "edge_cases": [
+    "A[0]=127, V[0]=127 (large positive contribution)",
+    "sign mismatch A negative, V positive",
+    "D tail [128,129] non-zero (non-128 remainder)",
+    "int32 accumulation without overflow for small M,N,D"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transposed_V.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "dcf527363fb8dbb226665402ce0d19fe43242f842bd22e3bb4c7b7b7de9bd081",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "attention_av_tile",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "attention_av_tile",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "attention",
+    "av",
+    "matmul",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float",
+    "int32-out"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 142842,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 8072,
+    "expert_speedup": 17.696,
+    "source": "v6 corpus build (simulator)"
+  }
+}

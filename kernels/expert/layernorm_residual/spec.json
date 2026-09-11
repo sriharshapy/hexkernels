@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "saturating residual add (x[0]=127 + residual[0]=1 => 127)",
+    "saturating residual add (x[1]=-128 + residual[1]=-1 => -128)",
+    "constant segment after add (var=0, v_idx=0 path)",
+    "n not a multiple of 128 (tail)",
+    "3 distinct (gamma, beta, inv_lut) sets (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_mean_sub.c",
+    "nearmiss_no_residual.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7b19bc7f46f1d3bbfffb97c7d3ef33f9ae9e5614c40c4e7f102d2a98c8f55cf1",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "layernorm_residual",
+  "origin": "expert",
+  "params": {
+    "SHIFT": 8,
+    "beta": "int8 per-element bias (runtime)",
+    "gamma": "int8 per-element scale (runtime)",
+    "inv_lut": "256 uint8 entries, index=clamp(var,0,255) (runtime)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "layernorm_residual",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "layernorm",
+    "residual",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float",
+    "lut"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 3523,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": null,
+    "expert_speedup": null,
+    "source": "v6 corpus build (simulator)"
+  }
+}

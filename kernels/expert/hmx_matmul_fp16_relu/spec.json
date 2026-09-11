@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "ReLU fused as native HVX Vhf vmax vs zero on the crouton-order output",
+    "fp16 crouton layout off(r,c)=(r/2)*64+c*2+(r&1)",
+    "HVX/HMX qf16 arithmetic is non-IEEE -> tolerance compare",
+    "no-ReLU near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_norelu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "4f5b0f1ecc3b18a76ac44f4f6fd5be722cee04359a69a374914541197500aa7b",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_fp16_relu",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "op": "matmul_relu"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_fp16_relu",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "relu",
+    "hmx",
+    "fp16",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 9825,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 7846,
+    "expert_speedup": 1.25,
+    "source": "v6 corpus build (simulator)"
+  }
+}

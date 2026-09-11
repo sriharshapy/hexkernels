@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": "HMX matmul+act",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "fp16 rounding before gelu (cast HMX fp16 output to float for gelu)",
+    "negative matmul outputs: gelu(neg) != relu(neg) != identity",
+    "crouton layout (every two rows transposed)",
+    "poisoned output buffer",
+    "relu near-miss fails on negative outputs",
+    "identity near-miss omits activation entirely",
+    "transposed-B near-miss uses wrong matmul"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_identity.c",
+    "nearmiss_relu.c",
+    "nearmiss_transposed.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "882d0620f25051243d686a807d18f65811cecaa4120c3ff9b4f6720eee65fe8b",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": false
+  },
+  "name": "ai_fp16_matmul_gelu",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ai_fp16_matmul_gelu",
+    "upstream": "v4-gen:ai_fp16_matmul_gelu__N32"
+  },
+  "signal": "compute-bound (matrix engine + GELU epilogue)",
+  "tags": [
+    "matmul",
+    "hmx",
+    "fp16",
+    "gelu",
+    "ai",
+    "fusion"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1186150,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 242727,
+    "expert_speedup": 4.888,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "op[] is exactly 128 bytes (one HVX vector), loaded/broadcast ONCE, never re-fetched per chunk",
+    "saturation boundary values at both the start and the wrap point of op[]'s 128-cycle",
+    "tail n%128 and n%DMA-tile-size"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wraparound.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "5332206e3059b4ce05d470306bd77ced543e811dc57872e28a7450b211ec3ab7",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_load_broadcast_i8",
+  "origin": "expert",
+  "params": {
+    "n": 700000,
+    "op": "broadcast_add_sat",
+    "op_len": 128
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_load_broadcast_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "dma",
+    "vtcm",
+    "double-buffer",
+    "broadcast",
+    "elementwise",
+    "negative-result"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 134042,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 156608,
+    "expert_speedup": 0.856,
+    "source": "v6 corpus build (simulator)"
+  }
+}

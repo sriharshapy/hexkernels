@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "LUT index boundary idx=0 (gate=-128)",
+    "LUT index boundary idx=255 (gate=127)",
+    "LUT index midpoint idx=128 (gate=0)",
+    "tail path: N=150 not a multiple of 128 (one full block + 22-element tail)",
+    "sign-varied gate/up values in the tail",
+    "requant round-half-away-from-zero, both signs",
+    "poisoned out buffer",
+    "silu_lut and (scale_mult, scale_shift) swept across 2 variants to prevent hardcoding"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_silu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "2ede751edd3396760a0c934b83fd62f578402a1255064919b10ab7798dcec144",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "mlp_gate_silu_i8",
+  "origin": "expert",
+  "params": {
+    "N": 150,
+    "op": "swiglu_gate",
+    "scale_mult": "int32 (runtime, positive)",
+    "scale_shift": "int (runtime, >=0)",
+    "silu_lut": "int8[256] (runtime SiLU-of-gate LUT; index = gate + 128)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "mlp_gate_silu_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "elementwise",
+    "swiglu",
+    "silu",
+    "gating",
+    "lut",
+    "requant",
+    "standalone",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 3770,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 645,
+    "expert_speedup": 5.84,
+    "source": "v6 corpus build (simulator)"
+  }
+}

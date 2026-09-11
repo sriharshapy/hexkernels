@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": "Rescale & round",
+  "domain": "ai",
+  "dtype": "int32->int8",
+  "edge_cases": [
+    "negative mult in one row",
+    "shift=0 in one row (no rounding)",
+    "saturation +127 / -128",
+    "zero input",
+    "tail n%128",
+    "all rows with same mult (degenerate per-channel)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_scalar_mult.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "dc64a16d11b81dedc204a888727bafa42dfa50b2c1518797b0ded20830dc5141",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "requant_per_channel",
+  "origin": "expert",
+  "params": {
+    "C": 25,
+    "R": 40,
+    "mult_per_row": true,
+    "shift_per_row": true,
+    "zp": 0
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "requant_per_channel",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "quantized",
+    "per-channel",
+    "rounding",
+    "saturation",
+    "conv-output"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 16499,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 5329,
+    "expert_speedup": 3.096,
+    "source": "v6 corpus build (simulator)"
+  }
+}

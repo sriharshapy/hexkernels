@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "M=N=K=32 single-tile matmul",
+    "wider input range (-6..6 quantized) so tanh exercises both saturating and mid-range regions",
+    "tanh epilogue is UNAVOIDABLY scalar (no HVX vector transcendental) -- the matmul is vectorized, the epilogue is not",
+    "tanh's steep mid-range slope amplifies qf16 rounding drift -- tolerance widened to 8e-3/1.2e-2 (still tight)",
+    "HVX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "poisoned output buffer",
+    "dropped-last-K-term near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_dropk.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "955106ab679be790e65c19ca8db586c5e39d94deab5b19140e9ea4780f6ceea8",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp16_matmul_tanh",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_matmul_tanh",
+    "upstream": null
+  },
+  "signal": "compute-bound matmul (HVX qf16) + unavoidably-scalar tanh epilogue",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 1181516,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 191368,
+    "expert_speedup": 6.17,
+    "source": "v6 corpus build (simulator)"
+  }
+}

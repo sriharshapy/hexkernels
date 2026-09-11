@@ -1,0 +1,67 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8xint8->int32",
+  "edge_cases": [
+    "FUSED two-stage attention: QK^T then AV, two chained single-tile HMX matmuls",
+    "no softmax between stages (linear attention, documented design choice)",
+    "K packed with swapped tile indices for QK^T (K row j IS key vector j -- no transpose buffer)",
+    "intermediate score matrix Sc re-packed as the SECOND matmul's uint8 activation (input range pinned so Sc is always non-negative)",
+    "V already in the generic [K,N] matmul layout for stage 2 -- no index swap needed there",
+    "each stage clears its own HMX accumulator (mxclracc) and reuses the same VTCM addresses sequentially",
+    "input ranges pinned narrow so BOTH requant fields stay exact (no saturation) end to end",
+    "transposed-V near-miss (stage 2 packs V^T) must fail",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transposed_v.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "44a3f41b79a42ddcd5493343b3e729deca9af825d2a4a8a9421780ad4f29ab82",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_attention_qkt_av_hmx",
+  "origin": "expert",
+  "params": {
+    "D": 32,
+    "Dv": 32,
+    "S": 32,
+    "op": "i8_attention_qkt_av_hmx"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_attention_qkt_av_hmx",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "attention",
+    "qkt",
+    "av",
+    "fusion",
+    "hmx",
+    "int8",
+    "requant",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 209850,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 23535,
+    "expert_speedup": 8.92,
+    "source": "v6 corpus build (simulator)"
+  }
+}

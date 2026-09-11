@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7efab3769fc5d8cb6c2c977ee09bd723e5b9b63dca888e27e7746bbcf633c924",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "reduction loops vectorise through an accumulator plus a horizontal reduce"
+    ],
+    [
+      "l2fetch",
+      "working set 24580 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_sum",
+  "op": "sum",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "80afbc5681287ebdbe9848a1e558eb3da3c9d4901691d7bb4d26148e9d3c6919",
+    "source_tier": "T1",
+    "task_tier": "T1",
+    "tier_match": true
+  },
+  "schema": "aten::sum(Tensor self, *, ScalarType? dtype=None) -> Tensor",
+  "shape": [
+    48,
+    128
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 24580
+}

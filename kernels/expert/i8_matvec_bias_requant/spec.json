@@ -1,0 +1,68 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "large products (127*127*128)",
+    "sign in K-reduction",
+    "large negative bias",
+    "large positive bias",
+    "zero bias",
+    "negative mult",
+    "shift==0 (no rounding)",
+    "non-zero zero-point",
+    "saturation to +127/-128",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_bias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "78ff32942fced38528487efcb375ddc88065e37bc0c3577d96fbbc67de5346cd",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_matvec_bias_requant",
+  "origin": "expert",
+  "params": {
+    "bias": "int32[M] (input data, per output row)",
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_matvec_bias_requant",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "matvec",
+    "bias",
+    "requantize",
+    "fused",
+    "fully-connected",
+    "param",
+    "dense",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 42839,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 9251,
+    "expert_speedup": 4.631,
+    "source": "v6 corpus build (simulator)"
+  }
+}

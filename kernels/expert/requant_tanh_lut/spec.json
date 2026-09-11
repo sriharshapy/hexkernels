@@ -1,0 +1,65 @@
+{
+  "bundle": "complete",
+  "category": "Rescale & round",
+  "domain": "ai",
+  "dtype": "int32->int8",
+  "edge_cases": [
+    "negative quantized value clamped to idx=0",
+    "large positive value clamped to idx=255",
+    "shift==0 (no rounding)",
+    "non-zero zero-point",
+    "rounding ties",
+    "n%128 tail",
+    "poisoned out buffer",
+    "two distinct LUTs swept"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_skip_lut.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e9b6f1cfe7e476ad14d498e6574f62c28a425f0a342334bcce6c80ef16a202ae",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "requant_tanh_lut",
+  "origin": "expert",
+  "params": {
+    "lut": "int8[256] tanh LUT (runtime, swept)",
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "requant_tanh_lut",
+    "upstream": "v3"
+  },
+  "signal": "memory-bound + LUT",
+  "tags": [
+    "elementwise",
+    "lut",
+    "tanh",
+    "requantize",
+    "fused",
+    "param",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 18452,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 521,
+    "expert_speedup": 35.417,
+    "source": "v6 corpus build (simulator)"
+  }
+}

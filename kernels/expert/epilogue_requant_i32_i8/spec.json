@@ -1,0 +1,67 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int32->int8",
+  "edge_cases": [
+    "n=1000 not a multiple of 32 int32 lanes (tail path)",
+    "large |acc| near the safe-bound ceiling (+/-10,000,000) saturates both sweep sets",
+    "rounding TIE cases (acc=+/-16, mult=200,shift=8 -> v=+/-3200 = exactly x.5*256)",
+    "shift=0 no-rounding branch (half=0)",
+    "small +/-1 values that discriminate round-vs-truncate",
+    "runtime mult/shift swept over 2 distinct sets (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_trunc_not_round.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "9b9321dc5b5f239d9b6d3f2ede1049c5bb09ed2390a2de917900418df3fce86e",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "epilogue_requant_i32_i8",
+  "origin": "expert",
+  "params": {
+    "mult_sweep": [
+      200,
+      1
+    ],
+    "n": 1000,
+    "op": "requant_i32_i8_epilogue",
+    "shift_sweep": [
+      8,
+      0
+    ]
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "epilogue_requant_i32_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "requantize",
+    "rounding",
+    "saturation",
+    "epilogue",
+    "fixed-point",
+    "gemm-epilogue"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 30233,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 4242,
+    "expert_speedup": 7.128,
+    "source": "v6 corpus build (simulator)"
+  }
+}

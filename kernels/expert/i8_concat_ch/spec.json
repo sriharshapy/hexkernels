@@ -1,0 +1,53 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "W=11 not a multiple of 128",
+    "two input tensors of different channel counts",
+    "channel boundary at C1=3"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_offset.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "14b76111e72b71a1e0b982615b81cdb025dd1c3b2f842e27fc207689da6f548b",
+  "level": "L1",
+  "mechanisms_declared": [],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_concat_ch",
+  "origin": "expert",
+  "params": {
+    "formula": "out[c*H*W+...] = a[...] for c<C1, else b[(c-C1)*H*W+...]",
+    "op": "concat_channel"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_concat_ch",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "concat",
+    "channel",
+    "layout",
+    "AI",
+    "data-movement"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1706,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 597,
+    "expert_speedup": 2.858,
+    "source": "v6 corpus build (simulator)"
+  }
+}

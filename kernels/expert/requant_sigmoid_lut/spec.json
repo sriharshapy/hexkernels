@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": "Rescale & round",
+  "domain": "ai",
+  "dtype": "int32->int8",
+  "edge_cases": [
+    "negative quantized value clamped to idx=0",
+    "large positive value clamped to idx=255",
+    "idx=0 and idx=255 boundary",
+    "shift==0 (no rounding)",
+    "non-zero zero-point",
+    "rounding ties",
+    "n%128 tail",
+    "poisoned out buffer",
+    "two distinct LUTs swept"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_clamp.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "40171f1c6a6dadab8133950a80da5986c88ae918306863b57a995d0d39a4d0cd",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "requant_sigmoid_lut",
+  "origin": "expert",
+  "params": {
+    "lut": "int8[256] sigmoid LUT (runtime, swept)",
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "requant_sigmoid_lut",
+    "upstream": "v3"
+  },
+  "signal": "memory-bound + LUT",
+  "tags": [
+    "elementwise",
+    "lut",
+    "sigmoid",
+    "requantize",
+    "fused",
+    "param",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 18452,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 462,
+    "expert_speedup": 39.939,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": "Fused conv block",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "border pixels (zero-padding at corners and edges)",
+    "large negative bias ch0",
+    "large positive bias ch1",
+    "negative mult behavior",
+    "non-zero zero-point",
+    "saturation to +127/-128",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_bias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "2270a05353b3529153ca7ada4e95701cdfa37c4ecdead2c5ece4dda43f7ac939",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_conv2d_bias",
+  "origin": "expert",
+  "params": {
+    "bias": "int32[C_out] per output channel",
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_conv2d_bias",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "conv2d",
+    "bias",
+    "requantize",
+    "fused",
+    "param",
+    "NHWC",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 292352,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 11475,
+    "expert_speedup": 25.477,
+    "source": "v6 corpus build (simulator)"
+  }
+}

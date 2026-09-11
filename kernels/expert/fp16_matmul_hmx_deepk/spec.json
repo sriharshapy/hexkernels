@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "M=N=32 (single crouton tile) but K=128: deep reduction accumulated over 4 K-tiles",
+    "Q6_mxclracc_hf clears the persistent hf accumulator ONCE; 4 (activation,weight) load pairs accumulate into it before the single store",
+    "fp16 crouton layout off(r,c)=(r/2)*64+c*2+(r&1) for A, weight, output, per K-tile",
+    "HVX/HMX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "K=128 is a MUCH deeper reduction than the K=32 sibling -> qf16 rounding drifts more (esp. near-cancellation outputs close to zero); task widens fp16 tolerance to atol=8e-3/rtol=1.2e-2 (still ~1% relative) vs the sibling's default 4e-3/8e-3",
+    "expert_speedup is a THIN margin (1.22x, just above the 1.2x gate) -- deep-K amortizes crouton overhead less per matmul than the int8 96x96/multi-output-tile sibling, since M=N=32 stays a single output tile",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "row/col-swapped-within-tile near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transB.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "8f637b9ad15a404020aef8b0723b7f3c28859e70e1b942d950e1eb6866692a0f",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "fp16_matmul_hmx_deepk",
+  "origin": "expert",
+  "params": {
+    "K": 128,
+    "M": 32,
+    "N": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_matmul_hmx_deepk",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine)",
+  "tags": [
+    "matmul",
+    "hmx",
+    "fp16",
+    "deep-k",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 29265,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 24001,
+    "expert_speedup": 1.22,
+    "source": "v6 corpus build (simulator)"
+  }
+}

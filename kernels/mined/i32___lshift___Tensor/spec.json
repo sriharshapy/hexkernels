@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "dtype": "i32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "4bcb8e3f05a4624e971983413cd64480f828ccb90163d13b103930284134f23a",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 18432 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i32___lshift___Tensor",
+  "op": "__lshift__",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "8a31595adb34abb8300603773c59427c04b4ff3dd6c363f3a1d3928cf051622a",
+    "source_tier": "T0",
+    "task_tier": "T1",
+    "tier_match": false
+  },
+  "schema": "aten::__lshift__.Tensor(Tensor self, Tensor other) -> Tensor",
+  "shape": [
+    24,
+    64
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 18432
+}

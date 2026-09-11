@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "large positive contribution (A[0]=127, B[0]=127)",
+    "sign-mismatch cancellation at k=1 (A negative, B positive)",
+    "deep K=262 not a multiple of 4 -- tail k-group has only 2 valid k's (260,261), non-zero in the tail exercise",
+    "poisoned C output detects untouched cells"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_tail_offbyone.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7752281e65b3323343d589110276237d6c868210f92a61ae5f169094ccc4d0df",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "gemm_tile_deepk_i8",
+  "origin": "expert",
+  "params": {
+    "K": 262,
+    "M": 8,
+    "N": 8,
+    "op": "gemm_tile_deepk_conventional_b"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "gemm_tile_deepk_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "vrmpy",
+    "gemm",
+    "conventional-b",
+    "deep-k",
+    "dense"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 67812,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 18822,
+    "expert_speedup": 3.603,
+    "source": "v6 corpus build (simulator)"
+  }
+}

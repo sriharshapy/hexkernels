@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "Q[0]=127, K[0]=127 (large positive dot)",
+    "sign mismatch in K reduction",
+    "D tail [128,129] non-zero (non-128 remainder)",
+    "4 distinct (scale_mult, scale_shift) sets (anti-hardcode)",
+    "scale_shift=0 (no rounding)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_missing_scale.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "bb5f6782598108e84aab7f50049d7559ee2fa104310962d9089066c39c054de9",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "attention_qkt_tile",
+  "origin": "expert",
+  "params": {
+    "scale_mult": "int32 (runtime)",
+    "scale_shift": "int (runtime)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "attention_qkt_tile",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "attention",
+    "qkt",
+    "matmul",
+    "requantize",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 72961,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 9467,
+    "expert_speedup": 7.707,
+    "source": "v6 corpus build (simulator)"
+  }
+}

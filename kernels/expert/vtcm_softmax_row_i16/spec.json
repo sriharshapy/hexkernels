@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int16",
+  "edge_cases": [
+    "S_r requires int64 (int32 overflows at this C: uniform row drives S_r to ~65500*65535~=4.29e9 > INT32_MAX)",
+    "C=65500 not a multiple of 128 (tail path)",
+    "runtime exp_lut, never hardcoded",
+    "clamp diff to [-255,0] before LUT index",
+    "uniform row -> idx=255 uniform softmax (also the int32-overflow-inducing row for the nearmiss)",
+    "one-dominant-max row -> huge underflow clamp path",
+    "alternating-extremes row -> clamp path on ~every other element",
+    "bounded period-256 ramp row -> dense NON-clamped path (diff stays within [-255,0] everywhere)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_s32_overflow.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "ec50658db2446e4456dc3ee266b2384cb9e2ad8c2ab113ee03e68d7da5db78fb",
+  "level": "L2",
+  "mechanisms_declared": [
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "vtcm_softmax_row_i16",
+  "origin": "expert",
+  "params": {
+    "C": 65500,
+    "R": 10,
+    "op": "softmax_row_lut_i64sum"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "vtcm_softmax_row_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "softmax",
+    "lut",
+    "dma",
+    "vtcm",
+    "fixed-point",
+    "row-wise",
+    "int64-accumulator"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 25939412,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 22491404,
+    "expert_speedup": 1.153,
+    "source": "v6 corpus build (simulator)"
+  }
+}

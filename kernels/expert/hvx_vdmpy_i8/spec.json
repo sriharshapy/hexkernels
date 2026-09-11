@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "group0 known dual-MAC: 1*127+2*100=327, 3*(-128)+4*50=-184",
+    "group1 forces int16 wrap: 255*127+255*100=57885 -> -7651",
+    "group2 all-zero input -> 0,0",
+    "g=262 tail path (8*32 + 6 groups)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_swapped_weights.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "cd1a41224d5953461a91d1f43055635652f5b22a0ca3666f270f39be374a0615",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vdmpy_i8",
+  "origin": "expert",
+  "params": {
+    "g": 262,
+    "op": "vdmpy_i8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vdmpy_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "dual-mac",
+    "multiply-accumulate",
+    "uint8",
+    "int16",
+    "Q6_Vh_vdmpy_VubRb"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 3429,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 550,
+    "expert_speedup": 6.23,
+    "source": "v6 corpus build (simulator)"
+  }
+}

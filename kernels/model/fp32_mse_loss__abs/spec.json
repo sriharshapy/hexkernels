@@ -1,0 +1,44 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "82436cd5632ff329a36f0b2f5721e6af63e2d7452f65c9a609740d54e2bfc87c",
+  "mechanisms_declared": [],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_mse_loss__abs",
+  "op": null,
+  "origin": "model",
+  "provenance": {
+    "corpus": "model",
+    "eval_set": "core128",
+    "generated_at": "2026-08-25T10:49:47+00:00",
+    "model": "gpt-5.6-luna",
+    "rung": 2,
+    "seed_index": 5,
+    "task_key": "b29i0_fp32_mse_loss__abs",
+    "turns_used": 1
+  },
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T0",
+  "verified": {
+    "compiled": null,
+    "correct": null,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": null,
+    "kernel_cycles": null,
+    "mechanisms_fired": {},
+    "source": "anticheat disassembly scan"
+  }
+}

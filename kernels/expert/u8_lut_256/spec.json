@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": "Lookup-table function",
+  "domain": "comms",
+  "dtype": "uint8",
+  "edge_cases": [
+    "index 0/1/254/255 boundaries",
+    "index 127/128 midpoints",
+    "n%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_offbyone.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "10ce6eea5b8d7df1b5aded6ab8c9ecb1d1139446f723312dbf47ba5f3c39d4b6",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "u8_lut_256",
+  "origin": "expert",
+  "params": {
+    "index": "in[i]",
+    "lut_entries": 256
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "u8_lut_256",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "lut",
+    "vlut",
+    "gather",
+    "uint8",
+    "nonlinear",
+    "gamma"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 5344,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 351,
+    "expert_speedup": 15.225,
+    "source": "v6 corpus build (simulator)"
+  }
+}

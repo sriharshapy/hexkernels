@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": "Sliding-window filter (1D)",
+  "domain": "dsp",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "max-magnitude products",
+    "n%128 tail",
+    "left boundary (first pad_left outputs use zero-pad)",
+    "right boundary (last pad_right outputs use zero-pad)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_valid.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "5eb04a11a4d173eb6644bb09daf699a7cc3f6af4d28823b4f62e2f839ec3a0d0",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_conv1d_same",
+  "origin": "expert",
+  "params": {
+    "accumulator": "int32",
+    "mode": "correlation",
+    "ntaps": 7,
+    "pad_left": 3,
+    "pad_right": 3,
+    "padding": "SAME (centered zero-pad)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_conv1d_same",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "fir",
+    "conv1d",
+    "same-padding",
+    "zero-pad",
+    "windowed",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 46971,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 6727,
+    "expert_speedup": 6.982,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "bundle": "complete",
+  "category": "SwiGLU gated FFN block (3 matmuls + SiLU gate + product, composition)",
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "SwiGLU: gate=X.Wg, up=X.Wu (two HMX projections), H=SiLU(gate)*up (SiLU LUT gate + elementwise product on HVX), out=H.Wd (HMX down projection) -- three matmuls, one gated product",
+    "SiLU applied to the GATE branch only (not up); nearmiss_no_silu multiplies the raw linear gate by up (drops SiLU) and must fail",
+    "SiLU is a hardswish approximation supplied as a runtime uint8 LUT (index g+128) so the nonlinearity is bit-exact by definition (no libm, no tolerance)",
+    "gate matmul X[64x64].Wg[64x128] and up matmul X[64x64].Wu[64x128] -> H[64x128]; down matmul H[64x128].Wd[128x64] -> out[64x64]; gate/up are 2x4 grids of 32x32 tiles (2 K-tiles), down is a 2x2 grid (4 K-tiles), one mxclracc per output tile",
+    "gated intermediate H staged VTCM-resident between the up/gate matmuls and the down matmul (bulk 128B vector copy in, bulk copy back out for down-matmul activation packing) alongside the HMX crouton operand slots -- hmx+hvx+vtcm = 3 mechanism groups",
+    "down-proj activation carries an int8 zero-point of 8 (h in [-8,7] -> Hu in [0,15], unsigned for the HMX activation.ub load); Wd columns are constructed to sum to ZERO so the zero-point contributes no per-column offset and out_acc equals the true gated.Wd",
+    "input ranges + zero-sum Wd keep |gate/up field|<=612 and |down field|<=1088 (all < 2048) so every HMX 12-bit requant field is exact and the whole block is bit-exact",
+    "output int8 saturation: bd[0]=-4000 (saturate-low -128), bd[1]=+4000 (saturate-high +127)",
+    "crouton pack/unpack staged through cacheable buffers, moved to/from VTCM in bulk 128B vector copies (scalar VTCM access ~48 cyc would lose)",
+    "harness reference computed via three HVX vrmpy matmuls, cross-checked against an INDEPENDENT full scalar SwiGLU golden on row 0 (all three matmuls + gate)",
+    "S,D,Dff are 32-multiples (crouton requirement); Dff=128 so the down reduction is one whole vrmpy vector",
+    "poisoned output buffer (0xA5)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_silu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "6c8a95d9a3e4bbf00171c7679e859832c3b5c74ed300fa50bc7a08d24a644348",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_ffn_swiglu_block",
+  "origin": "expert",
+  "params": {
+    "D": 64,
+    "Dff": 128,
+    "S": 64,
+    "down_zero_point": 8,
+    "gate_scale_shift": 2,
+    "out_shift": 3,
+    "product_shift": 10,
+    "silu": "hardswish approximation, runtime LUT (256 entries, index g+128)",
+    "tile": 32,
+    "up_scale_shift": 2
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_ffn_swiglu_block",
+    "upstream": null
+  },
+  "signal": "SwiGLU gated FFN block (3 matmuls + SiLU gate + elementwise product)",
+  "tags": [
+    "swiglu",
+    "ffn",
+    "mlp",
+    "gated",
+    "silu",
+    "swish",
+    "transformer",
+    "feed_forward",
+    "three_matmul",
+    "hmx",
+    "vtcm",
+    "hvx",
+    "int8",
+    "requant",
+    "activation",
+    "composition",
+    "l3",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 802275,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 497276,
+    "expert_speedup": 1.61,
+    "source": "v6 corpus build (simulator)"
+  }
+}

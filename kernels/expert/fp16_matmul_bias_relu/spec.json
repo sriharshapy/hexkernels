@@ -1,0 +1,53 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "M=N=K=32 single-tile matmul",
+    "per-output-column bias add then ReLU, fused as native HVX vector ops (qf16 add + hf convert + hf max) directly on the matmul result vector -- NOT a scalar (float) cast per element",
+    "v68 has no native Vhf+Vhf add instruction -- bias add goes through the qf16 accumulate path instead",
+    "HVX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "poisoned output buffer",
+    "dropped-last-K-term near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_dropk.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e11810adf2e15885993215d64e58017c6cda5af22c6777434601d99ca74af169",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp16_matmul_bias_relu",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_matmul_bias_relu",
+    "upstream": null
+  },
+  "signal": "compute-bound (HVX qf16 vector matmul vs scalar fp16)",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 1230478,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 9871,
+    "expert_speedup": 124.66,
+    "source": "v6 corpus build (simulator)"
+  }
+}

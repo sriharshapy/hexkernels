@@ -1,0 +1,65 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "large products (127*127*48)",
+    "sign in K-reduction",
+    "large negative bias -> pre_lut saturates to -128",
+    "large positive bias -> pre_lut saturates to 127",
+    "zero bias",
+    "LUT lookup boundary (idx=0 and idx=255)",
+    "negative pre-activation values (GELU suppresses them)",
+    "poisoned out buffer",
+    "LUT swept across 2 variants to prevent hardcoding"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode_lut.c",
+    "nearmiss_no_bias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "2dc5f181d2fca733cec34265af311b9f4f8c2b0f225f99c139b6fa1be4afb951",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "gemm_bias_gelu",
+  "origin": "expert",
+  "params": {
+    "bias": "int32[N] (input data, per output column)",
+    "gelu_lut": "int8[256] (runtime GELU approximation LUT; index = saturated_acc + 128)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "gemm_bias_gelu",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "matmul",
+    "bias",
+    "gelu",
+    "lut",
+    "fused",
+    "activation",
+    "dense",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 148193,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 12005,
+    "expert_speedup": 12.344,
+    "source": "v6 corpus build (simulator)"
+  }
+}

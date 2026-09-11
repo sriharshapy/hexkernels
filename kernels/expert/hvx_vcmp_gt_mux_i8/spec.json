@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "a>b true selects a, not related to c's value",
+    "a>b false selects c, NOT b (distinguishes from plain max)",
+    "equal values, strict > is false: selects c",
+    "extremes 127 vs -128",
+    "n=1013 tail path (7*128 + 117)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_selects_b.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "37cf039c501d8702564d028861ae5f0094a969ae868f83831c549dd778f3f4fb",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vcmp_gt_mux_i8",
+  "origin": "expert",
+  "params": {
+    "n": 1013,
+    "op": "vcmp_gt_mux_i8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vcmp_gt_mux_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "compare",
+    "select",
+    "mux",
+    "int8",
+    "Q6_V_vmux_QVV"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 7269,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 1199,
+    "expert_speedup": 6.06,
+    "source": "v6 corpus build (simulator)"
+  }
+}

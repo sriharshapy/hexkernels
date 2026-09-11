@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "98997647237209086ff3ddc67822aad8887f4d3395746e04f3d875f7d54eea4e",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 16388 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_soft_margin_loss",
+  "op": "soft_margin_loss",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "21c20b6abe8c0e4be9d6ed80d88d3ce4883f4ca3491f0c80e3e3513ca1ebfe94",
+    "source_tier": "T3",
+    "task_tier": "T1",
+    "tier_match": false
+  },
+  "schema": "aten::soft_margin_loss(Tensor self, Tensor target, int reduction=1) -> Tensor",
+  "shape": [
+    32,
+    64
+  ],
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 16388
+}

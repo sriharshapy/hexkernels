@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "bias added BEFORE relu (row0/col0 cell: acc=-80, bias=90 -> out=10, not 90)",
+    "acc large enough to overflow relu+saturate to 127 (row1/col1: acc=1,290,320)",
+    "an all-negative-acc row (row M-1, A=-128 with B globally non-negative) -> output row all zero",
+    "an all-zero-acc row (row M-2, A=0) -> output exactly equals clamp(max(bias,0),0,127)",
+    "N=20 not a multiple of 32 int32 lanes -- partial-vector output narrow/store path",
+    "B==0 extreme, int8 extremes in A"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_bias_after_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "661fd0ecf032b7012f553501259c49cc333f7af74802075b0eb606297e4383ef",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "gemm_tile_bias_relu_i8",
+  "origin": "expert",
+  "params": {
+    "K": 80,
+    "M": 20,
+    "N": 20,
+    "op": "gemm_tile_bias_relu_btransposed"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "gemm_tile_bias_relu_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "vrmpy",
+    "gemm",
+    "transposed-b",
+    "bias",
+    "relu",
+    "fused",
+    "requantize"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 133528,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 13715,
+    "expert_speedup": 9.737,
+    "source": "v6 corpus build (simulator)"
+  }
+}

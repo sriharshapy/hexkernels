@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "nonzero activation zero-point: sum (A-zp)*B = sum A*B - zp*sum B",
+    "realized as TWO accumulated HMX matmuls (A,B) + (zp,-B) pre-requant, one clear",
+    "int8 activation in HIGH byte of crouton slot, weight 4-deep packed",
+    "0x40-config requant (acc*17+8)>>4 & 0xFFF, 12-bit sign-extend",
+    "no-zero-point-correction near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nozp.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "9d208f9adce5c57557de032bcf1cb42a80f04aaf63e4f645ca19d1558407e28a",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_zp",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "op": "matmul_zero_point",
+    "zp": 2
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_zp",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "zero-point",
+    "quantization",
+    "hmx",
+    "int8",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 49982,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 22655,
+    "expert_speedup": 2.21,
+    "source": "v6 corpus build (simulator)"
+  }
+}

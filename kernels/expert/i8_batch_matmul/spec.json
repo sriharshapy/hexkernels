@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "K%128 tail",
+    "sign in reduction",
+    "large products",
+    "batch stride correctness",
+    "batch 0 vs batch 1 distinct data",
+    "poisoned C"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_batch0_reuse.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "631e6b5d7218cbfb34156dff02a354a4222185a84f62f89f5c7fc6c03fa363ac",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_batch_matmul",
+  "origin": "expert",
+  "params": {
+    "BATCH": 4
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_batch_matmul",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "matmul",
+    "batched",
+    "vrmpy",
+    "dense",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 275681,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 34028,
+    "expert_speedup": 8.102,
+    "source": "v6 corpus build (simulator)"
+  }
+}

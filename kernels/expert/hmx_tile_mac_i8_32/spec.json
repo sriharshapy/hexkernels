@@ -1,0 +1,65 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8xint8->int32",
+  "edge_cases": [
+    "single 32x32 tile, one mxclracc + one matmul packet + one requant store",
+    "activation int8 in high byte of crouton (2048B, lim 2047)",
+    "weight 4-deep packed (1024B, lim 1023) -- different load limit than activation",
+    "0x40-config requant field r=(acc*17+8)>>4, sign-extended from 12 bits",
+    "signed weights / negative accumulators / arithmetic-shift floor",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "no-requant-decode near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_noreqant.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "cfed3b5bfa8a475651e74346e111b327ee8686796fa91fcaffa4c55ca0e61cfd",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_tile_mac_i8_32",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "op": "hmx_tile_mac"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_tile_mac_i8_32",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "tile",
+    "primitive",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 144221,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 15593,
+    "expert_speedup": 9.25,
+    "source": "v6 corpus build (simulator)"
+  }
+}

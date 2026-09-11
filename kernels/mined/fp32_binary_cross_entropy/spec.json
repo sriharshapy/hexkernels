@@ -1,0 +1,67 @@
+{
+  "bundle": "harness-regenerable",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "HARNESS.md",
+    "PROMPT.md",
+    "kernel.c",
+    "reference.c"
+  ],
+  "harness_bytes": 11935552,
+  "kernel_sha256": "a0a4ca83fa157616c5a6af68001c7989bb823c34da089009d8317b0ed3af8e79",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 8388612 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ],
+    [
+      "dma",
+      "working set 8388612 B exceeds L2 1048576 B, so the data does not stay resident and staging is what buys bandwidth"
+    ],
+    [
+      "vtcm",
+      "the staged tiles need a software-managed scratchpad"
+    ],
+    [
+      "dma",
+      "working set 8388612 B also exceeds VTCM 8388608 B, so it must be streamed in tiles -- double-buffered"
+    ]
+  ],
+  "mechanisms_declared": [
+    "dma",
+    "hvx",
+    "l2fetch",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_binary_cross_entropy",
+  "op": "binary_cross_entropy",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "913aaebfb378e5d63e22876d40d4a6d7a7465d85a3c567f919d87a8e647f4fb9",
+    "source_tier": "T0",
+    "task_tier": "T3",
+    "tier_match": false
+  },
+  "schema": "aten::binary_cross_entropy(Tensor self, Tensor target, Tensor? weight=None, int reduction=1) -> Tensor",
+  "shape": [
+    1024,
+    1024
+  ],
+  "tier": "T3",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 8388612
+}

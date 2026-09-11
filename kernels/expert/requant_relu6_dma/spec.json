@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int32->int8",
+  "edge_cases": [
+    "clamp to zp+q6=24",
+    "negative -> ReLU floor 0",
+    "rounding tie",
+    "a=15 -> exactly 24 boundary",
+    "a=20 -> 32 clamps to 24",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_ceiling.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "6f493f8aa9fb0e735db9f43df82b39ff5ac16638f877b291e42d854cf8cfbf9b",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "requant_relu6_dma",
+  "origin": "expert",
+  "params": {
+    "mult": 13,
+    "note": "baked as fixed constants; signature is (a,out,n)",
+    "q6": 24,
+    "shift": 3,
+    "zp": 0
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "requant_relu6_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 771693,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 257571,
+    "expert_speedup": 3.0,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "bundle": "complete",
+  "category": "Transformer encoder block (attention + FFN + residuals, composition)",
+  "domain": "ai",
+  "dtype": "uint8xint8->int8",
+  "edge_cases": [
+    "the full encoder block: self-attention sub-layer (X.X^T-HMX -> scale+softmax-HVX -> A.V-HMX) + residual1 + FFN sub-layer (up-HMX -> ReLU/requant-HVX -> down-HMX) + residual2, requant between every stage",
+    "FOUR matmuls on the HMX engine (X.X^T 64x64x64, A.V 64x64x64, up 64x128x64, down 64x64x128); FFN intermediate H staged VTCM-resident between the two FFN matmuls (bulk 128B vector copy in/out)",
+    "documented simplifications: self-attention uses X directly as Q,K,V (no separate QKV/output projections); LayerNorm omitted for a residual+requant path (norms would blow the sim budget and add no new mechanism group)",
+    "chaining four matmuls through the 12-bit HMX requant field requires aggressive requant shifts so intermediates stay small: X.X^T |acc|<=576, A.V<=765, up-proj<=1152, down-proj<=1792 -> all *17/16 < 2048 (every field exact, block bit-exact)",
+    "residual add 1: h = clamp_u8(X + attn_out) (uint8 FFN activation); residual add 2: out = sat_i8(h + ffn_out) (int8)",
+    "FFN ReLU sparsity: b1[0]=-4000 (column always killed), b1[1]=+4000 (always fires); output saturation: b2[0]=-4000 (sat-low -128), b2[1]=+4000 (sat-high +127)",
+    "crouton pack/unpack + H staging moved to/from VTCM in bulk 128B HVX vector copies (scalar VTCM access ~48 cyc would lose)",
+    "harness reference computed via four HVX vrmpy matmuls, cross-checked against an INDEPENDENT full scalar golden on row 0 (Q6_Q_vsetq_R only encodes 0..127, so the 128-length down-proj must NOT be predicate-masked)",
+    "nearmiss_skip_attn_residual drops residual1 (h = attn_out, no + X) -> INCORRECT (3008/4096 wrong)",
+    "nearmiss_skip_ffn_residual drops residual2 (out = ffn_out, no + h) -> INCORRECT (3008/4096 wrong)",
+    "poisoned output buffer; runtime exp_lut (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_skip_attn_residual.c",
+    "nearmiss_skip_ffn_residual.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "abbc5a123d3c67ecd987eae1013745350974e9b214e7267b6fa401cb79f70619",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_transformer_encoder_block",
+  "origin": "expert",
+  "params": {
+    "ATTN_OUT_SHIFT": 8,
+    "ATTN_SCALE_SHIFT": 4,
+    "D": 64,
+    "Dff": 128,
+    "FFN_SH1": 8,
+    "FFN_SH2": 4,
+    "S": 64,
+    "exp_lut": "256 uint8 entries (runtime), fixed-point exp, index 255 = exp(0)",
+    "heads": 1,
+    "tile": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_transformer_encoder_block",
+    "upstream": null
+  },
+  "signal": "transformer encoder block (attention + FFN + 2 residuals)",
+  "tags": [
+    "transformer",
+    "encoder",
+    "block",
+    "attention",
+    "ffn",
+    "mlp",
+    "residual",
+    "softmax",
+    "matmul",
+    "hmx",
+    "hvx",
+    "vtcm",
+    "int8",
+    "requant",
+    "composition",
+    "tiling",
+    "l3",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1125671,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 650804,
+    "expert_speedup": 1.73,
+    "source": "v6 corpus build (simulator)"
+  }
+}

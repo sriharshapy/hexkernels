@@ -1,0 +1,49 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "93a23267a25fba294329793fd190a3d9a2958f53474d6ab944d3beba1d2f9ee0",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_slow_conv_transpose2d",
+  "op": "slow_conv_transpose2d",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "2b865c3ca2fc1c148c51e1c7cc1dd4e38fcc6311ed213a3e7968d7a12acc3cd6",
+    "source_tier": "T2",
+    "task_tier": "T0",
+    "tier_match": false
+  },
+  "schema": "aten::slow_conv_transpose2d(Tensor self, Tensor weight, SymInt[2] kernel_size, Tensor? bias=None, SymInt[2] stride=[1, 1], SymInt[2] padding=[0, 0], SymInt[2] output_padding=[0, 0], SymInt[2] dilation",
+  "shape": [
+    1,
+    4,
+    8,
+    8
+  ],
+  "tier": "T0",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 2576
+}

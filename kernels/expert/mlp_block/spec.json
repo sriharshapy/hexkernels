@@ -1,0 +1,71 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "large positive product saturates before LUT in layer 1",
+    "large negative b1 forces sat to -128 (GELU near 0)",
+    "large positive b1 forces sat to +127",
+    "negative pre-activation in layer 1 (GELU suppresses)",
+    "two LUT variants (anti-hardcode sweep)",
+    "two requant param sets (mult/shift/zp swept)",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode_lut.c",
+    "nearmiss_skip_gelu.c",
+    "nearmiss_skip_second_gemm.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "87ca3c3f450dfb0bbe79bc9c2325baf8a8ca0c8609f5e6292231cac5031bedfc",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "mlp_block",
+  "origin": "expert",
+  "params": {
+    "D": 16,
+    "K": 16,
+    "M": 8,
+    "V": 32,
+    "gelu_lut": "int8[256] (runtime GELU LUT; index = sat8(acc+b1)+128; do NOT hardcode)",
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "mlp_block",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "mlp",
+    "two-layer",
+    "gelu",
+    "lut",
+    "requantize",
+    "fused",
+    "transformer",
+    "AI",
+    "L3"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 39393,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 7498,
+    "expert_speedup": 5.254,
+    "source": "v6 corpus build (simulator)"
+  }
+}

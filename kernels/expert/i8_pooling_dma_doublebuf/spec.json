@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "window=8/stride=4 (50% overlap): each input byte contributes to two consecutive output windows",
+    "max-energy window (alternating -128/127) and all-zero window injected at the start; max-energy window at the tail",
+    "output always non-negative (sum of squares) -- only upper clamp at 127 needed",
+    "distinct from i8_avgpool_requant_dma/i8_maxpool_relu_dma (1D overlapping energy pool vs their 2D non-overlapping avg/max)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_sum_not_energy.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "d6e4380d19476fcb9701a2bd6cba58b5875dfa4e3d26c905e94245b0d132c947",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_pooling_dma_doublebuf",
+  "origin": "expert",
+  "params": {
+    "n": 393216,
+    "op": "energy_pool_overlap",
+    "overlap": "50%",
+    "shift": 9,
+    "stride": 4,
+    "window": 8
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_pooling_dma_doublebuf",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "pooling",
+    "energy",
+    "dma",
+    "vtcm",
+    "overlap",
+    "requant"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 4325078,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 2180446,
+    "expert_speedup": 1.98,
+    "source": "v6 corpus build (simulator)"
+  }
+}

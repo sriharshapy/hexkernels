@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "tail path n % tile_bytes != 0 (100-byte remainder)",
+    "saturation boundary: 127+1, -128-1, 127+127, -128-128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wraparound.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "709850e83f69b2505605f78264ff1c3d8283e853a89d38e115cff4f592239d2b",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_double_buffer_add_i8",
+  "origin": "expert",
+  "params": {
+    "n": 524388,
+    "op": "vadd_sat_i8",
+    "tile_bytes": 16384
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_double_buffer_add_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "dma",
+    "vtcm",
+    "add",
+    "saturating",
+    "double-buffer",
+    "ping-pong"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 155018,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 47937,
+    "expert_speedup": 3.233,
+    "source": "v6 corpus build (simulator)"
+  }
+}

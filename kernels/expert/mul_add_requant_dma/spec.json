@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int32->int8",
+  "edge_cases": [
+    "+127 saturation (a=b=15)",
+    "-128 saturation (a=15,b=-15)",
+    "a=0 -> fma=BIAS",
+    "rounding tie (odd*MULT >>1)",
+    "negative",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_bias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "f82586f9facaf718b9c9de4214c81642ff7f384300424df2c1587d3bcdf5fab1",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "mul_add_requant_dma",
+  "origin": "expert",
+  "params": {
+    "bias": 50,
+    "mult": 3,
+    "note": "per-element bias array baked to scalar BIAS; all params baked; signature is (a,b,out,n); inputs bounded [-15,15]",
+    "shift": 1,
+    "zp": 0
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "mul_add_requant_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 621983,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 227953,
+    "expert_speedup": 2.73,
+    "source": "v6 corpus build (simulator)"
+  }
+}

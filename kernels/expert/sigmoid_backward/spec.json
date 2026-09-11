@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Backward / gradient",
+  "domain": "ai",
+  "dtype": "fp32",
+  "edge_cases": [
+    "y near 0.5 (maximum gradient = 0.25)",
+    "y near 0.0 (gradient near 0)",
+    "y near 1.0 (gradient near 0)",
+    "dy negative (upstream gradient negative)",
+    "n=512 (multiple of 128 HVX vector width)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_missing_1my.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "97a754322aab62f1caf14dec30df2797ac84465dc54d2626592aeb7e9b4d7db0",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "sigmoid_backward",
+  "origin": "expert",
+  "params": {
+    "n": 512
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "sigmoid_backward",
+    "upstream": "v4-gap"
+  },
+  "signal": "elementwise (sigmoid gradient)",
+  "tags": [
+    "sigmoid",
+    "backward",
+    "gradient",
+    "elementwise",
+    "fp32",
+    "float",
+    "ai",
+    "activation_grad"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 6323,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 566,
+    "expert_speedup": 11.171,
+    "source": "v6 corpus build (simulator)"
+  }
+}

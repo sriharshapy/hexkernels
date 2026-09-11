@@ -1,0 +1,91 @@
+{
+  "bundle": "complete",
+  "category": "Tiled 3x3 convolution + fused bias+ReLU via matrix engine (composition)",
+  "domain": "ai",
+  "dtype": "uint8xint8->uint8",
+  "edge_cases": [
+    "3x3 VALID conv lowered to a tiled P x K x C_out matmul, K = C_in*Kh*Kw = 144 (im2col)",
+    "8x2 grid of 32x32 output tiles (M=P=256, N=C_out=64); K=144 zero-padded to 5 crouton K-tiles",
+    "HMX + uDMA COMPOSE in a partitioned VTCM: weight croutons resident @0x0000 (NTN*NKT*1KB), two double-buffered activation buffers @0x3000/0x6000 (NKT*2KB each), requant-config @0x9000, output crouton @0xA000 -- disjoint regions, no fault",
+    "weights are im2col-independent and reused across all M-tiles -> packed + chained-uDMA'd DDR->VTCM ONCE (resident); re-packing weights per output tile is the classic tiling waste that sank a naive first cut (1.005x)",
+    "activation crouton is tj-independent -> packed once per M-tile and double-buffered: while HMX computes M-tile ti's whole tj x kt grid, chained uDMA streams M-tile ti+1's im2col croutons into the ALTERNATE VTCM buffer",
+    "division-free im2col pack via precomputed koff/poff tables; activation int8 in high byte of crouton slot, weight 4-deep packed, different load limits (2047/1023) in one packet",
+    "HMX 0x40-config requant gives r=(acc*17+8)>>4, sign-extended from the 12-bit field; input ranges keep |acc|<=1296 so |r|<2048 (field exact, no HMX saturation)",
+    "fused HVX/scalar epilogue: per-output-channel int32 bias -> ReLU -> saturating narrow to uint8; crouton unpack staged via cacheable buffer + bulk 128B vector copies",
+    "bias includes extreme (-2000/+2000) and zero edge values so ReLU-zero, uint8-saturate-high, and passthrough all occur",
+    "harness installs identity VTCM add_translation AND enables the HMX context so DMA and HMX coexist",
+    "harness reference computed via independent HVX vrmpy im2col, cross-checked against a scalar golden on output position p=0",
+    "M,N are 32-multiples (crouton requirement), so the classic 128-tail rule does not apply; discrimination via nearmiss + edge bias values",
+    "poisoned output buffer (0xA5)",
+    "bias-omitted near-miss (still HMX+DMA+VTCM) must fail; note ReLU-omit alone would NOT discriminate since saturate_u8 already clamps negatives"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nobias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "af104503f45bea04007dd7ece7fb7358d5d21cb70c815e0968c9d3b33ce771b3",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_conv2d_tiled_bias_relu",
+  "origin": "expert",
+  "params": {
+    "C_in": 16,
+    "C_out": 64,
+    "IH": 18,
+    "IW": 18,
+    "K": 144,
+    "Kh": 3,
+    "Kw": 3,
+    "OH": 16,
+    "OW": 16,
+    "P": 256,
+    "padding": "VALID",
+    "stride": 1,
+    "tile": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_conv2d_tiled_bias_relu",
+    "upstream": null
+  },
+  "signal": "compute+bandwidth (tiled im2col matmul; matrix engine + on-chip streaming)",
+  "tags": [
+    "conv",
+    "conv3x3",
+    "tiled",
+    "im2col",
+    "hmx",
+    "dma",
+    "vtcm",
+    "double_buffer",
+    "hvx",
+    "int8",
+    "bias",
+    "relu",
+    "requant",
+    "epilogue",
+    "composition",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1040522,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 502271,
+    "expert_speedup": 2.07,
+    "source": "v6 corpus build (simulator)"
+  }
+}

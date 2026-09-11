@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": "Foreach (multi-tensor)",
+  "domain": "ai",
+  "dtype": "fp32",
+  "edge_cases": [
+    "y[i] negative (alpha*x[i]+y[i] sign depends on magnitudes)",
+    "x[i] = 0 (result == y[i], alpha dropped)",
+    "y[i] = 0 (result == alpha*x[i])",
+    "large magnitude pair: alpha*1e8 + 1e-8 (rounding)",
+    "last tensor's last element (tensor t=3, index 1023)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_drop_y.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "738a23e1bb892848bbf276aaa87e9fbb0f5e06b64f8cd27b99b7755da7cf85fe",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "foreach_axpy_f32",
+  "origin": "expert",
+  "params": {
+    "L": 256,
+    "T": 4,
+    "alpha": 0.5
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "foreach_axpy_f32",
+    "upstream": "v4-gap"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "foreach",
+    "elementwise",
+    "multi-tensor",
+    "axpy",
+    "fp32",
+    "float",
+    "in-place"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 9294,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 440,
+    "expert_speedup": 21.123,
+    "source": "v6 corpus build (simulator)"
+  }
+}

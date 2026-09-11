@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": "Fused conv block",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "border pixels (zero-padding at corners and edges)",
+    "large negative bias ch0 forces ReLU to clamp entire channel to 0",
+    "large positive bias ch1",
+    "negative pre-activation values must be clamped by ReLU",
+    "non-zero zero-point",
+    "saturation to +127/-128",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "fa74ab88ac02576f48be5ccd8125620faa62c7a12d1885881e2042b54536c4a9",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_depthwise_conv2d_bias_relu",
+  "origin": "expert",
+  "params": {
+    "bias": "int32[C] per-channel",
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_depthwise_conv2d_bias_relu",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "depthwise",
+    "conv2d",
+    "bias",
+    "relu",
+    "requantize",
+    "fused",
+    "param",
+    "NHWC",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 204657,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 27935,
+    "expert_speedup": 7.326,
+    "source": "v6 corpus build (simulator)"
+  }
+}

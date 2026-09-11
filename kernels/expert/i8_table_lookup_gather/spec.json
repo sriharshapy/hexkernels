@@ -1,0 +1,53 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int32",
+  "edge_cases": [
+    "random indices into a 64KB table (larger than L1) -> scalar misses to DDR",
+    "first/last table entry, repeated index, boundary positions injected",
+    "n_idx multiple of 32 (HVX gather width); scalar tail path in expert"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_off_by_one.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "07e04e3729946cceeb5a0f9b890a652e8091ffa2ba0a76d11b60d47dddb07cb4",
+  "level": "L2",
+  "mechanisms_declared": [
+    "gather",
+    "vtcm",
+    "dma"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_table_lookup_gather",
+  "origin": "expert",
+  "params": {
+    "formula": "out[i] = table[idx[i]]",
+    "n_idx": 32768,
+    "op": "table_lookup",
+    "table_words": 16384
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_table_lookup_gather",
+    "upstream": null
+  },
+  "signal": "random-access / scatter-gather bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 519088,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 80638,
+    "expert_speedup": 6.44,
+    "source": "v6 corpus build (simulator)"
+  }
+}

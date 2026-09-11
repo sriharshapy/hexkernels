@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "A[0]=127, V[0]=127 (large positive contribution, d=0,j=0)",
+    "sign mismatch A negative, V positive at d=1,j=1",
+    "D=90 not a multiple of 32/16 -- output-loop tail (5 full 16-col blocks + 1 tail of 10)",
+    "int32 accumulation without overflow for small M,N,D"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transposed_V.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "1eda1edee8518eb0df54eb20ae3f5b4f7547ea5650937baa82542678950a10c4",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "av_tile_i8",
+  "origin": "expert",
+  "params": {
+    "D": 90,
+    "M": 16,
+    "N": 16,
+    "op": "av_tile_colmajor_v"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "av_tile_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "attention",
+    "av",
+    "matmul",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float",
+    "int32-out",
+    "column-major-v"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 104170,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 13241,
+    "expert_speedup": 7.868,
+    "source": "v6 corpus build (simulator)"
+  }
+}

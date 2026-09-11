@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "x=0 non-positive path",
+    "x=-1 just negative",
+    "x=1 positive passthrough",
+    "x=-128 min scaled",
+    "x=127 max passthrough",
+    "distinct alpha per channel",
+    "tail within channel"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nopassthrough.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7d1d9dc30ba74eded6a0acdc96bee6f8878aa09602c35afca44a1da526ec0e90",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_prelu_dma",
+  "origin": "expert",
+  "params": {
+    "alpha": [
+      1,
+      2,
+      3,
+      1,
+      4,
+      1,
+      2,
+      3
+    ],
+    "n_ch": 8,
+    "n_elem": 65536,
+    "shift": 3
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_prelu_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 364742,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 92788,
+    "expert_speedup": 3.93,
+    "source": "v6 corpus build (simulator)"
+  }
+}

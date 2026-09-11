@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "idx is an affine permutation of [0,n) so every destination is written exactly once (no lane-order ambiguity)",
+    "n not necessarily a multiple of 32 (scatter width); scalar tail writes directly into the VTCM table",
+    "int8 boundary source values 127/-128/-1 widened to int32"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_off_by_one.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "064aeb57f50fadbaca0cd5d7e34ce9b9113ca5f0f6bba70cbaa4df934ee6829f",
+  "level": "L2",
+  "mechanisms_declared": [
+    "scatter",
+    "vtcm",
+    "dma"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_scatter_vtcm_i8",
+  "origin": "expert",
+  "params": {
+    "n": 32768,
+    "op": "scatter_permutation"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_scatter_vtcm_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "scatter",
+    "vtcm",
+    "dma",
+    "permutation"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 178352,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 83301,
+    "expert_speedup": 2.141,
+    "source": "v6 corpus build (simulator)"
+  }
+}

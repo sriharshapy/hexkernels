@@ -1,0 +1,67 @@
+{
+  "bundle": "complete",
+  "category": "Neighborhood image filter",
+  "domain": "dsp",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "flat patch (output depends only on bias+requant)",
+    "high-contrast step edge (exercises int8 saturation)",
+    "top row ramp, bottom row constant (border pixels)",
+    "w%128 tail at x=32,33",
+    "3 kernel/bias/requant sets swept: Laplacian, horizontal Sobel, sharpening"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_nobias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "4cbfc2dc97389b2c62476d625f5702e6c568dc4c06d05cc8c7ab39e38c609f44",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_stencil_bias_requant",
+  "origin": "expert",
+  "params": {
+    "bias": "int32 scalar (runtime, swept)",
+    "border": "clamp-to-edge",
+    "mult": "int32 (runtime, swept)",
+    "rounding": "round-half-away-from-zero",
+    "shift": "int (runtime, swept)",
+    "weights": "int8[9] row-major 3x3 kernel (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_stencil_bias_requant",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "image",
+    "stencil",
+    "conv2d",
+    "bias",
+    "requantize",
+    "param",
+    "fused",
+    "border",
+    "signed"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 63317,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 16758,
+    "expert_speedup": 3.778,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "distinct data per batch (batch stride correctness)",
+    "large products (127*127*32)",
+    "sign edge in K-reduction",
+    "large negative bias (batch 0, col 0)",
+    "large positive bias (batch 1, col 0)",
+    "bias per-column must broadcast across rows",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_bias.c",
+    "nearmiss_wrong_bias_stride.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "ad7fee9c984292e8d17c166d0890c4dda480da4fad47653a64035335a5336e24",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_batch_matmul_bias",
+  "origin": "expert",
+  "params": {
+    "bias": "int32[BATCH*N] (per-batch, per-output-column; bias[b*N+j])"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_batch_matmul_bias",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "matmul",
+    "batched",
+    "bias",
+    "fused",
+    "dense",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 138342,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 17940,
+    "expert_speedup": 7.711,
+    "source": "v6 corpus build (simulator)"
+  }
+}

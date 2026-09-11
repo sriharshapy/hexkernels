@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->u8",
+  "edge_cases": [
+    "Q row all-max (127) * K row all-max (127) -> large raw dot saturates to 127",
+    "Q row all-zero -> all raw=0 -> uniform softmax",
+    "K row all-min (-128) -> large negative dot saturates to -128",
+    "2 LUT tables x 2 inv_sqrt_d/shift pairs = 4 sweep sets (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_max_sub.c",
+    "nearmiss_no_scale.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "b694243c8917a37f4e8bc925eec54adf7ed0b56ff44e4955a6c4ea63d8918a87",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "matmul_softmax_tile",
+  "origin": "expert",
+  "params": {
+    "exp_lut": "256 uint8 entries (runtime), index 255=exp(0)=max",
+    "inv_sqrt_d": "fixed-point numerator for 1/sqrt(HEAD_DIM) (runtime)",
+    "shift": "fixed-point shift for 1/sqrt(HEAD_DIM) (runtime)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "matmul_softmax_tile",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "attention",
+    "matmul",
+    "softmax",
+    "lut",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 47998,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 15151,
+    "expert_speedup": 3.168,
+    "source": "v6 corpus build (simulator)"
+  }
+}

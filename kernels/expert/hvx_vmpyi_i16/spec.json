@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int16",
+  "edge_cases": [
+    "300*300=90000 -> low16 truncation 24464 (not a Q15 shift)",
+    "-300*300=-90000 -> low16 -24464",
+    "32767*2=65534 -> low16 -2",
+    "-32768*-1=32768 -> low16 -32768",
+    "n=577 tail path (9*64 + 1)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_q15shift.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "ce21f1b0dc7df1c1fb7963d2591952eeac302fe8014acb78e3b854220df831b6",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vmpyi_i16",
+  "origin": "expert",
+  "params": {
+    "n": 577,
+    "op": "vmpyi_i16"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vmpyi_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "elementwise",
+    "multiply",
+    "truncating",
+    "int16",
+    "Q6_Vh_vmpyi_VhVh"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 4793,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 312,
+    "expert_speedup": 15.36,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "val = -113 (0x8F): mixed bit pattern with high bit set (sign-extension trap for width bugs)",
+    "n=1011 tail path (7*128 + 115)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_widthbug.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "8cc144b459c848474e416639b93d1d208281f5292934c1e4732238c6e2642cd4",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vsplat_i8",
+  "origin": "expert",
+  "params": {
+    "n": 1011,
+    "op": "vsplat_i8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vsplat_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "broadcast",
+    "splat",
+    "int8",
+    "Q6_Vb_vsplat_R"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 496,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 314,
+    "expert_speedup": 1.58,
+    "source": "v6 corpus build (simulator)"
+  }
+}

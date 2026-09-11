@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "all-zero row (ms=0, relies on +1e-3 epsilon, no inf/nan)",
+    "row with one dominant large-magnitude element",
+    "negative and positive per-row gain values",
+    "C=80 not a multiple of 64 fp16 lanes (64 + 16 tail path)",
+    "gain is length-R (per-row), never indexed by column -- distinguishes from sibling rmsnorm_row_fp16's per-column gamma"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_noeps.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "da4d497c680643953ffac1da83b9ae8e33672a076a4ea2205c12fc8e9f20a992",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "rmsnorm_gain_fp16",
+  "origin": "expert",
+  "params": {
+    "C": 80,
+    "R": 6,
+    "eps": 0.001,
+    "op": "rmsnorm_per_row_gain"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "rmsnorm_gain_fp16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "rmsnorm",
+    "normalization",
+    "fp16",
+    "batched-rows",
+    "qf16",
+    "per-row-gain"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 26857,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 9798,
+    "expert_speedup": 2.741,
+    "source": "v6 corpus build (simulator)"
+  }
+}

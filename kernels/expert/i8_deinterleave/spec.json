@@ -1,0 +1,55 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "n%128 tail (500 mod 128 = 116)",
+    "two output streams",
+    "input stride 2x output"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_swapped.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "c5a0d3f936b267339b317211e293ac9e888021cc211434ebd49c3f1950eae7fe",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_deinterleave",
+  "origin": "expert",
+  "params": {
+    "formula": "a[i]=in[2*i], b[i]=in[2*i+1]",
+    "op": "deinterleave"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_deinterleave",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "deinterleave",
+    "unzip",
+    "vdeal",
+    "layout",
+    "data-movement"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1847,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 611,
+    "expert_speedup": 3.023,
+    "source": "v6 corpus build (simulator)"
+  }
+}

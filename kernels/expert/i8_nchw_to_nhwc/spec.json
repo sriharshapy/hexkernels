@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "four concurrent input plane streams (stride HW apart) defeat the prefetcher",
+    "HW=196608 multiple of 128 (clean vectorization) but tensor 768KB > L2",
+    "channel-last output; boundary int8 values per plane"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_axis.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "c7abf6849bcb52e1dcea32aaefc71ff015afff562a3785f2610f3dd27a154981",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_nchw_to_nhwc",
+  "origin": "expert",
+  "params": {
+    "C": 4,
+    "HW": 196608,
+    "formula": "out[p*C + c] = in[c*HW + p]",
+    "op": "nchw_to_nhwc",
+    "streams": 4
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_nchw_to_nhwc",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 155482,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 72008,
+    "expert_speedup": 2.16,
+    "source": "v6 corpus build (simulator)"
+  }
+}

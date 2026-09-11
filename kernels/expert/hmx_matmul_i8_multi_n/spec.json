@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "N=64 spans two 32-wide output tiles; matmul once per N-tile with shared activation",
+    "int8 activation in HIGH byte of crouton slot, weight 4-deep packed",
+    "0x40-config requant (acc*17+8)>>4 & 0xFFF, 12-bit sign-extend",
+    "only-first-N-tile near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_onetile.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "bc2c5113fbbfb4aca68671e091129a81176d15237483e6cf4d86478c215b3194",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_multi_n",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 64,
+    "op": "matmul_multi_n"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_multi_n",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "multi-n",
+    "tiling",
+    "hmx",
+    "int8",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 86936,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 22065,
+    "expert_speedup": 3.94,
+    "source": "v6 corpus build (simulator)"
+  }
+}

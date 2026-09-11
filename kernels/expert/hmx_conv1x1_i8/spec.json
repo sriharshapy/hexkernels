@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "1x1 conv contracts the channel axis -> out = In*W^T",
+    "weight crouton from W TRANSPOSED (aWgt[wgt_off(ci,co)]=W[co][ci])",
+    "per-output-channel int32 bias fused in the epilogue (extremes + zero bias)",
+    "0x40-config requant (acc*17+8)>>4 & 0xFFF, 12-bit sign-extend",
+    "no-bias near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nobias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "d26e48608b9472c8b32b72378a895fc76bf708a001b20637d3617dfe4852921c",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_conv1x1_i8",
+  "origin": "expert",
+  "params": {
+    "Cin": 32,
+    "Cout": 32,
+    "P": 32,
+    "op": "conv1x1_bias"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_conv1x1_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "conv1x1",
+    "matmul",
+    "bias",
+    "hmx",
+    "int8",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 41394,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 16758,
+    "expert_speedup": 2.47,
+    "source": "v6 corpus build (simulator)"
+  }
+}

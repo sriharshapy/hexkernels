@@ -1,0 +1,79 @@
+{
+  "bundle": "complete",
+  "category": "Tiled matrix multiply + fused epilogue (composition)",
+  "domain": "ai",
+  "dtype": "uint8xint8->uint8",
+  "edge_cases": [
+    "4x4 grid of 32x32 output tiles; each accumulates over 4 K-tiles (K=128)",
+    "HMX + uDMA COMPOSE in a partitioned VTCM: two double-buffered crouton operand slots (act 2KB x2 @0x0000/0x0800, wgt 1KB x2 @0x1000/0x1400) + requant-config @0x2000 + output crouton @0x3000 -- disjoint regions, no fault",
+    "DMA double-buffer: pack K-tile kt+1's crouton in cacheable DDR, uDMA it into the ALTERNATE VTCM slot (async) while HMX computes K-tile kt from the current slot",
+    "HMX accumulator persists across K-tile matmuls (one mxclracc per output tile)",
+    "activation int8 in high byte of crouton slot (low bytes dead); weight 4-deep packed; different load limits in one packet",
+    "HMX 0x40-config requant gives r=(acc*17+8)>>4, sign-extended from the 12-bit field; input ranges keep |r|<2048 so the field is exact (no HMX saturation)",
+    "fused HVX/scalar epilogue: per-column int32 bias -> ReLU -> saturating narrow to uint8",
+    "bias includes extreme (-2000/+2000) and zero edge values so ReLU-zero, uint8-saturate-high, and passthrough all occur",
+    "harness installs identity VTCM add_translation AND enables the HMX context so DMA and HMX coexist",
+    "harness reference computed via independent HVX vrmpy, cross-checked against a scalar golden on row 0",
+    "M,N,K are 32-multiples (crouton requirement), so the classic 128-tail rule does not apply; discrimination via nearmiss + edge bias values",
+    "poisoned output buffer",
+    "transposed-B near-miss (still HMX+DMA+VTCM) must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transB.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "f7d71259f36179c7687472bf4944c230a992e9e05e706ca7c4e0918f98dbe8d2",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_gemm_tiled_bias_relu_requant",
+  "origin": "expert",
+  "params": {
+    "K": 128,
+    "M": 128,
+    "N": 128,
+    "tile": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gemm_tiled_bias_relu_requant",
+    "upstream": null
+  },
+  "signal": "compute+bandwidth (tiled matmul)",
+  "tags": [
+    "gemm",
+    "tiled",
+    "hmx",
+    "dma",
+    "vtcm",
+    "double_buffer",
+    "hvx",
+    "int8",
+    "bias",
+    "relu",
+    "requant",
+    "epilogue",
+    "composition",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 756385,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 554202,
+    "expert_speedup": 1.36,
+    "source": "v6 corpus build (simulator)"
+  }
+}

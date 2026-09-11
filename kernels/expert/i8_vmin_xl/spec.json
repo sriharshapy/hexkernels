@@ -1,0 +1,53 @@
+{
+  "bundle": "complete",
+  "category": "Per-element math",
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "signed min: -1 vs 1 (unsigned-min trap)",
+    "signed min: 1 vs -1 (unsigned-min trap)",
+    "signed min: 127 vs -128 (extreme range span)",
+    "signed min: -128 vs -128 (equal, tie)",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_saturate.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "425496dff700d7bf5936c7187f76e41cf94735252056b74a74670e20c8c23eed",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_vmin_xl",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_vmin_xl",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound-ddr",
+  "tags": [
+    "elementwise",
+    "signed-min",
+    "ddr-bound"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 147119,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 114012,
+    "expert_speedup": 1.29,
+    "source": "v6 corpus build (simulator)"
+  }
+}

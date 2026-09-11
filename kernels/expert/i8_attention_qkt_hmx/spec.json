@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": "Attention matmul",
+  "domain": "ai",
+  "dtype": "uint8xint8->uint16",
+  "edge_cases": [
+    "K is stored [S,D] row-major (row j IS key vector j) -- scores = Q . K^T needs no explicit transpose, only swapped tile indices in the crouton weight pack",
+    "2x2 grid of 32x32 output tiles; each accumulates over 2 D-tiles",
+    "HMX accumulator persists across D-tile matmuls (one mxclracc per out tile)",
+    "activation int8 in high byte of crouton slot (low bytes dead)",
+    "weight 4-deep packed; different load limit than activation",
+    "0x40-config requant: round(scores*17/16), 12-bit two's-complement field",
+    "signed keys / negative accumulators",
+    "input range chosen so |requant| < 2048 (12-bit field exact, no saturation)",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "missing-transpose near-miss (computes Q.K, not Q.K^T) must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_missing_transpose.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "682a336749679b2720d566dca508d325807de21bdad3b268a3ee879c29c6ee85",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_attention_qkt_hmx",
+  "origin": "expert",
+  "params": {
+    "D": 64,
+    "S": 64
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_attention_qkt_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine)",
+  "tags": [
+    "attention",
+    "qkt",
+    "matmul",
+    "hmx",
+    "int8",
+    "requant",
+    "tiling",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 164201,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 54877,
+    "expert_speedup": 2.99,
+    "source": "v6 corpus build (simulator)"
+  }
+}

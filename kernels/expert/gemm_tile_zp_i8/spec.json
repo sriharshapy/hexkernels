@@ -1,0 +1,65 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8->int32->int8",
+  "edge_cases": [
+    "zpA=0 (degenerate: must reduce to plain GEMM requant with no zero-point correction)",
+    "negative zpA (zpA=-10) and positive zpA (zpA=20) swept",
+    "scale_shift=0 swept (no rounding)",
+    "large positive contribution (A[0]=127, B[0]=127)",
+    "sign-mismatch cancellation (A[1]=-128, B[N]=127)",
+    "K=94 not a multiple of 4 -- tail k-group has only 2 valid k's (92,93), non-zero in the tail exercise",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_zp_operand.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "5a644fafe0319ec6f647cd0738f6387ffd11732ca4fb38ccc00857d22ce1a464",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "gemm_tile_zp_i8",
+  "origin": "expert",
+  "params": {
+    "K": 94,
+    "M": 8,
+    "N": 8,
+    "op": "gemm_tile_zeropoint_requant"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "gemm_tile_zp_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "vrmpy",
+    "gemm",
+    "conventional-b",
+    "zero-point",
+    "quantization",
+    "requantize",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 27122,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 6645,
+    "expert_speedup": 4.082,
+    "source": "v6 corpus build (simulator)"
+  }
+}

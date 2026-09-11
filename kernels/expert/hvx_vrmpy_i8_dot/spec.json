@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "group0 known dot: 1*10+2*20+3*30+4*40=300",
+    "group1 signed extremes: -1-2+127-128=-4 (unsigned-a misread would give 764)",
+    "group2 cancellation dot == 0",
+    "g=261 tail path (8*32 + 5 groups)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_unsigned_a.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "66faf271ca318f4bfc8e071e8390fcc0903346b13b457222c374092e21e8104b",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vrmpy_i8_dot",
+  "origin": "expert",
+  "params": {
+    "g": 261,
+    "op": "vrmpy_i8_dot"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vrmpy_i8_dot",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "dot-product",
+    "reduce-multiply",
+    "int8",
+    "int32",
+    "Q6_Vw_vrmpy_VbVb"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 6962,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 475,
+    "expert_speedup": 14.66,
+    "source": "v6 corpus build (simulator)"
+  }
+}

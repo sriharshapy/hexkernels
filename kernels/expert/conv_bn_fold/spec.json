@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": "Fused conv block",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "border pixels (zero-padding at corners and edges)",
+    "large negative bias ch0 forces large negative pre-scale",
+    "large positive bias ch1",
+    "two per-channel (scale, shift) sweep sets",
+    "non-zero global zero-point",
+    "saturation to +127/-128",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_bias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "643a6fe9bb52d56c06475576f95e9c7888a90baaf8600452f195bcd214279e53",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "conv_bn_fold",
+  "origin": "expert",
+  "params": {
+    "bias": "int32[C_out] folded bn offset",
+    "bn_scale": "int32[C_out] per-channel (runtime, swept)",
+    "bn_shift": "int[C_out]   per-channel (runtime, swept)",
+    "zp": "int8 global zero-point (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "conv_bn_fold",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "conv2d",
+    "batchnorm",
+    "bn-fold",
+    "per-channel",
+    "requantize",
+    "fused",
+    "param",
+    "NHWC",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 297354,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 13968,
+    "expert_speedup": 21.288,
+    "source": "v6 corpus build (simulator)"
+  }
+}

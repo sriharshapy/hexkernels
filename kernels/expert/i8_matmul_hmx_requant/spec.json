@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "uint8xint8->int8",
+  "edge_cases": [
+    "single 32x32 crouton tile; activation int8 in high byte of crouton slot (low bytes dead)",
+    "weight 4-deep packed; different load limit than activation in the same packet",
+    "0x40-config requant: r=(acc*17+8)>>4, 12-bit two's-complement field",
+    "output NARROWED to real int8 (not the raw uint16 12-bit field the sibling matmul tasks expose)",
+    "input ranges (A 0..3 uint8, B -1..1 int8) chosen so |r|<=127: no int8 saturation, narrow is exact",
+    "signed weights / negative accumulators (sign-extended from bit 11 before narrowing)",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "transposed-B near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transB.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a775eea5be7b3d4a3ef55e386e389b101771d18bea944321485e6c60545a1f84",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_matmul_hmx_requant",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_matmul_hmx_requant",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine)",
+  "tags": [
+    "matmul",
+    "hmx",
+    "int8",
+    "requant",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 43496,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 12546,
+    "expert_speedup": 3.47,
+    "source": "v6 corpus build (simulator)"
+  }
+}

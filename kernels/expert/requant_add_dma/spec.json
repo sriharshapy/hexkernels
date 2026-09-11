@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int32->int8",
+  "edge_cases": [
+    "+127 saturation",
+    "-128 saturation",
+    "rounding tie (sum=4 -> 2.5 rounds to 3)",
+    "zero",
+    "negative round-half-away",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_truncate.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "36ac22a70479963bf7c38f2929fb684b24aff3a3b8c313da561580070d6c60d4",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "requant_add_dma",
+  "origin": "expert",
+  "params": {
+    "mult": 5,
+    "note": "baked as fixed constants; signature is (a,b,out,n)",
+    "shift": 3,
+    "zp": 0
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "requant_add_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 627956,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 239432,
+    "expert_speedup": 2.62,
+    "source": "v6 corpus build (simulator)"
+  }
+}

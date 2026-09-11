@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "all-negative block",
+    "all-positive block",
+    "exact zero (relu(0)=0)",
+    "x=-128 (most negative int8, must clamp to 0 not wrap)",
+    "n=1000 not a multiple of 128 (tail path)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_mask.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "40620d5d8803463d90f61bae38a050de4db6e8aff37b47ff3556ef3e896a44de",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "epilogue_relu_i8",
+  "origin": "expert",
+  "params": {
+    "context": "in_cache_tile_epilogue",
+    "n": 1000,
+    "op": "relu"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "epilogue_relu_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "relu",
+    "epilogue",
+    "int8",
+    "tile",
+    "tail",
+    "in-cache"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 4209,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 663,
+    "expert_speedup": 6.35,
+    "source": "v6 corpus build (simulator)"
+  }
+}

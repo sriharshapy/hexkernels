@@ -1,0 +1,70 @@
+{
+  "bundle": "complete",
+  "category": "Downsample / pooling",
+  "domain": "ai",
+  "dtype": "u8",
+  "edge_cases": [
+    "odd input dims: ow=65, oh=49",
+    "tail: output width 65 not multiple of 128",
+    "clamp-to-edge at all 4 borders (corner windows use replicated pixels)",
+    "all-255 3x3 region: avg = 255",
+    "rounding: truncate not round (e.g. 8/9=0 not 1)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_maxpool.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "89ebf07e2cc226523bcd0ac481b94bbfa65f6f087077499a6de2891d5c9cf225",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "u8_avgpool3x3_s2",
+  "origin": "expert",
+  "params": {
+    "output_h_formula": "(h+1)/2",
+    "output_w_formula": "(w+1)/2",
+    "padding": "clamp-to-edge",
+    "rounding": "truncate",
+    "stride": [
+      2,
+      2
+    ],
+    "window": [
+      3,
+      3
+    ]
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "u8_avgpool3x3_s2",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "pooling",
+    "avgpool",
+    "3x3",
+    "stride2",
+    "overlapping",
+    "clamp-border",
+    "ai",
+    "cat7"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 105955,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 15497,
+    "expert_speedup": 6.837,
+    "source": "v6 corpus build (simulator)"
+  }
+}

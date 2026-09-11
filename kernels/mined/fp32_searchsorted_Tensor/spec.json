@@ -1,0 +1,67 @@
+{
+  "bundle": "harness-regenerable",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "HARNESS.md",
+    "PROMPT.md",
+    "kernel.c",
+    "reference.c"
+  ],
+  "harness_bytes": 17900347,
+  "kernel_sha256": "8cf0acc5c2055d9d2a2df6f911de198d2c22aa70346f8f69663f9867285f2c1e",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 9437184 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ],
+    [
+      "dma",
+      "working set 9437184 B exceeds L2 1048576 B, so the data does not stay resident and staging is what buys bandwidth"
+    ],
+    [
+      "vtcm",
+      "the staged tiles need a software-managed scratchpad"
+    ],
+    [
+      "dma",
+      "working set 9437184 B also exceeds VTCM 8388608 B, so it must be streamed in tiles -- double-buffered"
+    ]
+  ],
+  "mechanisms_declared": [
+    "dma",
+    "hvx",
+    "l2fetch",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_searchsorted_Tensor",
+  "op": "searchsorted",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "abada0c1ac68657474c0f8918aa759a5af8bfad30060ad92fcf9500d699d635c",
+    "source_tier": "T1",
+    "task_tier": "T3",
+    "tier_match": false
+  },
+  "schema": "aten::searchsorted.Tensor(Tensor sorted_sequence, Tensor self, *, bool out_int32=False, bool right=False, str? side=None, Tensor? sorter=None) -> Tensor",
+  "shape": [
+    768,
+    1024
+  ],
+  "tier": "T3",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 9437184
+}

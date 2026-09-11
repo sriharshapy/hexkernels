@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "category": "Add up an array",
+  "domain": "dsp",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "max diff (+127 vs -128 = 255)",
+    "symmetry: (-128 vs +127 gives same sq)",
+    "zero diff (identical elements)",
+    "n=1024 result near int32 max"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_abs_diff.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "f8544651e152321406d30e7547b3cc87c17c40eac727e6295d12569a08ded6be",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_sumsq_diff_i32",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_sumsq_diff_i32",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "reduction",
+    "l2_distance",
+    "squared_diff",
+    "similarity"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 5321,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 896,
+    "expert_speedup": 5.939,
+    "source": "v6 corpus build (simulator)"
+  }
+}

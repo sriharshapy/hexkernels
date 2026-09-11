@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": "Per-element math",
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "127+1 saturates to 127 (NOT wraparound -128)",
+    "-128+-1 saturates to -128 (NOT wraparound 127)",
+    "127+127 saturates to 127",
+    "-128+-128 saturates to -128",
+    "0+0 -> 0 (non-saturating baseline)",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_saturate.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a00b7bc9c441025af605a7955579d53b7a91d90096fa27392b554977cfa8e5f1",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_satadd_xl",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_satadd_xl",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound-ddr",
+  "tags": [
+    "elementwise",
+    "saturating-add",
+    "ddr-bound"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 147230,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 113880,
+    "expert_speedup": 1.293,
+    "source": "v6 corpus build (simulator)"
+  }
+}

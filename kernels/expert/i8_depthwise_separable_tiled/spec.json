@@ -1,0 +1,91 @@
+{
+  "bundle": "complete",
+  "category": "Tiled depthwise-separable conv block (HVX depthwise + HMX pointwise, composition)",
+  "domain": "ai",
+  "dtype": "uint8xint8->uint8",
+  "edge_cases": [
+    "depthwise-separable: 3x3 VALID per-channel depthwise (HVX, does NOT lower to matmul) then 1x1 pointwise (dense matmul, HMX)",
+    "NHWC layout: C_in=64 channels innermost -> depthwise vectorized across channels (64 int16 lanes = one HVX vector); input bytes widened IN ORDER via Q6_Wh_vunpack_Vb (vzxt deinterleaves even/odd -> WRONG, gotcha)",
+    "pointwise matmul M=P=256 (8 M-tiles), K=C_in=64 (2 K-tiles), N=C_out=64 (2 N-tiles)",
+    "depthwise is IDENTICAL in baseline and expert (shared cost) -> the measured speedup isolates HMX (pointwise) + DMA/VTCM vs HVX vrmpy pointwise",
+    "HMX + uDMA compose in a partitioned VTCM: pointwise weight croutons resident @0x0000 (NTN*NKT*1KB), two double-buffered dw-activation buffers @0x2000/0x4000 (NKT*2KB each), requant-config @0x6000, output crouton @0x7000 -- disjoint",
+    "pointwise weights reused across all M-tiles -> packed + chained-uDMA'd once (resident); dw activation crouton double-buffered across M-tiles (chained uDMA of ti+1 overlaps HMX compute of ti)",
+    "input ranges keep dw in 0..27 and |acc|<=1728 so |r|<2048 (HMX 12-bit field exact, no saturation)",
+    "fused HVX/scalar epilogue: per-output-channel int32 bias -> ReLU -> saturating narrow to uint8; crouton unpack via cacheable buffer + bulk 128B vector copies",
+    "bias includes extreme (-2000/+2000) and zero edge values so ReLU-zero, uint8-saturate-high, and passthrough all occur",
+    "harness installs identity VTCM add_translation AND enables the HMX context so DMA and HMX coexist",
+    "harness reference: scalar depthwise (cheap) then HVX vrmpy pointwise, cross-checked against a scalar golden on output position p=0",
+    "bias-omitted near-miss (still HVX+HMX+DMA+VTCM) must fail; note ReLU-omit alone would NOT discriminate since saturate_u8 already clamps negatives",
+    "poisoned output buffer (0xA5)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nobias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "3030aa9239246b17169bb30fe3fc3e845a8ec9c6b436601d447f3e35396d804b",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_depthwise_separable_tiled",
+  "origin": "expert",
+  "params": {
+    "C_in": 64,
+    "C_out": 64,
+    "IH": 18,
+    "IW": 18,
+    "K_pointwise": 64,
+    "Kh": 3,
+    "Kw": 3,
+    "OH": 16,
+    "OW": 16,
+    "P": 256,
+    "padding": "VALID",
+    "stride": 1,
+    "tile": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_depthwise_separable_tiled",
+    "upstream": null
+  },
+  "signal": "compute+bandwidth (depthwise HVX + pointwise matrix engine + on-chip streaming)",
+  "tags": [
+    "conv",
+    "depthwise",
+    "separable",
+    "pointwise",
+    "tiled",
+    "hmx",
+    "dma",
+    "vtcm",
+    "double_buffer",
+    "hvx",
+    "int8",
+    "bias",
+    "relu",
+    "requant",
+    "epilogue",
+    "composition",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 686747,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 283483,
+    "expert_speedup": 2.42,
+    "source": "v6 corpus build (simulator)"
+  }
+}

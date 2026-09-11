@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": "Lookup-table function",
+  "domain": "comms",
+  "dtype": "int8",
+  "edge_cases": [
+    "in=-128 (tableA[0])",
+    "in=-1 (tableA[127])",
+    "in=0 (tableB[0], boundary between tables)",
+    "in=127 (tableB[127])",
+    "n%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_onetable.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "1a1bd2c09bc02702c6160521694ab02efc9123c2a180783e52669d4916684535",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_lut_piecewise",
+  "origin": "expert",
+  "params": {
+    "selector": "sign of in[i]",
+    "tableA_entries": 128,
+    "tableA_index": "(uint8_t)in[i] - 128",
+    "tableB_entries": 128,
+    "tableB_index": "in[i]"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_lut_piecewise",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "lut",
+    "piecewise",
+    "dual-table",
+    "sign-select",
+    "nonlinear",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 9333,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 338,
+    "expert_speedup": 27.612,
+    "source": "v6 corpus build (simulator)"
+  }
+}

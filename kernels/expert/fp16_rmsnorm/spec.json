@@ -1,0 +1,55 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "n=2048 = 32 HVX vectors of 64 fp16 lanes (clean single-tile size, no remainder)",
+    "no-mean-sub RMSNorm (only sum-of-squares, no mean subtraction, no beta)",
+    "x[0]=3.0, x[1]=-3.0 (extremes at the head of the reduction)",
+    "x[N-1]=0.0",
+    "per-feature gamma (0.5..1.5 cycling, != 1 for most indices) is a runtime array, must be read (anti-hardcode)",
+    "inv_rms computed as an O(1) scalar from a vectorized O(n) reduction (single scalar sqrtf call, not per-element)",
+    "HVX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "poisoned output buffer",
+    "omitted-gamma near-miss must fail (gamma is pinned != 1 for most indices)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nogamma.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "0ae0044a76ec9e6e6f41ab1d29e32f7066514fb8a7992d6b0c8d4da70b55d019",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp16_rmsnorm",
+  "origin": "expert",
+  "params": {
+    "eps": 0.001,
+    "n": 2048
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_rmsnorm",
+    "upstream": null
+  },
+  "signal": "compute-bound reduction + elementwise scale (HVX qf16 vs scalar fp16)",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 139887,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 2311,
+    "expert_speedup": 60.53,
+    "source": "v6 corpus build (simulator)"
+  }
+}

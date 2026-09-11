@@ -1,0 +1,52 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "idx saturates to 0",
+    "idx saturates to 255",
+    "x*scale/64 trunc toward zero",
+    "int8 extremes -128/127",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_noscale.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "b9a6bc2ed4a09cff4fb47182307f21dd07ee8c8e92988a53f8f0e01c95f072cd",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_gelu_approx_lut_dma",
+  "origin": "expert",
+  "params": {
+    "scale": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gelu_approx_lut_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 497482,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 231355,
+    "expert_speedup": 2.15,
+    "source": "v6 corpus build (simulator)"
+  }
+}

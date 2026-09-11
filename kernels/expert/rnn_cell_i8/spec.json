@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": "Integer RNN cells",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "max-product weights (127*127)",
+    "max-negative product (-128*127)",
+    "large positive bias (+32767)",
+    "large negative bias (-32768)",
+    "LUT index boundary 0/127/128/255",
+    "requant saturation to +127/-128",
+    "poisoned output buffer (0xA5)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_tanh.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "87547caf55e390cf0944f6c59af90f4eefc1f54874f805f777ff88e33cfaaa5d",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "rnn_cell_i8",
+  "origin": "expert",
+  "params": {
+    "mult": "int32 (runtime, swept x2)",
+    "shift": "int (runtime, swept x2)",
+    "tanh_lut": "int8[256] runtime activation table (swept x2)",
+    "zp": "int8 (runtime, swept x2)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "rnn_cell_i8",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "rnn",
+    "elman",
+    "matvec",
+    "requantize",
+    "lut",
+    "recurrent",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 9343,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 3457,
+    "expert_speedup": 2.703,
+    "source": "v6 corpus build (simulator)"
+  }
+}

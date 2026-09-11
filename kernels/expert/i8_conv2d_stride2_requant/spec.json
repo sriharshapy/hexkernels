@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": "Fused conv block",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "top-left output uses 1-pixel zero-pad on top and left",
+    "stride-2: output is half spatial size of input",
+    "border pixels at last input row/col",
+    "non-zero zero-point",
+    "saturation to +127/-128",
+    "poisoned out buffer",
+    "nearmiss: stride=1 produces wrong input positions"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_wrong_stride.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a4ea4c1e882dff10bc9d565aa17ea7c60c74052419e3aa649b1644a8d50067e5",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_conv2d_stride2_requant",
+  "origin": "expert",
+  "params": {
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_conv2d_stride2_requant",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "conv2d",
+    "stride2",
+    "downsampling",
+    "requantize",
+    "fused",
+    "param",
+    "NHWC",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 288881,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 16469,
+    "expert_speedup": 17.541,
+    "source": "v6 corpus build (simulator)"
+  }
+}

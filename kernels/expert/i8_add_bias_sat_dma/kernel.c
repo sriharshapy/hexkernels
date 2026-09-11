@@ -1,0 +1,46 @@
+/* EXPERT (achievability bar) — hvx + dma + vtcm.
+ * Streams x[] from DDR into VTCM via uDMA, computes the int8 saturating scalar-bias
+ * add on the on-chip copy with HVX, and DMAs results back to DDR. Double-buffered:
+ * the next input tile is prefetched (async DMA) while the current tile computes,
+ * hiding DDR latency behind compute on this bandwidth-bound task. */
+#include <stdint.h>
+#include <hexagon_types.h>
+#include <hexagon_protos.h>
+
+typedef struct __attribute__((aligned(32))) { uint32_t next, ctrl, src, dst; } desc_t;
+#define VTCM_BASE 0xd8400000u
+#define CH 16384
+static desc_t d_in, d_out, d_pf;
+
+static inline int8_t sat8_add(int8_t v, int32_t bias){ int32_t r=(int32_t)v+bias; if(r>127)r=127; if(r<-128)r=-128; return (int8_t)r; }
+
+void candidate_kernel(const int8_t *x, int8_t *out, int n, int32_t bias) {
+    HVX_Vector vb = Q6_V_vsplat_R(0x01010101u * (uint8_t)(int8_t)bias);
+    const uint32_t vt_x0 = VTCM_BASE,        vt_x1 = VTCM_BASE + CH;
+    const uint32_t vt_o0 = VTCM_BASE + 2*CH, vt_o1 = VTCM_BASE + 3*CH;
+    int nfull = n / CH;
+    int rem   = n - nfull * CH;
+
+    if (nfull == 0) { for (int i = 0; i < n; i++) out[i]=sat8_add(x[i],bias); return; }
+
+    d_in.next = 0; d_in.ctrl = CH; d_in.src = (uint32_t)(uintptr_t)x; d_in.dst = vt_x0;
+    Q6_dmstart_A(&d_in); Q6_R_dmwait();
+
+    for (int cc = 0; cc < nfull; cc++) {
+        uint32_t cur_x = (cc & 1) ? vt_x1 : vt_x0;
+        uint32_t cur_o = (cc & 1) ? vt_o1 : vt_o0;
+        uint32_t nxt_x = (cc & 1) ? vt_x0 : vt_x1;
+        if (cc + 1 < nfull) {
+            d_pf.next = 0; d_pf.ctrl = CH;
+            d_pf.src = (uint32_t)(uintptr_t)(x + (cc + 1) * CH); d_pf.dst = nxt_x;
+            Q6_dmstart_A(&d_pf);
+        }
+        HVX_Vector *px = (HVX_Vector *)(uintptr_t)cur_x;
+        HVX_Vector *po = (HVX_Vector *)(uintptr_t)cur_o;
+        for (int v = 0; v < CH / 128; v++) po[v] = Q6_Vb_vadd_VbVb_sat(px[v], vb);
+        if (cc + 1 < nfull) Q6_R_dmwait();
+        d_out.next = 0; d_out.ctrl = CH; d_out.src = cur_o; d_out.dst = (uint32_t)(uintptr_t)(out + cc * CH);
+        Q6_dmstart_A(&d_out); Q6_R_dmwait();
+    }
+    for (int i = nfull * CH; i < nfull * CH + rem; i++) out[i]=sat8_add(x[i],bias);
+}

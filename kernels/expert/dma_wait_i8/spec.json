@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "mem",
+  "dtype": "uint8",
+  "edge_cases": [
+    "tail path n % tile_bytes != 0",
+    "saturation boundary values near 255"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wraparound.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "49dcf47f68c82abfdcf8d8ca84a2a5cd8a5611ef7cb37f4eda7721c43a992906",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_wait_i8",
+  "origin": "expert",
+  "params": {
+    "n": 786532,
+    "op": "add_const_sat50",
+    "tile_bytes": 16384
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_wait_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "dma",
+    "vtcm",
+    "dmpoll",
+    "poll-wait",
+    "double-buffer"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 150015,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 35805,
+    "expert_speedup": 4.19,
+    "source": "v6 corpus build (simulator)"
+  }
+}

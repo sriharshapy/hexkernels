@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": "Loss",
+  "domain": "ai",
+  "dtype": "fp32",
+  "edge_cases": [
+    "pred[i] == tgt[i] (zero difference)",
+    "pred[i] - tgt[i] negative (squared -> still positive)",
+    "large magnitude differences contribute to loss",
+    "all differences equal (uniform MSE)",
+    "n=512 (multiple of 128 HVX vector width)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_mean.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "cb5bf6070514d061a36f97e07789ffbec77c609d55adbd87a2c95572d5627b67",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "mse_loss",
+  "origin": "expert",
+  "params": {
+    "n": 512
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "mse_loss",
+    "upstream": "v4-gap"
+  },
+  "signal": "reduction (mean squared error)",
+  "tags": [
+    "mse",
+    "loss",
+    "reduction",
+    "fp32",
+    "float",
+    "ai",
+    "mean_squared_error"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 3807,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 749,
+    "expert_speedup": 5.083,
+    "source": "v6 corpus build (simulator)"
+  }
+}

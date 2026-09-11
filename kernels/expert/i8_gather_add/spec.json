@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": "Gather / scatter",
+  "domain": "mem",
+  "dtype": "i8",
+  "edge_cases": [
+    "idx[0]=0 (first source element)",
+    "idx[1]=N_SRC-1 (last source element)",
+    "repeated index (same gather with different bias positions)",
+    "last output position N-1",
+    "n not a multiple of 128 (tail path)",
+    "two distinct (in_a, in_b, idx) sweep sets (anti-hardcode / anti-identity)",
+    "int8 wraparound arithmetic (no saturation)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_bias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "1fe4e7af638786d74181169d7ec3c42486032d662d831ac5978a5b4bac6bef8f",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_gather_add",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gather_add",
+    "upstream": "v3"
+  },
+  "signal": "memory-bound + compute (gather + elementwise add)",
+  "tags": [
+    "gather",
+    "add",
+    "fused",
+    "indexed",
+    "memory-bound",
+    "elementwise"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 3785,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 2605,
+    "expert_speedup": 1.453,
+    "source": "v6 corpus build (simulator)"
+  }
+}

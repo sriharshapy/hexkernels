@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "single 32x32 crouton tile matmul on the HMX matrix engine",
+    "GELU (tanh approximation) epilogue is UNAVOIDABLY scalar (no HVX vector transcendental) -- fused after the crouton unpack, matmul itself runs on the matrix engine",
+    "HVX/HMX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "PLAIN SCALAR (no HVX, no HMX) matmul+GELU is the denominator baseline",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "missing-GELU near-miss (raw matmul passthrough) must fail",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_missing_gelu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7eb057f3a186af68be73186856b1d01a62f94c66035f3a9cd099e29303ced295",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "fp16_matmul_gelu_hmx",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "op": "fp16_matmul_gelu_hmx"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_matmul_gelu_hmx",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "hmx",
+    "fp16",
+    "gelu",
+    "epilogue",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1328579,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 211671,
+    "expert_speedup": 6.28,
+    "source": "v6 corpus build (simulator)"
+  }
+}

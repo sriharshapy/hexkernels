@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "x[0]=127, x[1]=-128 (extremes in channel 0)",
+    "constant channel (channel 15 all=42, var=0, v_idx=0)",
+    "HW=256 is a multiple of 128 (clean HVX alignment per channel)",
+    "2 distinct (gamma, beta, inv_lut) sets (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_group_norm.c",
+    "nearmiss_hardcode.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "3059a74f4673635b83e9356a77186a6f5aa223b37dacc17de9c32bdec9354d7a",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_instance_norm",
+  "origin": "expert",
+  "params": {
+    "SHIFT": 8,
+    "beta": "int8[C] per-channel bias (runtime)",
+    "gamma": "int8[C] per-channel scale (runtime)",
+    "inv_lut": "uint8[C*256] per-channel LUT (runtime); channel c uses inv_lut + c*256"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_instance_norm",
+    "upstream": "v3"
+  },
+  "signal": "memory-bound",
+  "tags": [
+    "instance-norm",
+    "normalization",
+    "fused",
+    "per-channel",
+    "fixed-point",
+    "no-float",
+    "lut"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 81126,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 43166,
+    "expert_speedup": 1.879,
+    "source": "v6 corpus build (simulator)"
+  }
+}

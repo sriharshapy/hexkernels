@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8->uint8",
+  "edge_cases": [
+    "row of all-identical values (every diff=0, idx=255 for all j)",
+    "row with one dominant max value, rest at -128 (extreme spread)",
+    "alternating +127/-128 row (dense clamp exercise)",
+    "C=100 not a multiple of 128 (tail/padding path; padding must not contaminate max or sum)",
+    "exp_lut and recip_lut generated once by fixed closed-form formulas and read at runtime (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_recip.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a99ceeda72350e05b0e30ce59afa67b8dad19e55aa05ec4232bf43ae282cf2b1",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "softmax_row_i8",
+  "origin": "expert",
+  "params": {
+    "C": 100,
+    "R": 8,
+    "SSHIFT": 6,
+    "op": "softmax_row_recip_lut"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "softmax_row_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "softmax",
+    "rowwise",
+    "2d",
+    "lut",
+    "reciprocal-lut",
+    "no-division",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 12587,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 10555,
+    "expert_speedup": 1.192,
+    "source": "v6 corpus build (simulator)"
+  }
+}

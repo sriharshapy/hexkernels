@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": "Rescale & round",
+  "domain": "ai",
+  "dtype": "int32+int32->int8",
+  "edge_cases": [
+    "relu clamps negative sums to 0",
+    "large positive sums",
+    "sum==0 after relu",
+    "negative mult",
+    "shift==0 (no rounding)",
+    "non-zero zero-point",
+    "n%128 tail",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "bcac0a91fb1f4f029e1720a78b7c02e897fd1c8a9d5b096808b3204c98e2ae95",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "add_relu_requant",
+  "origin": "expert",
+  "params": {
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "add_relu_requant",
+    "upstream": "v3"
+  },
+  "signal": "memory-bound + compute",
+  "tags": [
+    "elementwise",
+    "add",
+    "relu",
+    "requantize",
+    "fused",
+    "param",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 143827,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 68356,
+    "expert_speedup": 2.1,
+    "source": "v6 corpus build (simulator)"
+  }
+}

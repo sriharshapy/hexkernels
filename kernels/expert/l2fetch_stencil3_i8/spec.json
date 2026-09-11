@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "edge replication at i=0 and i=n-1 (not zero-padding)",
+    "center weight (2x) must not be dropped -- distinguishes from a plain (1,1,1) average",
+    "unaligned -1/+1 tap loads via the vmemu (HEXAGON_Vect_UN) trick",
+    "saturation-forcing runs of 127/-128 planted near both ends",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_center_weight.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "16ab6748ca8432866de3e10d2a2a714531fc96aad50d65534b9dc15d2de59a63",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "l2fetch_stencil3_i8",
+  "origin": "expert",
+  "params": {
+    "n": 700000,
+    "op": "stencil3_121_edge_replicate"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "l2fetch_stencil3_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "l2fetch",
+    "rolling-prefetch",
+    "stencil",
+    "1d-conv",
+    "ddr-bound",
+    "edge-replicate"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 575395,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 309246,
+    "expert_speedup": 1.861,
+    "source": "v6 corpus build (simulator)"
+  }
+}

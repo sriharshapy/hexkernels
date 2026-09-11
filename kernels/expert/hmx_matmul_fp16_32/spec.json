@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "fp16 crouton layout off(r,c)=(r/2)*64+c*2+(r&1) for A, weight, output",
+    "single 32x32 crouton tile",
+    "HVX/HMX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "transposed-B near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transB.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "f6accc14c4ecd84b7dda8b95575c711945d4ab60b76577cedf09d995ba251fef",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_fp16_32",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "op": "matmul"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_fp16_32",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "hmx",
+    "fp16",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 9689,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 7804,
+    "expert_speedup": 1.24,
+    "source": "v6 corpus build (simulator)"
+  }
+}

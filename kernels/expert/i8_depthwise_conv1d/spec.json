@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": "Sliding-window filter (1D)",
+  "domain": "dsp",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "max-magnitude products",
+    "L%128 tail per channel",
+    "per-channel independent taps",
+    "valid window (no padding)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_ch0taps.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "ab9434dc6a0ce002eabe4f1c28f8f4dfee41cd1f28c1170398601666aba77a0c",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_depthwise_conv1d",
+  "origin": "expert",
+  "params": {
+    "C": 4,
+    "L": 250,
+    "accumulator": "int32",
+    "layout_out": "out[ch*L+i]",
+    "layout_taps": "taps[ch*ntaps+j]",
+    "layout_x": "x[ch*(L+ntaps-1)+i]",
+    "mode": "correlation",
+    "ntaps": 8
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_depthwise_conv1d",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "fir",
+    "conv1d",
+    "depthwise",
+    "per-channel",
+    "windowed",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 38771,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 11422,
+    "expert_speedup": 3.394,
+    "source": "v6 corpus build (simulator)"
+  }
+}

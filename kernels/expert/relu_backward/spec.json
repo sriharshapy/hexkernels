@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Backward / gradient",
+  "domain": "ai",
+  "dtype": "fp32",
+  "edge_cases": [
+    "x[i] > 0 (gate open, pass dy through)",
+    "x[i] < 0 (gate closed, zero gradient)",
+    "x[i] == 0 (boundary, subgradient = 0 by convention)",
+    "dy[i] negative (gradient flows through negative upstream grad)",
+    "n=512 (multiple of 128 HVX vector width)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_gate.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "72c3dbb5f6a63fda26fc76019a71930ea3341c83dae5400bd5733c63b70da48a",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "relu_backward",
+  "origin": "expert",
+  "params": {
+    "n": 512
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "relu_backward",
+    "upstream": "v4-gap"
+  },
+  "signal": "elementwise (ReLU gradient mask)",
+  "tags": [
+    "relu",
+    "backward",
+    "gradient",
+    "elementwise",
+    "fp32",
+    "float",
+    "ai",
+    "activation_grad"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 3251,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 263,
+    "expert_speedup": 12.361,
+    "source": "v6 corpus build (simulator)"
+  }
+}

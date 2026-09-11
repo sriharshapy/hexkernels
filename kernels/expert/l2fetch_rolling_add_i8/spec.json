@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "wrap 127+1=-128, -128-1=127, 127+127, -128-128",
+    "tail path n % (4*128) != 0"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_saturate.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "3cf1a99ba13ce43cbca4933378660cf9fd4f68ce5e93cc5d369ca443b54cd9df",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch",
+    "unroll"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "l2fetch_rolling_add_i8",
+  "origin": "expert",
+  "params": {
+    "n": 600064,
+    "op": "vadd_wrap_i8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "l2fetch_rolling_add_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "l2fetch",
+    "unroll",
+    "rolling-prefetch",
+    "add",
+    "wraparound"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 176228,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 136566,
+    "expert_speedup": 1.291,
+    "source": "v6 corpus build (simulator)"
+  }
+}

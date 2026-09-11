@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "K=128 accumulated over 4 crouton K-tiles into a single persistent HMX accumulator",
+    "clear accumulator ONCE, single store after all 4 matmuls",
+    "widened fp16 tolerance for the deeper qf16 reduction",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "shallow-K (only first tile) near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_shallowk.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "d54abebe175a5bd00cfc11fd2dc08cf4388c082a331b45509493edba524f8f0d",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_fp16_deepk",
+  "origin": "expert",
+  "params": {
+    "K": 128,
+    "M": 32,
+    "N": 32,
+    "op": "matmul_deepk"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_fp16_deepk",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "deepk",
+    "hmx",
+    "fp16",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 29261,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 32182,
+    "expert_speedup": 0.91,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "mem",
+  "dtype": "int32",
+  "edge_cases": [
+    "tail path n % (tile_bytes/4) != 0 (1376-element remainder)",
+    "INT32_MAX/INT32_MIN boundary values, wraparound sum"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_tail.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a18eef40546ba4b99284d28798d7c4f733053a90eaaa40f4f1635ad6b67ef0c2",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "vtcm_reduce_i32",
+  "origin": "expert",
+  "params": {
+    "n": 284000,
+    "op": "sum_reduce_i32",
+    "tile_bytes": 16384
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "vtcm_reduce_i32",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "dma",
+    "vtcm",
+    "reduce",
+    "sum",
+    "double-buffer"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 87627,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 32649,
+    "expert_speedup": 2.684,
+    "source": "v6 corpus build (simulator)"
+  }
+}

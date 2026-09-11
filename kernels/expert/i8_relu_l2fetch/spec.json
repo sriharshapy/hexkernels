@@ -1,0 +1,50 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "zero->0",
+    "-1->0",
+    "min -128->0",
+    "max 127->127",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_ge.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "111c5ce4e12003159444363ff94177c81f6839cebbc9720c161b136dbc35f5a5",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch",
+    "unroll"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_relu_l2fetch",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_relu_l2fetch",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 99849,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 62165,
+    "expert_speedup": 1.61,
+    "source": "v6 corpus build (simulator)"
+  }
+}

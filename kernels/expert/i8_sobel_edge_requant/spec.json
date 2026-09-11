@@ -1,0 +1,66 @@
+{
+  "bundle": "complete",
+  "category": "Neighborhood image filter",
+  "domain": "dsp",
+  "dtype": "uint8->uint8",
+  "edge_cases": [
+    "horizontal gradient row (strong Gx near top/bottom borders)",
+    "vertical edge column (strong Gy near left/right borders)",
+    "checkerboard patch (max both Gx and Gy)",
+    "flat region (mag=0, exercises zp clamping)",
+    "w%128 tail at x=64,65",
+    "3 distinct (mult,shift,zp) sets swept -- hardcoded requant fails"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode_requant.c",
+    "nearmiss_xonly.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "58c508b77c4ad82522277d46396da550e16e37360e6aa7ac8edfec017ede7736",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_sobel_edge_requant",
+  "origin": "expert",
+  "params": {
+    "border": "clamp-to-edge",
+    "magnitude": "L1 (|Gx|+|Gy|)",
+    "mult": "int (runtime, swept)",
+    "rounding": "round-half-up",
+    "shift": "int (runtime, swept)",
+    "zp": "int (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_sobel_edge_requant",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "image",
+    "sobel",
+    "gradient",
+    "magnitude",
+    "requantize",
+    "param",
+    "fused",
+    "border"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 177817,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 25193,
+    "expert_speedup": 7.058,
+    "source": "v6 corpus build (simulator)"
+  }
+}

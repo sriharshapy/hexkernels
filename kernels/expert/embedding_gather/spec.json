@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "mem",
+  "dtype": "i8",
+  "edge_cases": [
+    "idx[i]=0 (first row)",
+    "idx[i]=VOCAB_SIZE-1 (last row)",
+    "repeated index (same row gathered multiple times)",
+    "last token position T-1",
+    "T not a multiple of 128",
+    "2 distinct (table, idx) sets (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_off_by_one.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "725b498acbf75eb50ab2fdf8b4c9271249bee6337f03f8547e29f9f7c3de8a09",
+  "level": "L1",
+  "mechanisms_declared": [],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "embedding_gather",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "embedding_gather",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "embedding",
+    "gather",
+    "fused",
+    "transformer",
+    "memory-bound",
+    "no-arithmetic"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 17870,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 1305,
+    "expert_speedup": 13.693,
+    "source": "v6 corpus build (simulator)"
+  }
+}

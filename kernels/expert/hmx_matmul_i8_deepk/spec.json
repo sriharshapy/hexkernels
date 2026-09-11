@@ -1,0 +1,64 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8xint8->int32",
+  "edge_cases": [
+    "large contraction K=128 = 4 accumulating K-tiles into one 32x32 output tile",
+    "single mxclracc; accumulator persists across four matmul packets",
+    "missing-last-K-tile near-miss must fail",
+    "narrow input range keeps the 12-bit requant field exact under long accumulation",
+    "0x40 requant field sign-extended from 12 bits",
+    "crouton pack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_missing_ktile.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "f93633482478fc5fe1238546cf20750957cf975cfbe02089d6de058dce2a97b3",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_deepk",
+  "origin": "expert",
+  "params": {
+    "K": 128,
+    "M": 32,
+    "N": 32,
+    "ktiles": 4,
+    "op": "hmx_matmul_i8_deepk"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_deepk",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "deep-k",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 538375,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 30307,
+    "expert_speedup": 17.76,
+    "source": "v6 corpus build (simulator)"
+  }
+}

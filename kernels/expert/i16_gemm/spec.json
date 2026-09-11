@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int16->int32",
+  "edge_cases": [
+    "K%128 tail",
+    "sign in reduction",
+    "large products (bounded to avoid overflow)",
+    "zero term",
+    "poisoned C"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_accum.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "41ad0504e320cddc3ba6c0a805c1d47d3d0e5695fa52a4be836f621d1f7fa9bb",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i16_gemm",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i16_gemm",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "matmul",
+    "int16",
+    "vdmpy",
+    "dense",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 275372,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 89906,
+    "expert_speedup": 3.06,
+    "source": "v6 corpus build (simulator)"
+  }
+}

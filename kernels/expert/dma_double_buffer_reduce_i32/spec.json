@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int32->int64",
+  "edge_cases": [
+    "n not a multiple of the DMA chunk size (tail handling)",
+    "negative + positive values sum correctly (no accidental unsigned treatment)",
+    "int32 vector-lane accumulation stays within range; only the final cross-lane reduction needs int64"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_skiptail.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a68192846eb6db58a628fb4fcbed1d3b6cf98e937ef9a2eb271f33ff43010986",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_double_buffer_reduce_i32",
+  "origin": "expert",
+  "params": {
+    "chunk_bytes": 16384,
+    "input_bound": "|a[i]|<=1000",
+    "n": 300000,
+    "op": "reduce_sum"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_double_buffer_reduce_i32",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "reduce",
+    "sum",
+    "dma",
+    "vtcm",
+    "double-buffer",
+    "int64",
+    "bandwidth-bound"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 121977,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 34833,
+    "expert_speedup": 3.5,
+    "source": "v6 corpus build (simulator)"
+  }
+}

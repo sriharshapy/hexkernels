@@ -1,0 +1,67 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8->int32->int8",
+  "edge_cases": [
+    "residual added AFTER requantize/shift (own separate saturating add)",
+    "residual saturation edges (residual=127 and residual=-128 paired with large requantized values)",
+    "2 distinct (scale_mult, scale_shift) pairs swept, including scale_shift=0 (no rounding)",
+    "large positive contribution (A[0]=127, B[0]=127)",
+    "sign-mismatch cancellation (A[1]=-128, B[N]=127)",
+    "K=90 not a multiple of 4 -- tail k-group has only 2 valid k's (88,89), non-zero in the tail exercise",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_residual_before_requant.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "41935bd355cace0324ed84150c7147c4de37bb27444bd6410610f4f0343c99a5",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "matmul_residual_add_i8",
+  "origin": "expert",
+  "params": {
+    "K": 90,
+    "M": 8,
+    "N": 8,
+    "op": "matmul_requant_residual_add"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "matmul_residual_add_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "vrmpy",
+    "gemm",
+    "conventional-b",
+    "residual",
+    "skip-connection",
+    "requantize",
+    "fixed-point",
+    "no-float",
+    "fused",
+    "transformer"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 24477,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 6599,
+    "expert_speedup": 3.709,
+    "source": "v6 corpus build (simulator)"
+  }
+}

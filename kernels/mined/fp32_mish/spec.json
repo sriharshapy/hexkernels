@@ -1,0 +1,67 @@
+{
+  "bundle": "harness-regenerable",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "HARNESS.md",
+    "PROMPT.md",
+    "kernel.c",
+    "reference.c"
+  ],
+  "harness_bytes": 14918065,
+  "kernel_sha256": "c4258b019b80ed0bc828e43e0c7333a4ce3f391c526281c333c2fbce7bbed5b5",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 10485760 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ],
+    [
+      "dma",
+      "working set 10485760 B exceeds L2 1048576 B, so the data does not stay resident and staging is what buys bandwidth"
+    ],
+    [
+      "vtcm",
+      "the staged tiles need a software-managed scratchpad"
+    ],
+    [
+      "dma",
+      "working set 10485760 B also exceeds VTCM 8388608 B, so it must be streamed in tiles -- double-buffered"
+    ]
+  ],
+  "mechanisms_declared": [
+    "dma",
+    "hvx",
+    "l2fetch",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_mish",
+  "op": "mish",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "775733ca8ccc305fcd652cd93114c2a3876b1110f475284b6d5d292a3a5bd178",
+    "source_tier": "T3",
+    "task_tier": "T3",
+    "tier_match": true
+  },
+  "schema": "aten::mish(Tensor self) -> Tensor",
+  "shape": [
+    1280,
+    1024
+  ],
+  "tier": "T3",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 10485760
+}

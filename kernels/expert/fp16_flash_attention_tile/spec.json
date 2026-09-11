@@ -1,0 +1,71 @@
+{
+  "bundle": "complete",
+  "category": "Flash-attention tile (tiled online-softmax recurrence, composition)",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "row 0's query aligns strongly with the LAST key (last tile, j=48..63) -- forces the running max to be updated (and the accumulator/sum rescaled) on the FINAL tile, the case a missing/short-circuited rescale is most likely to break",
+    "DH=64 is exactly one 64-lane fp16 HVX vector -- no tail/padding on the head-dim axis",
+    "SK/FLASH_TILE_K=4 tiles per query row -- at least one real rescale (running max increases) is exercised across the sweep",
+    "exp() is unavoidably scalar (no HVX vector transcendental); only the QK^T dot-reduce, the rescale-multiply, and the weighted-V accumulate/normalize are vectorized (qf16 chain)",
+    "nearmiss_no_rescale computes corr=exp(m_old-m_new) but never applies it to the old running sum/accumulator (classic flash-attention bug) -> INCORRECT (567/1024 wrong)",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_rescale.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "cbec909d03dc2034d7fa91e82ab27eaff484dba04c1fff85b87aa8748ad04608",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp16_flash_attention_tile",
+  "origin": "expert",
+  "params": {
+    "DH": 64,
+    "FLASH_SCALE": 0.125,
+    "FLASH_TILE_K": 16,
+    "SK": 64,
+    "SQ": 16,
+    "op": "flash_attention_tile"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_flash_attention_tile",
+    "upstream": null
+  },
+  "signal": "flash-attention tile: QK^T dot-per-key + online-softmax running max/sum/rescale + weighted-V accumulate, streamed over K/V tiles, equals standard full-softmax attention for the Q tile",
+  "tags": [
+    "flash-attention",
+    "attention",
+    "online-softmax",
+    "running-max",
+    "rescale",
+    "fp16",
+    "transformer",
+    "tiling",
+    "streaming",
+    "hvx",
+    "composition",
+    "l3",
+    "ai",
+    "holdout"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 3286234,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 171517,
+    "expert_speedup": 19.15,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "bundle": "harness-regenerable",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "HARNESS.md",
+    "PROMPT.md",
+    "kernel.c",
+    "reference.c"
+  ],
+  "harness_bytes": 3360412,
+  "kernel_sha256": "d811d14757ee822e611dfead18e8db95af1b74c7dbff049634af344880b51570",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "reduction loops vectorise through an accumulator plus a horizontal reduce"
+    ],
+    [
+      "l2fetch",
+      "working set 2359296 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ],
+    [
+      "dma",
+      "working set 2359296 B exceeds L2 1048576 B, so the data does not stay resident and staging is what buys bandwidth"
+    ],
+    [
+      "vtcm",
+      "the staged tiles need a software-managed scratchpad"
+    ]
+  ],
+  "mechanisms_declared": [
+    "dma",
+    "hvx",
+    "l2fetch",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_avg_pool3d",
+  "op": "avg_pool3d",
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "cb439fa8882ce09d35dba49114e82ac5b169f5092add7c65257dfb783f5627b3",
+    "source_tier": "T3",
+    "task_tier": "T2",
+    "tier_match": false
+  },
+  "schema": "aten::avg_pool3d(Tensor self, int[3] kernel_size, int[3] stride=[], int[3] padding=0, bool ceil_mode=False, bool count_include_pad=True, int? divisor_override=None) -> Tensor",
+  "shape": [
+    1,
+    16,
+    32,
+    32,
+    32
+  ],
+  "tier": "T2",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 2359296
+}

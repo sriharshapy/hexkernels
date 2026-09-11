@@ -1,0 +1,53 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "M=N=K=32 single-tile matmul",
+    "negative bias entries combined with wide (-6..6) matmul-output range so GELU's near-zero curvature and both-tail saturation regions are exercised",
+    "GELU (tanh approximation) epilogue is UNAVOIDABLY scalar (no HVX vector transcendental) -- the matmul is vectorized, the epilogue is not",
+    "HVX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "poisoned output buffer",
+    "dropped-last-K-term near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_dropk.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "2daa190ddb6077477a38cee74ccec081a687b7d68c74be03bc268e67dff520ef",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp16_matmul_bias_gelu",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_matmul_bias_gelu",
+    "upstream": null
+  },
+  "signal": "compute-bound matmul (HVX qf16) + unavoidably-scalar GELU epilogue",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 1190151,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 221620,
+    "expert_speedup": 5.37,
+    "source": "v6 corpus build (simulator)"
+  }
+}

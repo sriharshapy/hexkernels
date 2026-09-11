@@ -1,0 +1,73 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "edge replication at i=0 and i=n-1 (clamp-to-edge, NOT zero-padding)",
+    "asymmetric weights (2,5,3) so tap-order bugs are detectable",
+    "halo bytes at tile boundaries come from the actual neighboring tile's data via a DMA'd 1-byte halo on each side of the VTCM buffer, not garbage/zero",
+    "first tile has no left neighbor: DMA CH+1 bytes and replicate the left halo byte after the DMA completes",
+    "tail n not a multiple of the DMA chunk size (1200000 % 16384 = 3968)",
+    "n=1,200,000 (not the originally-specified 300,000): int8 dtype needs 4x the element count of the int32 tasks to clear the ~1MB L2 threshold the DMA/VTCM mechanism needs to show any speedup -- at n=300,000 (300KB, under L2) the expert was measured SLOWER than baseline (0.585x); corrected per AUTHORING_GUIDE.md Sec.3"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_tapswap.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "eefb522a17d61043d096746466597b9cb7a045007b6d0f8bea15cbce8a52a828",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_ping_pong_conv1d_i8",
+  "origin": "expert",
+  "params": {
+    "bias": 10,
+    "border": "clamp-to-edge",
+    "chunk_bytes": 16384,
+    "n": 1200000,
+    "op": "conv1d_3tap_bias_requant",
+    "shift": 4,
+    "weights": [
+      2,
+      5,
+      3
+    ]
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_ping_pong_conv1d_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "conv1d",
+    "fir",
+    "dma",
+    "vtcm",
+    "halo",
+    "double-buffer",
+    "edge-replicate",
+    "requantize",
+    "bandwidth-bound"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2207097,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 726465,
+    "expert_speedup": 3.04,
+    "source": "v6 corpus build (simulator)"
+  }
+}

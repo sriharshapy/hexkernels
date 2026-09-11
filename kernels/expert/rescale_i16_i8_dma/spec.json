@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int16->int8",
+  "edge_cases": [
+    "+127 saturation (a=1000)",
+    "-128 saturation (a=-1000)",
+    "rounding tie (a=8 -> 1.5 rounds to 2)",
+    "negative tie",
+    "zero",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_truncate.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "5a35cfbce354840a79fbd96c41ffed31ac784380770efb05f4b734543a4210ca",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "rescale_i16_i8_dma",
+  "origin": "expert",
+  "params": {
+    "mult": 3,
+    "note": "baked as fixed constants; signature is (a,out,n)",
+    "shift": 4,
+    "zp": 0
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "rescale_i16_i8_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 779009,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 228877,
+    "expert_speedup": 3.4,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply + fused epilogue",
+  "domain": "ai",
+  "dtype": "uint8xint8->uint8",
+  "edge_cases": [
+    "2x2 grid of 32x32 output tiles; each accumulates over 2 K-tiles",
+    "HMX accumulator persists across K-tile matmuls (one mxclracc per out tile)",
+    "activation int8 in high byte of crouton slot (low bytes dead)",
+    "weight 4-deep packed; different load limit than activation",
+    "HMX 0x40-config requant gives the native matrix-engine output r=(acc*17+8)>>4, sign-extended from the 12-bit field",
+    "the classic quantized-inference epilogue: per-column int32 bias -> ReLU -> saturating narrow to uint8, fully fused in HVX",
+    "bias includes extreme (-2000/+2000) and zero edge values so ReLU-zero, uint8-saturate-high, and passthrough all occur",
+    "signed weights / negative accumulators",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "transposed-B near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transB.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a480b8aa4de45eed4b183e503e93dfacb454de9309a91f2e01b5c421700eb8c7",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_gemm_bias_relu_requant_hmx",
+  "origin": "expert",
+  "params": {
+    "K": 64,
+    "M": 64,
+    "N": 64
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gemm_bias_relu_requant_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine + fused epilogue)",
+  "tags": [
+    "gemm",
+    "hmx",
+    "hvx",
+    "int8",
+    "bias",
+    "relu",
+    "requant",
+    "epilogue",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 172989,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 95994,
+    "expert_speedup": 1.8,
+    "source": "v6 corpus build (simulator)"
+  }
+}

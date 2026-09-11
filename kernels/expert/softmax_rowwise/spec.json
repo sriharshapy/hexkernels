@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->u8",
+  "edge_cases": [
+    "row with all identical values (all diff=0)",
+    "row with single max all others -128 (extreme spread)",
+    "alternating +127/-128 row",
+    "C not a multiple of 128 (tail)",
+    "3 distinct lut tables (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_axis.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "231b7e49862724a1a1c351bf9c45e38fc08ea7836a34cacd321208ee4730c76f",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "softmax_rowwise",
+  "origin": "expert",
+  "params": {
+    "exp_lut": "256 uint8 entries (runtime)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "softmax_rowwise",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "softmax",
+    "rowwise",
+    "2d",
+    "lut",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 40015,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 18121,
+    "expert_speedup": 2.208,
+    "source": "v6 corpus build (simulator)"
+  }
+}

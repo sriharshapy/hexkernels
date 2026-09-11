@@ -1,0 +1,57 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "block-granular permutation, defined only over full 128B vectors",
+    "n=896 is exactly 7 blocks (no byte tail -- see prompt.md)",
+    "identity-ramp block 0 (a[i]=i) reverses to 127,126,...,0 (hand-verifiable)",
+    "control vector 0xFF pinned via sim experiment (verified full reversal); only bits[6:0] matter for a 128-lane network (2^7=128) -- 0x7F is degenerate-equal to 0xFF, so the nearmiss uses 0xFE (clears bit0) to actually break the permutation"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_partial_ctrl.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "51c67533bea0a4f557c99efbac53b3b74cb7894229605edcd6bbb9077911055f",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vdelta_i8",
+  "origin": "expert",
+  "params": {
+    "n": 896,
+    "op": "vdelta_i8_reverse"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vdelta_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "permute",
+    "delta",
+    "reverse",
+    "int8",
+    "Q6_V_vdelta_VV"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2079,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 234,
+    "expert_speedup": 8.89,
+    "source": "v6 corpus build (simulator)"
+  }
+}

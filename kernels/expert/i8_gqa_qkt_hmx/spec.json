@@ -1,0 +1,72 @@
+{
+  "bundle": "complete",
+  "category": "Attention matmul (grouped-query)",
+  "domain": "ai",
+  "dtype": "uint8xint8->uint16",
+  "edge_cases": [
+    "H_Q=2 query heads share H_KV=1 key head (GROUP_SIZE=2); K stored [H_KV,S,D] row-major -- row j IS key vector j, Q.K^T needs no transpose, only swapped tile indices",
+    "GQA mechanism: the shared KV head's 4 weight croutons (per (tj,kt) tile pair) are packed into VTCM ONCE and left resident, reused by both query heads without re-packing -- only the activation (Q) side is re-packed per head/tile",
+    "2x2 grid of 32x32 output tiles per head; each accumulates over 2 D-tiles",
+    "HMX accumulator persists across D-tile matmuls (one mxclracc per out tile)",
+    "activation int8 in high byte of crouton slot (low bytes dead)",
+    "weight 4-deep packed; different load limit than activation",
+    "0x40-config requant: round(scores*17/16), 12-bit two's-complement field",
+    "input range chosen so |requant| < 2048 (12-bit field exact, no saturation)",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "LCG fill draws from bits >>13 (not the raw low 3 bits) so head0 and head1's Q data don't alias -- the raw low bits of this LCG have a short period that evenly divides S*D=4096 and would silently repeat across the head boundary",
+    "wrong-grouping near-miss (forgets to advance the query pointer per head -- head1 reads head0's Q) must fail, specifically on head1's output range"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrong_grouping.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "f48a87643aafa786dd98245eaa262906806636991b644dfc7c9298220b3008f8",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_gqa_qkt_hmx",
+  "origin": "expert",
+  "params": {
+    "D": 64,
+    "GROUP_SIZE": 2,
+    "H_KV": 1,
+    "H_Q": 2,
+    "S": 64
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gqa_qkt_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine, weight-crouton reuse across grouped query heads)",
+  "tags": [
+    "attention",
+    "gqa",
+    "qkt",
+    "matmul",
+    "hmx",
+    "int8",
+    "requant",
+    "tiling",
+    "weight-reuse",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 328485,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 76549,
+    "expert_speedup": 4.29,
+    "source": "v6 corpus build (simulator)"
+  }
+}

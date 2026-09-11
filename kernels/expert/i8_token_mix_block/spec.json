@@ -1,0 +1,71 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "X[0]=127, W[0]=127 (large positive product in step1 GEMM)",
+    "X[1]=-128, W[1]=127 (sign edge in step1 GEMM)",
+    "b[0]=-200000, b[1]=+200000 (large bias exercises saturation)",
+    "b2[0]=-200000, b2[1]=+200000 (large bias in step2)",
+    "W2[0]=127, W2[1]=-128 (sign edge in step2 GEMM)",
+    "2 distinct (mult1, shift1, mult2, shift2) param sets (anti-hardcode)",
+    "channel-independent: step1/step2 computed per channel column"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_wrong_axis.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a2807c9044ec8f2e3cb0c0383a418c81d6a0dc5939fb972aa394d69eefbf992b",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_token_mix_block",
+  "origin": "expert",
+  "params": {
+    "W": "int8[D_MIX x TOKENS] token-mixing weight (input data)",
+    "W2": "int8[TOKENS x D_MIX] projection weight (input data)",
+    "b": "int32[D_MIX] token-mixing bias (input data)",
+    "b2": "int32[TOKENS] projection bias (input data)",
+    "mult1": "int32 (runtime, swept) -- step1 requant multiplier",
+    "mult2": "int32 (runtime, swept) -- step2 requant multiplier",
+    "shift1": "int (runtime, swept) -- step1 requant shift",
+    "shift2": "int (runtime, swept) -- step2 requant shift"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_token_mix_block",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "mixer",
+    "token-mix",
+    "mlp-mixer",
+    "gemm",
+    "bias",
+    "requantize",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 17761,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 8439,
+    "expert_speedup": 2.105,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "X[0]=127, W1[0]=127 (large positive product in step1 GEMM)",
+    "X[1]=-128, W1[1]=127 (sign edge in step1 GEMM)",
+    "b1[0]=-200000, b1[1]=+200000 (large bias in expand layer)",
+    "b2[0]=-200000, b2[1]=+200000 (large bias in project layer)",
+    "gelu_lut[128]=0 (GELU(0)=0 in both tables)",
+    "2 distinct gelu_lut tables (anti-hardcode LUT)",
+    "2 param sets x 2 tables = 4 combos total",
+    "token-independent: each token processed identically"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_skip_gelu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "4d47ed3b75e07987abfda46ba050cdce5696bce22d2ff4dc54b8c4c227085bd1",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_channel_mix_block",
+  "origin": "expert",
+  "params": {
+    "W1": "int8[D_FF x CHANNELS] expand weight (input data)",
+    "W2": "int8[CHANNELS x D_FF] project weight (input data)",
+    "b1": "int32[D_FF] expand bias (input data)",
+    "b2": "int32[CHANNELS] project bias (input data)",
+    "gelu_lut": "256 int8 entries (runtime, swept -- 2 distinct tables; opaque to candidate)",
+    "mult1": "int32 (runtime, swept) -- step1 requant multiplier",
+    "mult2": "int32 (runtime, swept) -- step2 requant multiplier",
+    "shift1": "int (runtime, swept) -- step1 requant shift",
+    "shift2": "int (runtime, swept) -- step2 requant shift"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_channel_mix_block",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "mixer",
+    "channel-mix",
+    "mlp-mixer",
+    "gemm",
+    "bias",
+    "gelu",
+    "lut",
+    "requantize",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 22970,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 7049,
+    "expert_speedup": 3.259,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "uint8",
+  "edge_cases": [
+    "wrap 200*200+200*200=80000 -> 14464 (overflow)",
+    "wrap 255*255+255*255=130050 -> -1022 (overflow)",
+    "all-zero inputs -> 0",
+    "one term zeroed (b=0) -> pure a*wa term",
+    "n=780 tail path (6*128 + 12)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_swapped_parity.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "15cbbde63a91205c2a8cd4ddcd4c4c406cfada9c6623ae39e3a426babf0c5305",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vmpa_u8",
+  "origin": "expert",
+  "params": {
+    "n": 780,
+    "op": "vmpa_u8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vmpa_u8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "multiply-add",
+    "dual-mac",
+    "uint8",
+    "int16",
+    "Q6_Wh_vmpa_WubWub"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 11103,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 2825,
+    "expert_speedup": 3.93,
+    "source": "v6 corpus build (simulator)"
+  }
+}

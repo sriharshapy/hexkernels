@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "~0 = -1",
+    "~(-1) = 0",
+    "~0x0F = 0xF0",
+    "~127 = -128",
+    "n=1017 tail path (7*128 + 121)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_negate.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "fe45acda7535304865e3ac2aab4dcc027f48fb0dd0fe7f464d9f003702aef6d8",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vnot_i8",
+  "origin": "expert",
+  "params": {
+    "n": 1017,
+    "op": "vnot_i8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vnot_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "elementwise",
+    "bitwise",
+    "not",
+    "unary",
+    "int8",
+    "Q6_V_vnot_V"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 4245,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 714,
+    "expert_speedup": 5.94,
+    "source": "v6 corpus build (simulator)"
+  }
+}

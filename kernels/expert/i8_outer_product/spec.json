@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "max positive * max positive",
+    "mixed sign products",
+    "zero row",
+    "zero column",
+    "max negative * max negative = positive",
+    "poisoned C"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_swapped_ij.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "418e877fe8246cd7556b7cdf0e022a9be7d4d8ece5089bcb280d99907f432475",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_outer_product",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_outer_product",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "outer-product",
+    "rank1",
+    "vmpy",
+    "dense"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 89011,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 52015,
+    "expert_speedup": 1.711,
+    "source": "v6 corpus build (simulator)"
+  }
+}

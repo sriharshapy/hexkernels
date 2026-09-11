@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int16",
+  "edge_cases": [
+    "tail path n % (tile_bytes/2) != 0",
+    "overflow wraparound: 32767*32767, -32768*-32768"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_widening.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "a0fd8f7ee27042205cdf215e8eb8858a6d1d03e33329e1ab2924226f78371b56",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_double_buffer_mul_i16",
+  "origin": "expert",
+  "params": {
+    "n": 270056,
+    "op": "vmpyi_trunc_i16",
+    "tile_bytes": 16384
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_double_buffer_mul_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "dma",
+    "vtcm",
+    "multiply",
+    "int16",
+    "double-buffer",
+    "wraparound"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 159872,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 126898,
+    "expert_speedup": 1.26,
+    "source": "v6 corpus build (simulator)"
+  }
+}

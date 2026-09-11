@@ -1,0 +1,65 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8->int32",
+  "edge_cases": [
+    "K=8101 not a multiple of 4 (k-group tail, zero-padded)",
+    "X reused unchanged across all M rows (staged/packed once, not per-row)",
+    "N=4 small output width, int32 accumulation safe for the given M,K,N bounds",
+    "sign in the reduction (A[1]=-128 paired with X[k=1,col0]=127)",
+    "max positive contribution (A[0]=127, X[k=0,col0]=127)",
+    "tail k-group sign coverage (A[K-2]=-128, A[K-1]=127 paired with X's last row)",
+    "poisoned C output detects untouched cells"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_x_transposed.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "6e088c81e922fed96cd742ce01e6685aa91cc65a94edc135df03d35535c4cbb3",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "vtcm_stage_matmul_i8",
+  "origin": "expert",
+  "params": {
+    "K": 8101,
+    "M": 161,
+    "N": 4,
+    "op": "gemm_stream_a_stage_x"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "vtcm_stage_matmul_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "vrmpy",
+    "gemm",
+    "dma",
+    "vtcm",
+    "stream-large-stage-small",
+    "dot-product-shaped"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 6960791,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 3778794,
+    "expert_speedup": 1.842,
+    "source": "v6 corpus build (simulator)"
+  }
+}

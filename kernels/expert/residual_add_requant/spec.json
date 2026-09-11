@@ -1,0 +1,68 @@
+{
+  "bundle": "complete",
+  "category": "Rescale & round",
+  "domain": "ai",
+  "dtype": "int32+int32->int8",
+  "edge_cases": [
+    "large positive sums",
+    "large negative sums",
+    "sum near int32 overflow (requires int64 widening)",
+    "sum == 0",
+    "negative mult",
+    "shift == 0 (no rounding)",
+    "non-zero zero-point",
+    "rounding ties",
+    "saturate to +127 / -128",
+    "n%128 tail",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_widen.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "addab751c6d45a59ea03ff405b17c756bb927c48757e7808ffc14e61dfa3a29b",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "residual_add_requant",
+  "origin": "expert",
+  "params": {
+    "mult": "int32 (runtime, swept)",
+    "shift": "int (runtime, swept)",
+    "zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "residual_add_requant",
+    "upstream": "v3"
+  },
+  "signal": "memory-bound + compute",
+  "tags": [
+    "elementwise",
+    "add",
+    "requantize",
+    "residual",
+    "skip-connection",
+    "fused",
+    "param",
+    "AI"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 133416,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 68475,
+    "expert_speedup": 1.95,
+    "source": "v6 corpus build (simulator)"
+  }
+}

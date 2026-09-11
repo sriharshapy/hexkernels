@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "K=64 chained over two 32-deep K-tiles into ONE accumulator (mxclracc once)",
+    "single requant store after both matmul packets",
+    "int8 activation in HIGH byte of crouton slot, weight 4-deep packed",
+    "0x40-config requant (acc*17+8)>>4 & 0xFFF, 12-bit sign-extend",
+    "clear-each-tile near-miss (only last K-tile survives) must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_cleareachtile.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "18a9fab2fefd34b719cafc20347482ced311bcfc00689d366a03b55042b16acf",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_accum_chain",
+  "origin": "expert",
+  "params": {
+    "K": 64,
+    "M": 32,
+    "N": 32,
+    "op": "matmul_accum_chain"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_accum_chain",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "accumulate",
+    "deepk",
+    "hmx",
+    "int8",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 50192,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 19847,
+    "expert_speedup": 2.53,
+    "source": "v6 corpus build (simulator)"
+  }
+}

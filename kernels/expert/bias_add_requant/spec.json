@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": "Rescale & round",
+  "domain": "ai",
+  "dtype": "int32->int8",
+  "edge_cases": [
+    "int64 sum to avoid int32 overflow",
+    "negative mult",
+    "shift=0",
+    "non-zero zp",
+    "large positive and negative bias values",
+    "rounding ties",
+    "saturation +127 / -128",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_no_bias.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "774bc763732bbf24f79cb86c4312ec81ad30a948b044b72b515d649eba357cdd",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "bias_add_requant",
+  "origin": "expert",
+  "params": {
+    "mult": 5,
+    "shift": 3,
+    "zp": 0
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "bias_add_requant",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "quantized",
+    "rounding",
+    "saturation",
+    "bias",
+    "fused",
+    "conv-bias"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 130474,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 16057,
+    "expert_speedup": 8.126,
+    "source": "v6 corpus build (simulator)"
+  }
+}

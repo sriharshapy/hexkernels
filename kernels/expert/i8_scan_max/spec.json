@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": "Scan / prefix ops",
+  "domain": "dsp",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "in[0]=-128 (min at start, first output must be -128)",
+    "in[1]=127 (immediate jump to global max, all subsequent >= 127)",
+    "in[500]=-128 (late minimum: must NOT decrease running max)",
+    "in[999]=-128 (tail: final output still equals prior max)",
+    "monotone-decreasing run (running max stays at head value)",
+    "n%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_reduce_max.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "b068a55ad043bc68d01e1533fb3dba852408c744fda8df37a5f41028be6510f1",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_scan_max",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_scan_max",
+    "upstream": "v3"
+  },
+  "signal": "memory-bound (sequential dependency chain)",
+  "tags": [
+    "scan",
+    "prefix",
+    "max",
+    "sequential",
+    "1D",
+    "monotone"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 4177,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 1203,
+    "expert_speedup": 3.472,
+    "source": "v6 corpus build (simulator)"
+  }
+}

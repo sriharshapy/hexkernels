@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8",
+  "edge_cases": [
+    "int8 value in HIGH byte of fp16 crouton slot; low/even bytes must be 0",
+    "every two logical rows transposed (crouton)",
+    "full 0..255 activation byte range",
+    "poisoned 2048-byte output buffer",
+    "low-byte near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_lowbyte.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "d91d144dc5ae629533cfff4bb376dbfab9d905399e81ae6611665e91df0aa2eb",
+  "level": "L1",
+  "mechanisms_declared": [],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": false
+  },
+  "name": "hmx_activation_pack_i8",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "op": "hmx_activation_pack",
+    "tile_bytes": 2048
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_activation_pack_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "hmx",
+    "int8",
+    "crouton",
+    "pack",
+    "activation",
+    "layout",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2674,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 2543,
+    "expert_speedup": 1.05,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "bundle": "complete",
+  "category": "Transformer / fused AI ops",
+  "domain": "ai",
+  "dtype": "i8->i8",
+  "edge_cases": [
+    "Q[0]=127, K[0]=127 (large QKT product within window)",
+    "Q[1]=-128, K[1]=127 (sign edge in QKT)",
+    "V[0]=127, V[1]=-128 (sign edge in AV)",
+    "high-magnitude Q[i=0] dot K[j=2] outside window=1 (attending there would be wrong)",
+    "V[j=2] is extreme (+127/-128) so outside-window errors are detectable",
+    "window=1 vs window=2 sweep (different positions are masked)",
+    "masked positions contribute exp_lut[0] not zero (softmax includes them)",
+    "2 distinct exp_lut tables (anti-hardcode LUT)",
+    "2 param sets x 2 windows = 4 combos"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_attend_all.c",
+    "nearmiss_hardcode.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "39ae3112c5670f397dbea826cbe49d4e5a1380ac75ed58a2e87f0d46cd02130b",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_sparse_attn_block",
+  "origin": "expert",
+  "params": {
+    "amult": "int32 (runtime, swept) -- AV output requant multiplier",
+    "ashift": "int (runtime, swept) -- AV output requant shift",
+    "exp_lut": "256 uint8 entries for softmax (runtime, swept -- 2 distinct tables)",
+    "smult": "int32 (runtime, swept) -- QKT score requant multiplier",
+    "sshift": "int (runtime, swept) -- QKT score requant shift",
+    "window": "int (runtime, swept: {1, 2}) -- half-width of the attention band"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_sparse_attn_block",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "attention",
+    "sparse",
+    "banded",
+    "window",
+    "softmax",
+    "lut",
+    "transformer",
+    "fixed-point",
+    "no-float"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 38914,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 26715,
+    "expert_speedup": 1.457,
+    "source": "v6 corpus build (simulator)"
+  }
+}

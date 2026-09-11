@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int16",
+  "edge_cases": [
+    "saturate 200 -> 127",
+    "saturate -200 -> -128",
+    "no-sat -50, 50",
+    "saturate int16 extremes 32767 -> 127, -32768 -> -128 (tail chunk, n=270 tail m=14)",
+    "concatenation layout: b first (low), a second (high) within each 64-chunk"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_interleaved.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "9de1d80065157fa0eb970eb4beb5fc40efa523c4472fb38ed732239cc7b5762a",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hvx_vsat_i16_i8",
+  "origin": "expert",
+  "params": {
+    "n": 270,
+    "op": "vsat_i16_i8"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hvx_vsat_i16_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "drill",
+    "saturate",
+    "narrow",
+    "pack",
+    "int16",
+    "int8",
+    "Q6_Vb_vpack_VhVh_sat"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2604,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 506,
+    "expert_speedup": 5.15,
+    "source": "v6 corpus build (simulator)"
+  }
+}

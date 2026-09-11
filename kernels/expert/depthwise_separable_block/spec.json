@@ -1,0 +1,77 @@
+{
+  "bundle": "complete",
+  "category": "Fused conv block",
+  "domain": "ai",
+  "dtype": "int8->int8",
+  "edge_cases": [
+    "border pixels exercise zero-padding in depthwise",
+    "large negative DW bias forces relu clamp (ch0)",
+    "large negative PW bias forces relu clamp (co0)",
+    "large positive PW bias causes saturation",
+    "DW output must be requantized to int8 before PW dot product",
+    "two separate relu+requant stages must both be correct",
+    "negative mult in either stage",
+    "shift==0 (no rounding) in either stage",
+    "non-zero zero-point in either stage",
+    "saturation to +127/-128",
+    "poisoned out buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_skip_dw_requant.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "71be7ed9f7bf35894c8be734fb7cf4ae59985706b5ce925dc2fff574ca44a2cb",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "depthwise_separable_block",
+  "origin": "expert",
+  "params": {
+    "dw_bias": "int32[C_in] (folded BN bias, depthwise stage)",
+    "dw_mult": "int32 (runtime, swept)",
+    "dw_shift": "int (runtime, swept)",
+    "dw_zp": "int8 (runtime, swept)",
+    "pw_bias": "int32[C_out] (folded BN bias, pointwise stage)",
+    "pw_mult": "int32 (runtime, swept)",
+    "pw_shift": "int (runtime, swept)",
+    "pw_zp": "int8 (runtime, swept)"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "depthwise_separable_block",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "depthwise",
+    "pointwise",
+    "separable",
+    "MobileNet",
+    "BN-fold",
+    "relu",
+    "requantize",
+    "fused",
+    "param",
+    "NHWC",
+    "AI",
+    "L3"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 198062,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 48604,
+    "expert_speedup": 4.07,
+    "source": "v6 corpus build (simulator)"
+  }
+}

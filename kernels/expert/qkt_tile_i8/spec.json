@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int8->int32->int8",
+  "edge_cases": [
+    "Q[0]=127, K[0]=127 (large positive dot, d=0,j=0)",
+    "sign-mismatch cancellation at d=1 (Q negative, K positive)",
+    "D-tail [96,97] non-zero (D=98 = 24*4 + 2, exercises the reduction tail group)",
+    "3 distinct (scale_mult, scale_shift) sets swept, including scale_shift=0 (no rounding)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_round.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "1ef7d9d343ed465c4266582b64b182c98f674c81cccf2febd2210301771e337b",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "qkt_tile_i8",
+  "origin": "expert",
+  "params": {
+    "D": 98,
+    "M": 16,
+    "N": 16,
+    "op": "qkt_tile_colmajor_k"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "qkt_tile_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "attention",
+    "qkt",
+    "matmul",
+    "requantize",
+    "fused",
+    "transformer",
+    "fixed-point",
+    "no-float",
+    "column-major-k"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 104707,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 12181,
+    "expert_speedup": 8.596,
+    "source": "v6 corpus build (simulator)"
+  }
+}

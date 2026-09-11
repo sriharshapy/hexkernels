@@ -1,0 +1,65 @@
+{
+  "bundle": "complete",
+  "category": "Optimizer step",
+  "domain": "ai",
+  "dtype": "fp32",
+  "edge_cases": [
+    "grad = 0 (m and v decay toward zero)",
+    "grad very small (eps dominates denominator)",
+    "grad very large (large v, small effective lr)",
+    "t=1 (largest bias correction factor)",
+    "negative gradients (w increases)",
+    "n not a multiple of 32 (tail path)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_bias_correction.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "9b54a4a4c6d003ea856600ab3561b988adcda08ad490a2dfb3fc782daddeb69b",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "adam_update",
+  "origin": "expert",
+  "params": {
+    "b1": 0.9,
+    "b2": 0.999,
+    "eps": 1e-08,
+    "lr": 0.001,
+    "n": 256,
+    "t": 10
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "adam_update",
+    "upstream": "v4-gap"
+  },
+  "signal": "compute-bound (sqrtf + bias correction + in-place update)",
+  "tags": [
+    "adam",
+    "optimizer",
+    "in_place",
+    "bias_correction",
+    "fp32",
+    "ai",
+    "training",
+    "adaptive"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 40181,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 26578,
+    "expert_speedup": 1.51,
+    "source": "v6 corpus build (simulator)"
+  }
+}

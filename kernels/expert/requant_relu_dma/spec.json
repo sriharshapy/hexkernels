@@ -1,0 +1,56 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int32->int8",
+  "edge_cases": [
+    "+127 saturation",
+    "negative -> ReLU floor at zp",
+    "rounding tie",
+    "zero",
+    "a=79 -> 128 saturates to 127",
+    "tail n%128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "26c193aa22c6a634883c2241c1f44ca22ca0f17f042f8707701c4c8c3f4b81d8",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "requant_relu_dma",
+  "origin": "expert",
+  "params": {
+    "mult": 13,
+    "note": "baked as fixed constants; signature is (a,out,n)",
+    "shift": 3,
+    "zp": 0
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "requant_relu_dma",
+    "upstream": null
+  },
+  "signal": "bandwidth-bound",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 755445,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 249108,
+    "expert_speedup": 3.03,
+    "source": "v6 corpus build (simulator)"
+  }
+}

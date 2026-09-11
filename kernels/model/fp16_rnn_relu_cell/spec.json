@@ -1,0 +1,55 @@
+{
+  "bundle": "complete",
+  "dtype": "fp16",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "da66d8dd79fc0379656901249548c1721c1f6ac30563ee0b53e2c8f7508c67e2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": false
+  },
+  "name": "fp16_rnn_relu_cell",
+  "op": "rnn_relu_cell",
+  "origin": "model",
+  "provenance": {
+    "corpus": "model",
+    "eval_set": "core128",
+    "generated_at": "2026-08-25T11:20:10+00:00",
+    "model": "gpt-5.6-luna",
+    "rung": 2,
+    "seed_index": 1,
+    "task_key": "b48i4_fp16_rnn_relu_cell",
+    "turns_used": 1
+  },
+  "shape": [
+    320,
+    384
+  ],
+  "tier": "T2",
+  "verified": {
+    "compiled": true,
+    "correct": null,
+    "elf_confirmed": false,
+    "expert_kernel_cycles": null,
+    "kernel_cycles": null,
+    "mechanisms_fired": {
+      "dma": false,
+      "hmx": false,
+      "hvx": false,
+      "hvx_compute": false,
+      "l2fetch": false,
+      "vtcm": false
+    },
+    "source": "anticheat disassembly scan"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int16",
+  "edge_cases": [
+    "row of all-identical values (var=0, exercises vidx=0)",
+    "row with large spread / high variance (exercises vidx clamp to 255)",
+    "negative and positive gamma (deterministic, cycling)",
+    "C=100 not a multiple of 64 int16 lanes (tail path)",
+    "int16 dynamic range (wider than the int8 layernorm_i8 original)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_no_mean_sub.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "675c29942b46dffaea42facccd3941c5fb5bbee888c2934c8175539d493662c0",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "layernorm_row_i16",
+  "origin": "expert",
+  "params": {
+    "C": 100,
+    "R": 6,
+    "SHIFT1": 6,
+    "SHIFT2": 10,
+    "VSHIFT": 5,
+    "op": "layernorm"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "layernorm_row_i16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "layernorm",
+    "normalization",
+    "int16",
+    "batched-rows",
+    "fixed-point",
+    "no-float",
+    "lut"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 16813,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 19653,
+    "expert_speedup": 0.86,
+    "source": "v6 corpus build (simulator)"
+  }
+}

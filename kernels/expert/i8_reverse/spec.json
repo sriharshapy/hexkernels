@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": "Rearrange data (no math)",
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "n=501 not a multiple of 128",
+    "odd length (center element must map to itself)",
+    "index symmetry: i and n-1-i"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_offbyone.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "6800feebd114123985c416cdc074104fb4df1f6864193542c2d499765782f4a7",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_reverse",
+  "origin": "expert",
+  "params": {
+    "formula": "out[i] = in[n-1-i]",
+    "op": "reverse"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_reverse",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "reverse",
+    "flip",
+    "layout",
+    "data-movement"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1186,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": null,
+    "expert_speedup": null,
+    "source": "v6 corpus build (simulator)"
+  }
+}

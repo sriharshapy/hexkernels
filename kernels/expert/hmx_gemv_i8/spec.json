@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "int8",
+  "edge_cases": [
+    "GEMV mapped to matrix engine: x in weight column 0, read output column 0",
+    "int8 activation in HIGH byte of crouton slot, weight 4-deep packed",
+    "0x40-config requant (acc*17+8)>>4 & 0xFFF, 12-bit sign-extend",
+    "wrong-output-column (reads zero column) near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_wrongcol.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "d8d0a50ac5a64e41f89ee6c5d50f36a0c629f47d3e74599e2d1a22e521ae7930",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_gemv_i8",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 1,
+    "op": "gemv"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_gemv_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "gemv",
+    "matvec",
+    "hmx",
+    "int8",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 1455,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 8528,
+    "expert_speedup": 0.17,
+    "source": "v6 corpus build (simulator)"
+  }
+}

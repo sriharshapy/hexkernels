@@ -1,0 +1,49 @@
+{
+  "bundle": "complete",
+  "dtype": null,
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "c01da087b9b054a686a8d0debf05e34ef97e052a1917e6a95161d92b2d7512a1",
+  "mechanism_reasons": [
+    [
+      "hvx",
+      "at least one loop is parallel with unit/zero stride on every operand, so it maps to a vector loop"
+    ],
+    [
+      "l2fetch",
+      "working set 16388 B exceeds L1D 16384 B, so the stream misses L1 and prefetch has something to hide"
+    ]
+  ],
+  "mechanisms_declared": [
+    "hvx",
+    "l2fetch"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32__weight_norm__any",
+  "op": null,
+  "origin": "mined",
+  "provenance": {
+    "corpus": "mined",
+    "sha256_at_import": "b3b04e4eddfc7b6ea4ad68c4a146af30e57809544c3717988acc2cf64fa8f2f7",
+    "source_tier": "T3",
+    "task_tier": "T1",
+    "tier_match": false
+  },
+  "schema": null,
+  "shape": null,
+  "tier": "T1",
+  "verified": {
+    "elf_confirmed": null,
+    "note": "authored for source_tier; the entitlement gate rejects a kernel whose task tier differs here",
+    "source": "none"
+  },
+  "working_set_bytes": 16388
+}

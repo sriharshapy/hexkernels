@@ -1,0 +1,62 @@
+{
+  "bundle": "complete",
+  "category": "Pointwise fp32 activation",
+  "domain": "ai",
+  "dtype": "fp32",
+  "edge_cases": [
+    "exactly 0.0f (lower clamp boundary)",
+    "exactly 6.0f (upper clamp boundary)",
+    "negative input (clamps to 0)",
+    "input > 6 (clamps to 6)",
+    "n%128 tail",
+    "poisoned output buffer (0xA5A5A5A5 per element)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_identity.c",
+    "nearmiss_relu_only.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "3bb46404b14aaf4475cd714b0e83c1da1e49659d0f045fcc77fb98a941cb02cd",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "ai_fp32_relu6",
+  "origin": "expert",
+  "params": {
+    "n": 1000
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ai_fp32_relu6",
+    "upstream": "v4-gen:ai_fp32_relu6__n1000"
+  },
+  "signal": "memory-bound pointwise",
+  "tags": [
+    "relu6",
+    "activation",
+    "clamp",
+    "mobilenet",
+    "fp32",
+    "float",
+    "pointwise",
+    "ai",
+    "elementwise"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 12727,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 448,
+    "expert_speedup": 28.41,
+    "source": "v6 corpus build (simulator)"
+  }
+}

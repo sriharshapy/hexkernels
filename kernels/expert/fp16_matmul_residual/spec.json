@@ -1,0 +1,53 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "M=N=K=32 single-tile matmul, elementwise residual add of a full n x n matrix C",
+    "residual add fused as a native HVX qf16 vector op (v68 lacks native Vhf+Vhf add), reading C via a bulk vector copy + row-offset unaligned vector load, NOT a scalar per-element repack",
+    "residual added to the fp16-rounded matmul result, not the float accumulator",
+    "HVX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "poisoned output buffer",
+    "dropped-last-K-term near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_dropk.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "bc78e258536f4006e2a547919f16bd6cefce78117151fc2409afcf405d82de52",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp16_matmul_residual",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_matmul_residual",
+    "upstream": null
+  },
+  "signal": "compute-bound (HVX qf16 vector matmul + fused residual vs scalar fp16)",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 1163744,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 10221,
+    "expert_speedup": 113.86,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "bundle": "complete",
+  "category": "Transformer decoder block (causal attention + LUT-FFN + residuals, composition)",
+  "domain": "ai",
+  "dtype": "uint8xint8->int8",
+  "edge_cases": [
+    "CAUSAL mask: query i attends only to keys j<=i; row 0 is the fully-degenerate case (attends only to itself)",
+    "FFN activation is a runtime LUT (GELU-shaped), not a closed-form ReLU -- distinct mechanism from i8_transformer_encoder_block",
+    "LUT-index saturation columns: b1[0]=-4000 (always clamps to LUT index 0), b1[1]=+4000 (always clamps to LUT index 255)",
+    "FFN output saturation columns: b2[0]=-300 (sat-low -128), b2[1]=+300 (sat-high +127)",
+    "causal softmax window length varies per row i (1..S), never a fixed multiple of 128 -- exercises HVX partial-vector masking (Q6_Q_vsetq_R) at every row",
+    "FFN down-proj reduction length Dff=128 is exactly one full HVX vector -- must NOT be predicate-masked (Q6_Q_vsetq_R only encodes 0..127)",
+    "nearmiss_noncausal drops the causal mask (attends to the full sequence, encoder-style) -> INCORRECT for all rows i<S-1",
+    "poisoned output buffer; runtime exp_lut and act_lut (anti-hardcode)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_noncausal.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "5ea5f27a3f44d2f91513713fc642b1a6efaebbdcc5cc532eb2c15040e28356cd",
+  "level": "L3",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_decoder_block",
+  "origin": "expert",
+  "params": {
+    "ATTN_OUT_SHIFT": 8,
+    "ATTN_SCALE_SHIFT": 2,
+    "D": 64,
+    "Dff": 128,
+    "FFN_SH1": 8,
+    "FFN_SH2": 7,
+    "S": 32,
+    "act_lut": "256 int8 entries (runtime, GELU-shaped FFN activation)",
+    "exp_lut": "256 uint8 entries (runtime, fixed-point exp)",
+    "op": "decoder_block"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_decoder_block",
+    "upstream": null
+  },
+  "signal": "causal transformer decoder block (masked attention + LUT-FFN + 2 residuals)",
+  "tags": [
+    "transformer",
+    "decoder",
+    "block",
+    "causal",
+    "attention",
+    "ffn",
+    "lut",
+    "residual",
+    "softmax",
+    "matmul",
+    "hvx",
+    "int8",
+    "requant",
+    "composition",
+    "l3",
+    "ai",
+    "holdout"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2493765,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 439573,
+    "expert_speedup": 5.67,
+    "source": "v6 corpus build (simulator)"
+  }
+}

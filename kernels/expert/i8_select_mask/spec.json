@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "category": "Conditional / threshold",
+  "domain": "comms",
+  "dtype": "int8",
+  "edge_cases": [
+    "mask==0 (select b)",
+    "mask==0xFF (select a)",
+    "mask==0x01 (nonzero-true, select a)",
+    "a and b at int8 extremes (-128, 127)",
+    "n%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_polarity.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "8e95351b2ef35babe9af9d12a81407ea5119c6bd3ad04cb7f9ee5c065242085a",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_select_mask",
+  "origin": "expert",
+  "params": {},
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_select_mask",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "select",
+    "where",
+    "mask",
+    "vmux",
+    "conditional"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 8346,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 1108,
+    "expert_speedup": 7.532,
+    "source": "v6 corpus build (simulator)"
+  }
+}

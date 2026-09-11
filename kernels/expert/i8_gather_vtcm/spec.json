@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "random row indices into a 64KB table (larger than L1, VTCM-stageable)",
+    "first/last vocab row, repeated index, boundary token positions injected",
+    "T not tied to any vector-width multiple (row width E=128 is the only alignment constraint)",
+    "distinct from dma-adjacent gather tasks: D-wide (E=128) row gather via a single whole-table VTCM stage, vs i8_table_lookup_gather's single-word Q6_vgather_ARMVw element gather and embedding_gather's small (64-row, no-VTCM) table"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_off_by_one.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7ddc205d356c830a976dc2d7523d6e521e6d21874dc7dace08d6950ae37b69cb",
+  "level": "L2",
+  "mechanisms_declared": [
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_gather_vtcm",
+  "origin": "expert",
+  "params": {
+    "E": 128,
+    "T": 8199,
+    "formula": "out[i,:] = table[idx[i],:]",
+    "op": "embedding_row_gather",
+    "vocab_size": 512
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_gather_vtcm",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "gather",
+    "embedding",
+    "vtcm",
+    "dma",
+    "row-copy"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 2495495,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 183763,
+    "expert_speedup": 13.58,
+    "source": "v6 corpus build (simulator)"
+  }
+}

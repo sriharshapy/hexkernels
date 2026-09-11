@@ -1,0 +1,63 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "int32->int8",
+  "edge_cases": [
+    "0x40-config requant r=(acc*17+8)>>4 (arithmetic shift, matches HMX field)",
+    "signed int8 saturation to [-128,127]; truncating cast near-miss must fail",
+    "boundary accumulators r=127/128/-128/-129 pin the clamp edges",
+    "arithmetic shift on negative accumulators",
+    "poisoned output buffer",
+    "n multiple of vector width (1024)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nosat.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7c1b3291ef04e92d1d32a2410cf049fff561e6917b466f1fb0f285782ed3b725",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "hmx_requant_store_i8",
+  "origin": "expert",
+  "params": {
+    "n": 1024,
+    "op": "hmx_requant_store",
+    "scale_num": 17,
+    "shift": 4
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_requant_store_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "hmx",
+    "hvx",
+    "int8",
+    "requant",
+    "quantize",
+    "saturate",
+    "epilogue",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 8395,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 6435,
+    "expert_speedup": 1.3,
+    "source": "v6 corpus build (simulator)"
+  }
+}

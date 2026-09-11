@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": "Pointwise fp16 activation",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "exactly 0.0 (lower clamp boundary)",
+    "exactly 6.0 (upper clamp boundary)",
+    "negative input (clamps to 0)",
+    "input > 6 (clamps to 6)",
+    "n%128 tail",
+    "poisoned output buffer (0xA5A5 per element)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_identity.c",
+    "nearmiss_relu_only.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7529e6c2d66829f0ac506fbf159adc98faefcf9d8cee140c49fc0e94865461e0",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "ai_fp16_relu6",
+  "origin": "expert",
+  "params": {
+    "n": 1000
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ai_fp16_relu6",
+    "upstream": "v4-gen:ai_fp16_relu6__n1000"
+  },
+  "signal": "memory-bound pointwise",
+  "tags": [
+    "relu6",
+    "activation",
+    "clamp",
+    "mobilenet",
+    "fp16",
+    "pointwise",
+    "ai",
+    "elementwise"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 62333,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 2757,
+    "expert_speedup": 22.61,
+    "source": "v6 corpus build (simulator)"
+  }
+}

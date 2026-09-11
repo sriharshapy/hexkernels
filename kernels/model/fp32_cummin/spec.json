@@ -1,0 +1,46 @@
+{
+  "bundle": "complete",
+  "dtype": "fp32",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e6f1e9233719e427afed5066b1f6070c9c7e29c52c6125527501d0a52887369b",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp32_cummin",
+  "op": "cummin",
+  "origin": "model",
+  "provenance": {
+    "corpus": "model",
+    "eval_set": "core128",
+    "generated_at": "2026-08-25T10:51:58+00:00",
+    "model": "gpt-5.6-luna",
+    "rung": 2,
+    "seed_index": 2,
+    "task_key": "b18i3_fp32_cummin",
+    "turns_used": 1
+  },
+  "shape": [
+    8,
+    64
+  ],
+  "tier": "T0",
+  "verified": {
+    "compiled": null,
+    "correct": null,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": null,
+    "kernel_cycles": null,
+    "mechanisms_fired": {},
+    "source": "anticheat disassembly scan"
+  }
+}

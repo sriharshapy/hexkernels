@@ -1,0 +1,69 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "dsp",
+  "dtype": "int8",
+  "edge_cases": [
+    "5-tap correlation (not reversed) with asymmetric, non-palindromic taps",
+    "max-magnitude / saturation-triggering values at head and tail",
+    "int8 (not int32) output via round-half-away-from-zero shift + saturate -- distinct from i8_fir_i32_dma (8 taps, int32 out, no requant) and i8_moving_avg_dma (uniform W=8 average, division, dense int8 out)",
+    "tail path (n not a multiple of the DMA tile size) handled scalarly, though this harness's N is a multiple of 128"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_taps_reversed.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "e81075532a3cbf34d95a01e26d81d25af985ac46b77fcb65bb2208808a07860a",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hvx",
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "i8_streaming_conv_dma",
+  "origin": "expert",
+  "params": {
+    "n": 1572864,
+    "ntaps": 5,
+    "op": "fir5_shift_requant",
+    "rounding": "round-half-away-from-zero",
+    "shift": 4,
+    "taps": [
+      -3,
+      5,
+      12,
+      -2,
+      4
+    ]
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_streaming_conv_dma",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "fir",
+    "conv",
+    "streaming",
+    "dma",
+    "vtcm",
+    "requant"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 3711753,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 1642179,
+    "expert_speedup": 2.26,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "all-zero row (ms=0, relies on +1e-3 epsilon, no inf/nan)",
+    "row with one dominant large-magnitude element",
+    "negative and positive gamma values",
+    "C=90 not a multiple of 64 fp16 lanes (tail path)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_nogamma.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "859f3c98b3f27d41d48532557cb5d21c58fccb2c76aaabb65fc9a7119650968d",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "rmsnorm_row_fp16",
+  "origin": "expert",
+  "params": {
+    "C": 90,
+    "R": 5,
+    "eps": 0.001,
+    "op": "rmsnorm"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "rmsnorm_row_fp16",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "rmsnorm",
+    "normalization",
+    "fp16",
+    "batched-rows",
+    "qf16"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 35207,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 19724,
+    "expert_speedup": 1.79,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "bundle": "complete",
+  "category": "Conditional / threshold",
+  "domain": "comms",
+  "dtype": "uint8",
+  "edge_cases": [
+    "in==thresh boundary (strict < means output 0)",
+    "thresh=0 (all outputs 0)",
+    "thresh=255 (all but 255 output 255)",
+    "n%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_hardcode.c",
+    "nearmiss_inclusive.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "0eb27a52f5d98bdd0271c772761316f79f570f6cfb219debb5c7c86f8251219f",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "u8_threshold_inv",
+  "origin": "expert",
+  "params": {
+    "compare": "<",
+    "false_val": 0,
+    "thresh": 128,
+    "true_val": 255
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "u8_threshold_inv",
+    "upstream": "v3"
+  },
+  "signal": "bandwidth-bound",
+  "tags": [
+    "threshold",
+    "inverse",
+    "vcmp",
+    "vmux",
+    "select"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 6008,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 685,
+    "expert_speedup": 8.771,
+    "source": "v6 corpus build (simulator)"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "bundle": "complete",
+  "category": "Neighborhood image filter",
+  "domain": "dsp",
+  "dtype": "uint8->int16",
+  "edge_cases": [
+    "top/bottom/left/right border pixels (clamp both axes)",
+    "high-contrast edge in top row (strong Gx signal)",
+    "left col=0 right col=255 (max gradient at border)",
+    "w%128 tail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_sobely.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "740ce7cb14be45b5c2909f5f50e20b9b9d323052ae39c88a2da58c6f9314b961",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "u8_sobel3x3_x",
+  "origin": "expert",
+  "params": {
+    "border": "clamp-to-edge",
+    "kernel": [
+      [
+        -1,
+        0,
+        1
+      ],
+      [
+        -2,
+        0,
+        2
+      ],
+      [
+        -1,
+        0,
+        1
+      ]
+    ],
+    "output_type": "int16"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "u8_sobel3x3_x",
+    "upstream": "v3"
+  },
+  "signal": "compute-bound",
+  "tags": [
+    "image",
+    "sobel",
+    "gradient",
+    "border",
+    "signed-output"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 53356,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 19114,
+    "expert_speedup": 2.791,
+    "source": "v6 corpus build (simulator)"
+  }
+}

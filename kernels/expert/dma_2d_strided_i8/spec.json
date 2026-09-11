@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "mem",
+  "dtype": "int8",
+  "edge_cases": [
+    "H % row-group size != 0 (8-row remainder)",
+    "row padding bytes must never leak into out[]"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_missing_tail_rows.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "55cca7958edf782a9744ce8596657c524db294ab5b9e0a1e531c427f856a0b4d",
+  "level": "L2",
+  "mechanisms_declared": [
+    "dma",
+    "vtcm"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "dma_2d_strided_i8",
+  "origin": "expert",
+  "params": {
+    "H": 136,
+    "W": 8192,
+    "op": "row_strided_depad",
+    "rowstride": 8320
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "dma_2d_strided_i8",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "dma",
+    "vtcm",
+    "2d",
+    "row-strided",
+    "depad",
+    "negative-finding"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 113743,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 301063,
+    "expert_speedup": 0.378,
+    "source": "v6 corpus build (simulator)"
+  }
+}

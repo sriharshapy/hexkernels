@@ -1,0 +1,54 @@
+{
+  "bundle": "complete",
+  "dtype": "fp16",
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "6851fb3b066803c9d05c957a5288db76d7e315fa4666428b4855b5687ef9c7fd",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": false
+  },
+  "name": "fp16_inner",
+  "op": "inner",
+  "origin": "model",
+  "provenance": {
+    "corpus": "model",
+    "eval_set": "core128",
+    "generated_at": "2026-08-25T11:15:38+00:00",
+    "model": "gpt-5.6-luna",
+    "rung": 2,
+    "seed_index": 3,
+    "task_key": "b35i3_fp16_inner",
+    "turns_used": 1
+  },
+  "shape": [
+    64,
+    128
+  ],
+  "tier": "T1",
+  "verified": {
+    "compiled": true,
+    "correct": true,
+    "elf_confirmed": false,
+    "expert_kernel_cycles": null,
+    "kernel_cycles": null,
+    "mechanisms_fired": {
+      "dma": false,
+      "hmx": false,
+      "hvx": false,
+      "hvx_compute": false,
+      "l2fetch": false,
+      "vtcm": false
+    },
+    "source": "anticheat disassembly scan"
+  }
+}

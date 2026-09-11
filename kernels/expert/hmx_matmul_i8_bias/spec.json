@@ -1,0 +1,65 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "uint8xint8->int32",
+  "edge_cases": [
+    "per-output-COLUMN int32 bias add (bias[j]); wrong-axis (bias[i]) near-miss fails",
+    "edge biases +-700 and 0",
+    "single 32x32 tile, one K-tile",
+    "activation high-byte crouton (lim 2047), weight 4-deep (lim 1023)",
+    "0x40 requant field sign-extended from 12 bits",
+    "crouton pack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_biasrow.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "7b048858a5d4c4d6e79adbf90603637ce9b723344a6e5c026859ea2f66f37d21",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_matmul_i8_bias",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "epilogue": "bias",
+    "op": "hmx_matmul_i8_bias"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_matmul_i8_bias",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "bias",
+    "epilogue",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 146455,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 16299,
+    "expert_speedup": 8.99,
+    "source": "v6 corpus build (simulator)"
+  }
+}

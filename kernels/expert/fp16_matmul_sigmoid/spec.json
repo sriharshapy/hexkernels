@@ -1,0 +1,53 @@
+{
+  "bundle": "complete",
+  "category": null,
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "M=N=K=32 single-tile matmul",
+    "wider input range (-6..6 quantized) so sigmoid exercises both saturating and mid-range regions",
+    "sigmoid epilogue is UNAVOIDABLY scalar (no HVX vector transcendental) -- the matmul is vectorized, the epilogue is not",
+    "HVX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "poisoned output buffer",
+    "dropped-last-K-term near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_dropk.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "74b9fb1d4f205eb4582c972602df9622b8bbe7b7199fdf775f660658b553a4ef",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "fp16_matmul_sigmoid",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "fp16_matmul_sigmoid",
+    "upstream": null
+  },
+  "signal": "compute-bound matmul (HVX qf16) + unavoidably-scalar sigmoid epilogue",
+  "tags": [],
+  "verified": {
+    "baseline_kernel_cycles": 1142339,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 137159,
+    "expert_speedup": 8.33,
+    "source": "v6 corpus build (simulator)"
+  }
+}

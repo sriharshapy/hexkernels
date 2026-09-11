@@ -1,0 +1,58 @@
+{
+  "bundle": "complete",
+  "category": "FP16 elementwise product",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "product negative (one operand < 0)",
+    "zero operand (product == 0.0)",
+    "product requiring fp16 rounding (non-exact intermediate)",
+    "n%128 tail",
+    "poisoned output buffer (0xA5A5)"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_add.c",
+    "nearmiss_square.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "9799f8b79ccb75d6339e6ff21f95466df19732f2c780762eb6f83df79d23e741",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "ai_fp16_hadamard_mul",
+  "origin": "expert",
+  "params": {
+    "n": 1000
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ai_fp16_hadamard_mul",
+    "upstream": "v4-gen:ai_fp16_hadamard_mul__n1000"
+  },
+  "signal": "memory-bound, vectorizable",
+  "tags": [
+    "hadamard",
+    "elementwise",
+    "multiply",
+    "fp16",
+    "gating",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 46173,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 2225,
+    "expert_speedup": 20.75,
+    "source": "v6 corpus build (simulator)"
+  }
+}

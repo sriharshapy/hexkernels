@@ -1,0 +1,60 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "output pre-loaded with C0 accumulator -> must ADD (MAC), not overwrite",
+    "fp16 crouton layout off(r,c)=(r/2)*64+c*2+(r&1) for A, weight, output",
+    "HVX/HMX qf16 arithmetic is non-IEEE -> tolerance compare, not bit-exact",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "no-accumulate (overwrite) near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_noaccum.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "79d2ef58e317a7ed290226899bef74be5622c99c6609044cce0903259a771896",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hmx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "hmx_tile_mac_fp16_32",
+  "origin": "expert",
+  "params": {
+    "K": 32,
+    "M": 32,
+    "N": 32,
+    "fused": "accumulate_C0",
+    "op": "tile_mac"
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "hmx_tile_mac_fp16_32",
+    "upstream": null
+  },
+  "signal": null,
+  "tags": [
+    "matmul",
+    "mac",
+    "hmx",
+    "fp16",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 10162,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 10884,
+    "expert_speedup": 0.93,
+    "source": "v6 corpus build (simulator)"
+  }
+}

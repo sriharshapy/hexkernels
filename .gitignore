@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.venv/
+venv/
+
+# Build caches and measurement scratch: regenerable, and large.
+witness_build/
+run_artifacts/
+_work_qdc*/
+*.elf
+*.o
+
+# Credentials. Nothing of this shape belongs in the repo.
+.openai_token
+.qdc_api_key
+*.pem
+*.key
+.env

@@ -1,0 +1,69 @@
+{
+  "bundle": "complete",
+  "category": "Matrix multiply + fused epilogue",
+  "domain": "ai",
+  "dtype": "uint8xint8->int8",
+  "edge_cases": [
+    "2x2 grid of 32x32 output tiles; each accumulates over 2 K-tiles",
+    "HMX accumulator persists across K-tile matmuls (one mxclracc per out tile)",
+    "activation int8 in high byte of crouton slot (low bytes dead)",
+    "weight 4-deep packed; different load limit than activation",
+    "HMX 0x40-config requant gives the native matrix-engine output r=(acc*17+8)>>4, sign-extended from the 12-bit field",
+    "elementwise int8 residual add then saturating narrow to int8 fused into the HVX epilogue",
+    "|r| routinely exceeds int8 range (unlike i8_matmul_hmx_requant's exact-narrow domain) -- saturation is genuinely exercised, not just the residual add",
+    "residual includes +127/-128/0 edge values",
+    "signed weights / negative accumulators",
+    "crouton pack/unpack staged via cacheable buffers + bulk vector copy",
+    "poisoned output buffer",
+    "transposed-B near-miss must fail"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_transB.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "b893323379683d2d78309becd580bb3e2b77955859dcddd738d17a3b7de7d77b",
+  "level": "L2",
+  "mechanisms_declared": [
+    "hmx",
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": true,
+    "hvx": true
+  },
+  "name": "i8_matmul_add_requant_hmx",
+  "origin": "expert",
+  "params": {
+    "K": 64,
+    "M": 64,
+    "N": 64
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "i8_matmul_add_requant_hmx",
+    "upstream": null
+  },
+  "signal": "compute-bound (matrix engine + fused epilogue)",
+  "tags": [
+    "matmul",
+    "hmx",
+    "hvx",
+    "int8",
+    "residual",
+    "requant",
+    "epilogue",
+    "ai"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 173380,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 94452,
+    "expert_speedup": 1.84,
+    "source": "v6 corpus build (simulator)"
+  }
+}

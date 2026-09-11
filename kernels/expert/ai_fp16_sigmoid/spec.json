@@ -1,0 +1,61 @@
+{
+  "bundle": "complete",
+  "category": "FP16 pointwise activation",
+  "domain": "ai",
+  "dtype": "fp16",
+  "edge_cases": [
+    "x=0: sigmoid(0)=0.5 (not 0 or 1, so relu and identity both fail)",
+    "large negative: sigmoid->0 (not exactly 0, so identity fails)",
+    "large positive: sigmoid->1 (not exactly 1, so identity fails)",
+    "negative inputs: sigmoid < 0.5, so relu (max(0,x)) fails",
+    "n%128 tail (candidate must not read/write past n)",
+    "poisoned output buffer (0xA5A5)",
+    "quarter-integer inputs cover full [-6,6] range"
+  ],
+  "entry": "candidate_kernel",
+  "files": [
+    "PROMPT.md",
+    "harness.c",
+    "kernel.c",
+    "kernel_api.h",
+    "nearmiss_identity.c",
+    "nearmiss_relu.c",
+    "reference.c"
+  ],
+  "kernel_sha256": "be6c802b4195d21645047a7e8998e2959aff445d2f7b0639e326ad545788f37e",
+  "level": "L1",
+  "mechanisms_declared": [
+    "hvx"
+  ],
+  "mechanisms_in_source": {
+    "hmx": false,
+    "hvx": true
+  },
+  "name": "ai_fp16_sigmoid",
+  "origin": "expert",
+  "params": {
+    "n": 1024
+  },
+  "provenance": {
+    "corpus": "v6",
+    "task_id": "ai_fp16_sigmoid",
+    "upstream": "v4-gen:ai_fp16_sigmoid__n1024"
+  },
+  "signal": "memory-bound + transcendental (expf per element)",
+  "tags": [
+    "sigmoid",
+    "activation",
+    "fp16",
+    "pointwise",
+    "ai",
+    "elementwise",
+    "expf"
+  ],
+  "verified": {
+    "baseline_kernel_cycles": 127360,
+    "elf_confirmed": null,
+    "expert_kernel_cycles": 37548,
+    "expert_speedup": 3.392,
+    "source": "v6 corpus build (simulator)"
+  }
+}
