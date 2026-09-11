@@ -7,9 +7,8 @@
 Every entry carries HVX or HMX intrinsics, a scalar reference to check it against,<br>
 and a harness to run both. Plus the machinery that proves it.
 
-[![CI](https://github.com/sriharshapy/hexkernels/actions/workflows/ci.yml/badge.svg)](https://github.com/sriharshapy/hexkernels/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10%20%E2%80%93%203.13-blue.svg)](pyproject.toml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![Release](https://img.shields.io/github/v/release/sriharshapy/hexkernels)](https://github.com/sriharshapy/hexkernels/releases)
 
 [![kernels](https://img.shields.io/badge/kernels-538-6f42c1)](docs/LIBRARY.md)
