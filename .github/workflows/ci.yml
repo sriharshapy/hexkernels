@@ -135,13 +135,18 @@ jobs:
           # two-backslash pattern walked straight past it.
           HOME = re.compile(rb"(?:[A-Za-z]:[\\/]{1,8}Users|/home)[\\/]{1,8}"
                             rb"(?!user\b|USER\b|runner\b|<|\$|\{)([A-Za-z0-9._-]+)")
+          # This workflow necessarily contains the patterns it searches for, in
+          # the comments explaining them. Skipped BY PATH: the script is piped
+          # in on stdin, so `__file__` is "<stdin>" and comparing against it
+          # silently never matches -- which is how this job first failed on its
+          # own documentation.
+          SELF = os.path.join(".github", "workflows", "ci.yml")
           bad = []
           for dirpath, dirs, files in os.walk("."):
               dirs[:] = [d for d in dirs if d not in (".git", "__pycache__")]
               for fn in files:
                   p = os.path.join(dirpath, fn)
-                  # This file necessarily contains the patterns it searches for.
-                  if os.path.abspath(p) == os.path.abspath(__file__):
+                  if os.path.normpath(p).endswith(SELF):
                       continue
                   try:
                       raw = open(p, "rb").read()
