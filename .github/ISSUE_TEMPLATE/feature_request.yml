@@ -1,0 +1,44 @@
+name: "💡 Feature or improvement"
+description: Suggest something new for the library, tooling, or docs
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you hitting?
+      description: The situation that made you want this, not the solution yet.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part would it touch?
+      multiple: true
+      options:
+        - "kernels/ — corpus contents or schema"
+        - "hexkernels.library — the loader API"
+        - "hexkernels.anticheat — detectors"
+        - "hexkernels.forge — the pipeline"
+        - "hexkernels.gym"
+        - "hexkernels.core"
+        - "hexkernels.device.qdc"
+        - "docs"
+        - "tooling / CI"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Anything you have already tried or ruled out?
+    validations:
+      required: false

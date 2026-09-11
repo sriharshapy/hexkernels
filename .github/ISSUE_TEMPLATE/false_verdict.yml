@@ -1,0 +1,58 @@
+name: "🔍 Disputed verdict"
+description: A kernel is marked as reaching a mechanism when it doesn't, or vice versa
+title: "[verdict] "
+labels: ["anti-cheat", "verdict"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This project's whole premise is that the ELF settles what the source
+        cannot. So a **wrong verdict is the most serious kind of bug here** —
+        more serious than a crash. Thank you for reporting one.
+
+        Worth checking first: `elf_confirmed` is **tri-state**. `null` means the
+        kernel was *never scanned*, which is not a claim that it lacks the
+        mechanism. 526 of 538 entries are unscanned. If the field is `null`,
+        that is a gap in coverage, not a false verdict — though it is still worth
+        filing if you have scanned it yourself.
+
+  - type: input
+    id: kernel
+    attributes:
+      label: Kernel
+      placeholder: kernels/model/fp16_inner
+    validations:
+      required: true
+
+  - type: dropdown
+    id: direction
+    attributes:
+      label: Which way is it wrong?
+      options:
+        - "False positive — marked confirmed, but the binary does not use it"
+        - "False negative — marked refuted, but the binary does use it"
+        - "Metadata disagrees with the kernel's actual source"
+    validations:
+      required: true
+
+  - type: textarea
+    id: disasm
+    attributes:
+      label: Disassembly evidence
+      description: >
+        The instruction lines that settle it. Please say which detector produced
+        your verdict — the static disassembly reader or the runtime PMU counter.
+        They can disagree, and `used_vtcm` in particular reads 0 silently when
+        timing is disabled.
+      render: asm
+    validations:
+      required: true
+
+  - type: textarea
+    id: how
+    attributes:
+      label: How did you build and scan it?
+      description: Toolchain version, flags, and the scan command.
+      render: shell
+    validations:
+      required: true

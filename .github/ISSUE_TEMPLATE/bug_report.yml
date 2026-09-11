@@ -1,0 +1,78 @@
+name: "🐛 Bug report"
+description: Something in the library, loader, forge pipeline, or detector is wrong
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing: a surprising *measurement* is often one of the documented
+        traps rather than a bug. [`docs/MEASUREMENT.md`](../blob/main/docs/MEASUREMENT.md)
+        covers the ones that cost us real time — parallel simulation, whole-program
+        cycles, and the `used_vtcm` detector asymmetry.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part?
+      options:
+        - "kernels/ — a kernel or its metadata"
+        - "hexkernels.library — loading or querying the corpus"
+        - "hexkernels.anticheat — the ELF detectors"
+        - "hexkernels.forge — the pipeline"
+        - "hexkernels.gym — the tune loop"
+        - "hexkernels.core — toolchain, target, simulator fleet"
+        - "hexkernels.device.qdc — on-silicon path"
+        - "docs"
+        - "other / not sure"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: The shortest command or snippet that shows it.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Output / traceback
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: >
+        Python version, OS, and — if the bug touches a build, a simulation or a
+        scan — the Hexagon SDK and toolchain versions. A cycle number without a
+        toolchain version attached is not comparable to anything.
+      placeholder: |
+        python: 3.11
+        os: Windows 11
+        Hexagon SDK: 6.4.0.2
+        toolchain: 19.0.04
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: sdk
+    attributes:
+      label: Does this need hardware to reproduce?
+      options:
+        - label: "No — reproduces with just `pip install hexkernels`"
+        - label: "Needs the Hexagon SDK (build / simulate / disassemble)"
+        - label: "Needs a device or Qualcomm Device Cloud access"

@@ -342,7 +342,7 @@ def render_ssh_command(template: str, key_path: str, local_port: int) -> list[st
     This used to substitute into the template string and then `shlex.split()`
     the result. `shlex` in POSIX mode treats backslash as an escape, so a
     Windows key path went in as
-    `C:\\Users\\sriha\\AppData\\...` and came out as `C:UserssrihaAppData...`
+    `C:\\Users\\user\\AppData\\...` and came out as `C:UsersuserAppData...`
     -- ssh then reported "Identity file ... not accessible: No such file or
     directory" followed by "Permission denied (publickey)", which reads like a
     key problem and is actually a quoting one. Session 771027 died on it.

@@ -1,0 +1,187 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: tests (py${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      # The library and its loader depend on nothing but the standard library.
+      # Installing with --no-deps keeps that promise honest: if an import of
+      # `hexkernels.library` ever starts needing a third-party package, this fails.
+      - name: Install (no dependencies)
+        run: pip install -e . --no-deps
+
+      - name: The corpus loads with no third-party packages
+        run: |
+          python -c "
+          from hexkernels.library import load, summary
+          s = summary()
+          print(f\"{s['total']} kernels: {s['counts']}\")
+          assert len(load()) == s['total']
+          "
+
+      - name: Test
+        run: |
+          pip install pytest
+          python -m pytest tests/ -q
+
+  corpus:
+    name: corpus invariants
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e . --no-deps pytest
+
+      # The admission rule is the premise of the repo, so it gets its own job:
+      # a red X here should read "a scalar kernel got in", not "tests failed".
+      - name: Every entry reaches the accelerator
+        run: |
+          python -m pytest tests/test_library.py -q \
+            -k "reaches_the_accelerator or no_reference_is_itself_accelerated"
+
+      - name: Metadata is well formed
+        run: python -m pytest tests/test_library.py -q -k "specs_are_valid or bundle"
+
+      - name: index.json agrees with the tree on disk
+        run: |
+          python - <<'PY'
+          import os
+          from hexkernels.library import load, root
+          # Keyed by (origin, name): a name can legitimately appear under two
+          # origins -- 538 entries share 527 distinct names -- so comparing bare
+          # names would hide a duplicate or a misfiled entry.
+          index = {(k.origin, k.name) for k in load()}
+          on_disk = {
+              (origin, d) for origin in ("expert", "mined", "model")
+              if os.path.isdir(os.path.join(root(), origin))
+              for d in os.listdir(os.path.join(root(), origin))
+          }
+          missing, extra = index - on_disk, on_disk - index
+          if missing or extra:
+              raise SystemExit(
+                  f"index.json and kernels/ disagree.\n"
+                  f"  in index, not on disk: {sorted(missing)[:10]}\n"
+                  f"  on disk, not in index: {sorted(extra)[:10]}\n"
+                  f"Rebuild with tools/assemble_library.py."
+              )
+          print(f"{len(index)} kernels, index and tree agree")
+          PY
+
+  hygiene:
+    name: hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Kernel harnesses embed base64 golden vectors and get very large very
+      # fast -- one upstream harness is 93 MB. GitHub hard-rejects over 100 MB,
+      # so catch it in review rather than at push time.
+      - name: No file over 5 MB
+        run: |
+          big=$(find . -path ./.git -prune -o -type f -size +5M -print)
+          if [ -n "$big" ]; then
+            echo "Files over 5 MB (harnesses belong behind HARNESS.md):"
+            echo "$big" | while read -r f; do echo "  $(du -h "$f")"; done
+            exit 1
+          fi
+          echo "no oversized files"
+
+      # Absolute home paths leak a username, and they arrive by accident --
+      # captured compiler output and tracebacks, not source. One such traceback
+      # carried 702 copies of a username into a cached JSON file.
+      - name: No credentials or personal paths
+        run: |
+          python - <<'PY'
+          import os, re, sys
+          CRED = re.compile(rb"sk-[A-Za-z0-9_-]{20,}"
+                            rb"|gho_[A-Za-z0-9]{30,}"
+                            rb"|-----BEGIN [A-Z ]*PRIVATE KEY-----")
+          # A home path whose user component is not an obvious placeholder.
+          HOME = re.compile(rb"(?:[A-Za-z]:[\\/]{1,2}Users|/home)[\\/]{1,2}"
+                            rb"(?!user\b|USER\b|runner\b|<|\$|\{)([A-Za-z0-9._-]+)")
+          bad = []
+          for dirpath, dirs, files in os.walk("."):
+              dirs[:] = [d for d in dirs if d not in (".git", "__pycache__")]
+              for fn in files:
+                  p = os.path.join(dirpath, fn)
+                  # This file necessarily contains the patterns it searches for.
+                  if os.path.abspath(p) == os.path.abspath(__file__):
+                      continue
+                  try:
+                      raw = open(p, "rb").read()
+                  except OSError:
+                      continue
+                  if b"\0" in raw[:8000]:
+                      continue                      # binary
+                  if CRED.search(raw):
+                      bad.append((p, "possible credential"))
+                  m = HOME.search(raw)
+                  if m:
+                      bad.append((p, f"home path for user {m.group(1).decode()!r}"))
+          for p, why in bad:
+              print(f"::error file={p}::{why}")
+          print("clean" if not bad else f"{len(bad)} problem(s)")
+          sys.exit(1 if bad else 0)
+          PY
+
+      - name: Issue templates and workflows are valid YAML
+        run: |
+          python - <<'PY'
+          import glob, sys, yaml
+          bad = []
+          for p in glob.glob(".github/**/*.yml", recursive=True):
+              try:
+                  yaml.safe_load(open(p, encoding="utf-8"))
+              except Exception as e:
+                  bad.append((p, e))
+          for p, e in bad:
+              print(f"::error file={p}::{e}")
+          sys.exit(1 if bad else 0)
+          PY
+
+      - name: Documentation links resolve
+        run: |
+          python - <<'PY'
+          import glob, os, re, sys
+          bad = []
+          for md in glob.glob("**/*.md", recursive=True):
+              if ".git" in md:
+                  continue
+              text = open(md, encoding="utf-8", errors="replace").read()
+              for m in re.finditer(r'\[[^\]]*\]\(([^)#:]+?)\)', text):
+                  target = m.group(1).strip()
+                  if target.startswith(("http", "mailto", "../blob/")):
+                      continue
+                  if not os.path.exists(
+                          os.path.normpath(os.path.join(os.path.dirname(md), target))):
+                      bad.append((md, target))
+          for md, t in bad:
+              print(f"::error file={md}::broken link: {t}")
+          sys.exit(1 if bad else 0)
+          PY

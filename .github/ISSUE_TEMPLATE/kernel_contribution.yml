@@ -1,0 +1,112 @@
+name: "🧮 Contribute a kernel"
+description: Propose a new HVX/HMX kernel for the library
+title: "[kernel] "
+labels: ["kernel", "contribution"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing a kernel.
+
+        **The one hard rule:** a library entry must actually reach the accelerator.
+        If the source has no HVX (`HVX_Vector`, `Q6_V*`, `Q6_W*`) or HMX intrinsic,
+        it belongs as a `reference.c`, not as a kernel. Scalar contributions are
+        welcome — just as references, not as entries.
+
+        Read [`docs/LIBRARY.md`](../blob/main/docs/LIBRARY.md) and
+        [`CONTRIBUTING.md`](../blob/main/CONTRIBUTING.md) first.
+
+  - type: input
+    id: name
+    attributes:
+      label: Kernel name
+      description: Lowercase, dtype-prefixed, matching the corpus convention.
+      placeholder: fp16_layernorm
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mechanism
+    attributes:
+      label: Which mechanism does it reach?
+      multiple: true
+      options:
+        - hvx (vector)
+        - hmx (matrix)
+        - l2fetch (prefetch)
+        - dma (user DMA)
+        - vtcm (scratchpad)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Task tier (working-set size)
+      description: >
+        The mechanisms a kernel may use are DERIVED from its size — see
+        docs/TIERS.md. A kernel that issues l2fetch in a T0 task is rejected by
+        the entitlement gate before it runs.
+      options:
+        - "T0 — fits L1D (≤16 KB); hvx only"
+        - "T1 — past L1D, up to L2 (≤1 MB); hvx + l2fetch"
+        - "T2 — past L2, inside VTCM; + dma + vtcm"
+        - "T3 — exceeds VTCM (>8 MB); must stream tiles"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: input
+    id: dtype
+    attributes:
+      label: Data type
+      placeholder: fp16, fp32, int8, uint8xint8->int32, …
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What does it compute?
+      description: The arithmetic, and the memory plan if it is interesting.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence it uses the accelerator
+      description: >
+        Source intrinsics are NOT evidence — 3 of the 12 model kernels we scanned
+        had intrinsics in source and nothing in the binary. Paste the anti-cheat
+        scan output, or the relevant disassembly lines, if you have them.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: measurement
+    attributes:
+      label: Measured cycles, if any
+      description: >
+        `kernel_cycles` against the scalar reference — never whole-program
+        `cycles`, never host wall clock (see docs/MEASUREMENT.md). Include the
+        toolchain version; codegen differences across releases explain known
+        outliers.
+      placeholder: |
+        reference kernel_cycles: 127360
+        candidate kernel_cycles:  37548   (3.39x)
+        toolchain: 19.0.04
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Bundle checklist
+      description: An entry needs all of these. See CONTRIBUTING.md for the layout.
+      options:
+        - label: "`kernel.c` — the accelerated kernel, entry point `candidate_kernel`"
+        - label: "`reference.c` — a scalar implementation that is the ground truth"
+        - label: "`harness.c` — checks the kernel against the reference"
+        - label: "I have read that a scalar kernel is never a library entry"

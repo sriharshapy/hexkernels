@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📖 Read the docs first
+    url: https://github.com/sriharshapy/hexkernels/tree/main/docs
+    about: The library schema, the anti-cheat detectors, the two T0-T3 ladders, and the measurement traps.
+  - name: ⚠️ Surprising cycle numbers
+    url: https://github.com/sriharshapy/hexkernels/blob/main/docs/MEASUREMENT.md
+    about: Parallel simulation, whole-program cycles, and the used_vtcm asymmetry are documented traps, not bugs.
+  - name: 💬 Questions and ideas
+    url: https://github.com/sriharshapy/hexkernels/discussions
+    about: For open-ended questions rather than a specific defect.
